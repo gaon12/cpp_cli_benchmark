@@ -125,7 +125,7 @@ int main()
     cout << mill_third.count() << "ms" << "(" << sec_third.count() << "초)" << endl;//시간 출력
 
     printf("\n4. 4K 영상 1080p 인코딩 계산 : ");
-    system("./cpp_cli_benchmark-main/ffmpeg/ffmpeg_bg.vbs");
+    system("ffmpeg_bg.vbs");
 
     chrono::system_clock::time_point FourthPartEndTime = chrono::system_clock::now();
     chrono::duration<double> DefaultSec_Fourth = FourthPartEndTime - ThirdPartEndTime;
