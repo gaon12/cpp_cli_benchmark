@@ -105,7 +105,7 @@ int main()
     chrono::minutes min_end = chrono::duration_cast<chrono::minutes>(EndTime - StartTime);
 
     std::cout << "\n총 수행시간 : " << std::endl;
-    cout << mill_end.count() << "ms (" << min_end.count() << "분 " << sec_end.count() << "초)" << endl;//시간 출력
+    cout << mill_end.count() << "ms (" << sec_end.count() << "초)" << endl;//시간 출력
 
     //사용한 파일들 삭제
     system("@echo off && del terms.txt 7z.exe 7z.dll wcc.zip waifu2x-converter-cpp.exe w2xc.dll opencv_world430.dll LICENSE aki.png aki_out.png testfile.bin > 1.txt");
