@@ -6,7 +6,6 @@
 #include<cmath>
 #pragma comment(lib, "Urlmon.lib")
 #include <chrono>
-#include <wincrypt.h>
 #include <filesystem>
 using namespace std;
 
@@ -16,16 +15,7 @@ int main()
     실행 전 잔류 파일을 삭제합니다.
     */
     system("@echo off && del terms.txt 7z.exe 7z.dll wcc.zip waifu2x-converter-cpp.exe w2xc.dll opencv_world430.dll LICENSE aki.png aki_out.png testfile.bin > 1.txt");
-    system("@echo off && del /s /q models_rgb > 2.txt"); //폴더는 따로 삭제합니다.
-
-    char filename1[] = "5.txt";
-    char filename2[] = "6.txt";
-
-    int r;
-    int re;
-
-    r = _unlink(filename1);
-    re = _unlink(filename2);
+    system("@echo off && del /s /q models_rgb > 1.txt"); //폴더는 따로 삭제합니다.
 
     system("title 벤치마크 - 약관 동의"); //콘솔창 제목 설정
 
@@ -116,19 +106,16 @@ int main()
     chrono::seconds sec_end = chrono::duration_cast<chrono::seconds>(EndTime - StartTime);
     chrono::minutes min_end = chrono::duration_cast<chrono::minutes>(EndTime - StartTime);
 
-    std::cout << "총 수행시간 : " << std::endl;
+    std::cout << "\n총 수행시간 : " << std::endl;
     cout << mill_end.count() << "ms (" << min_end.count() << "분 " << sec_end.count() << "초)" << endl;//시간 출력
 
     //사용한 파일들 삭제
-    system("@echo off && del terms.txt 7z.exe 7z.dll wcc.zip waifu2x-converter-cpp.exe w2xc.dll opencv_world430.dll LICENSE aki.png aki_out.png testfile.bin 1.txt 2.txt 3.txt 4.txt > 5.txt");
-    system("@echo off && del /s /q models_rgb > 6.txt"); //폴더는 따로 삭제합니다.
+    system("@echo off && del terms.txt 7z.exe 7z.dll wcc.zip waifu2x-converter-cpp.exe w2xc.dll opencv_world430.dll LICENSE aki.png aki_out.png testfile.bin > 1.txt");
+    system("@echo off && del /s /q models_rgb > 1.txt"); //폴더는 따로 삭제합니다.
 
-    char filename1[] = "5.txt";
-    char filename2[] = "6.txt";
+    char filename1[] = "1.txt";
 
     int r;
-    int re;
 
     r = _unlink(filename1);
-    re = _unlink(filename2);
 }
