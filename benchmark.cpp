@@ -9,12 +9,6 @@ using namespace std;
 
 int main()
 {
-    /*
-    실행 전 잔류 파일을 삭제합니다.
-    */
-    system("@echo off && del 7z.exe 7z.dll wcc.zip waifu2x-converter-cpp.exe w2xc.dll opencv_world430.dll LICENSE aki.png aki_out.png testfile.bin > 1.txt");
-    system("@echo off && del /s /q models_rgb > 1.txt"); //폴더는 따로 삭제합니다.
-
     system("title 벤치마크 - 약관 동의"); //콘솔창 제목 설정
 
     /*
