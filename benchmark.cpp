@@ -7,8 +7,7 @@
 #include <filesystem>
 using namespace std;
 
-int main()
-{
+int main() {
     system("title 벤치마크 - 약관 동의"); //콘솔창 제목 설정
 
     /*
@@ -17,7 +16,39 @@ int main()
     약관 내용은 txt 파일을 불러오는 것으로 하였습니다.
     */
 
-    //URLDownloadToFile(NULL, L"경로 추가 예정", L"terms.txt", 0, NULL); //약관 파일을 다운로드합니다.
+    URLDownloadToFile(NULL, L"https://pastebin.com/raw/sgminY56", L"terms.txt", 0, NULL); //약관 파일을 다운로드합니다.
+
+TERMS:
+
+    FILE* fp = 0;
+    char text[100];
+    setlocale(LC_ALL, "korean");
+    fopen_s(&fp, "terms.txt", "r"); //약관 파일 열기
+
+    while (1) {
+        fgets(text, 100, fp);
+        printf("%s\n", text);
+        if (feof(fp)) break;
+    }
+
+    fclose(fp); //파일 닫기
+
+    std::cout << "\n\n약관에 동의하십니까? 동의하시면 Y를 입력해 주십시오.    " << std::endl;
+
+    char terms_agree;
+
+    scanf_s("%c", &terms_agree, sizeof(1));
+    if (terms_agree == 'Y' || terms_agree == 'y') {
+        goto START;
+    }
+    else {
+        std::cout << "\n\n잘못 입력하셨습니다. 다시 입력해 주시기 바랍니다!" << std::endl;
+        goto TERMS;
+    }
+
+START:
+
+    system("cls");
 
     std::cout << "벤치마크 프로그램입니다.\n필요한 파일들을 다운로드하고 있습니다. 잠시만 기다려주세요.\n" << std::endl;
     std::cout << "방화벽 등의 프로그램에서 차단하고 있다면 예외 처리해 주세요!\n\n" << std::endl;
@@ -25,7 +56,7 @@ int main()
     URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/7-Zip/7z.exe", L"7z.exe", 0, NULL); //7z.exe를 다운로드합니다.
     URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/7-Zip/7z.dll", L"7z.dll", 0, NULL); //7z.exe이 동작하는데 필요한 파일인 7z.dll 파일을 다운로드합니다.
     URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/waifu2x/waifu2x-converter-cpp/wcc.zip", L"wcc.zip", 0, NULL); //waifu2x cpp 버전을 다운로드합니다.
-    system("@echo off && 7z x wcc.zip > 3.txt"); //다운로드 받은 파일을 압축해제합니다.
+    system("@echo off && 7z x wcc.zip > 1.txt"); //다운로드 받은 파일을 압축해제합니다.
     URLDownloadToFile(NULL, L"https://i.ibb.co/1b2Ns1b/aki.png", L"aki.png", 0, NULL);//크기가 작은 이미지 파일을 다운로드합니다.
     Sleep(600);
     std::cout << "현재 수행중인 작업은 다음과 같습니다.\n\n" << std::endl;
@@ -83,7 +114,7 @@ int main()
     system("title 벤치마크 - (작업) waifu2x 40배 업스케일링 작업"); //콘솔창 제목 설정
 
     std::cout << "\n4. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(40배) : " << std::endl;
-    system("@echo off && waifu2x-converter-cpp  --scale-ratio 40 -i aki.png -o aki_out.png > 4.txt");
+    system("@echo off && waifu2x-converter-cpp  --scale-ratio 40 -i aki.png -o aki_out.png > 1.txt");
 
     chrono::system_clock::time_point FourthPartEndTime = chrono::system_clock::now();
     chrono::duration<double> DefaultSec_Fourth = FourthPartEndTime - ThirdPartEndTime;
