@@ -1,7 +1,5 @@
 ﻿#include <iostream>
 #include <windows.h>
-#include <iomanip>
-//setprecision() 함수 정의
 #include <stdio.h>
 #include<cmath>
 #pragma comment(lib, "Urlmon.lib")
