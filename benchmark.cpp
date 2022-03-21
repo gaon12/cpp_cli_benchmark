@@ -16,7 +16,7 @@ int main() {
     약관 내용은 txt 파일을 불러오는 것으로 하였습니다.
     */
 
-    URLDownloadToFile(NULL, L"https://pastebin.com/raw/sgminY56", L"terms.txt", 0, NULL); //약관 파일을 다운로드합니다.
+    URLDownloadToFile(NULL, L"https://common.gaon.xyz/prj/cpp_cli_benchmark/terms.txt", L"terms.txt", 0, NULL); //약관 파일을 다운로드합니다.
 
 TERMS:
 
@@ -42,7 +42,8 @@ TERMS:
         goto START;
     }
     else {
-        std::cout << "\n\n잘못 입력하셨습니다. 다시 입력해 주시기 바랍니다!" << std::endl;
+        system("cls");
+        std::cout << "\n\nㅁ ERROR! 잘못 입력하셨습니다. 다시 입력해 주시기 바랍니다!" << std::endl;
         goto TERMS;
     }
 
