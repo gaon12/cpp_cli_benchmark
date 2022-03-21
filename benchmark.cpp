@@ -169,7 +169,7 @@ START:
     cout << mill_end.count() << "ms (" << sec_end.count() << "초)" << endl;//시간 출력
 
     //사용한 파일들 삭제
-    system("@echo off && del terms.txt 7z.exe 7z.dll wcc.zip waifu2x-converter-cpp.exe w2xc.dll opencv_world430.dll LICENSE aki.png aki_out.png testfile.bin > 1.txt");
+    system("@echo off && del terms.txt 7z.exe 7z.dll wcc.zip waifu2x-converter-cpp.exe w2xc.dll opencv_world430.dll LICENSE aki.png aki_out.png testfile.bin test.7z test.zip zip.7z > 1.txt");
     system("@echo off && del /s /q models_rgb && del /s /q zip > 1.txt"); //폴더는 따로 삭제합니다.
 
     char filename1[] = "1.txt";
