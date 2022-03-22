@@ -1,6 +1,6 @@
 #include <iostream>
 #include <windows.h>
-#include <stdio.h>
+#include <cstdio>
 #include<cmath>
 #pragma comment(lib, "Urlmon.lib")
 #include <chrono>
@@ -21,24 +21,19 @@ int main() {
 
 TERMS:
 
-    FILE* fp = 0;
-    char text[100];
-    setlocale(LC_ALL, "korean");
-    fopen_s(&fp, "terms.txt", "r"); //약관 파일 열기
+    char buffer[20];    // 파일을 읽을 때 사용할 임시 공간
+    FILE* fp = fopen("terms.txt", "r");    // terms.txt 파일을 읽기 모드로 열기.  
+                                           // 파일 포인터를 반환
 
-    while (1) {
-        fgets(text, 100, fp);
-        printf("%s\n", text);
-        if (feof(fp)) break;
-    }
+    fgets(buffer, sizeof(buffer), fp);    // terms.txt에서 문자열을 읽음
+    printf("%s\n", buffer);    // 파일의 내용 출력
 
-    fclose(fp); //파일 닫기
+    fclose(fp);    // 파일 포인터 닫기
 
     std::cout << "\n\n약관에 동의하십니까? 동의하시면 Y를 입력해 주십시오.    " << std::endl;
 
     char terms_agree;
-
-    scanf_s("%c", &terms_agree);
+    scanf_s("%c", &terms_agree, 50);
     if (terms_agree == 'Y' || terms_agree == 'y') {
         goto START;
     }
@@ -49,7 +44,7 @@ TERMS:
     }
 
 START:
-
+    
     system("cls");
 
     std::cout << "벤치마크 프로그램입니다.\n필요한 파일들을 다운로드하고 있습니다. 잠시만 기다려주세요.\n" << std::endl;
@@ -89,7 +84,7 @@ START:
 
     double pi = 0.0, num = 1.0;
 
-    while (num < 1000000000)
+    while (num < 2000000000)
     {
         pi += 1.0 / pow(num, 2.0);
         num += 1.0;
@@ -158,7 +153,6 @@ START:
     chrono::seconds sec_fifth = chrono::duration_cast<chrono::seconds>(FifthPartEndTime - FourthPartEndTime);
     cout << mill_fifth.count() << "ms" << "(" << sec_fifth.count() << "초)" << endl;//시작 출력
 
-
     chrono::system_clock::time_point EndTime = chrono::system_clock::now();
     chrono::duration<double> DefaultSec_end = EndTime - StartTime;
     chrono::milliseconds mill_end = chrono::duration_cast<chrono::milliseconds>(EndTime - StartTime);
@@ -169,8 +163,9 @@ START:
     cout << mill_end.count() << "ms (" << sec_end.count() << "초)" << endl;//시간 출력
 
     //사용한 파일들 삭제
-    system("@echo off && del terms.txt 7z.exe 7z.dll wcc.zip waifu2x-converter-cpp.exe w2xc.dll opencv_world430.dll LICENSE aki.png aki_out.png testfile.bin test.7z test.zip zip.7z > 1.txt");
-    system("@echo off && del /s /q models_rgb && del /s /q zip > 1.txt"); //폴더는 따로 삭제합니다.
+    system("@echo off && del terms.txt 7z.exe 7z.dll wcc.zip waifu2x-converter-cpp.exe w2xc.dll opencv_world430.dll LICENSE aki.png aki_out.png testfile.bin test.zip test.7z zip.7z > 1.txt");
+    system("@echo off && del /s /q models_rgb > 1.txt"); //폴더는 따로 삭제합니다.
+    system("@echo off && del /s /q zip > 1.txt");
 
     char filename1[] = "1.txt";
 
