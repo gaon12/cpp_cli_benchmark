@@ -6,6 +6,7 @@
 #include <chrono>
 #include <filesystem>
 #include <winbase.h>
+#include "unistd.h"
 using namespace std;
 
 int main() {
@@ -21,19 +22,21 @@ int main() {
 
 TERMS:
 
-    char buffer[20];    // 파일을 읽을 때 사용할 임시 공간
-    FILE* fp = fopen("terms.txt", "r");    // terms.txt 파일을 읽기 모드로 열기.  
-                                           // 파일 포인터를 반환
-
-    fgets(buffer, sizeof(buffer), fp);    // terms.txt에서 문자열을 읽음
-    printf("%s\n", buffer);    // 파일의 내용 출력
-
-    fclose(fp);    // 파일 포인터 닫기
-
-    std::cout << "\n\n약관에 동의하십니까? 동의하시면 Y를 입력해 주십시오.    " << std::endl;
+    FILE* fp = 0;
+    char text[100];
+    setlocale(LC_ALL, "korean");
+    fopen_s(&fp, "terms.txt", "r"); //약관 파일 열기
+    while (1) {
+        fgets(text, 100, fp);
+        printf("%s\n", text);
+        if (feof(fp)) break;
+    }
+    fclose(fp); //파일 닫기
 
     char terms_agree;
-    scanf_s("%c", &terms_agree, 50);
+
+    cout << "\n\n약관에 동의하십니까? 동의하시면 Y를 입력해 주십시오.   : ";
+    cin>> terms_agree;
     if (terms_agree == 'Y' || terms_agree == 'y') {
         goto START;
     }
