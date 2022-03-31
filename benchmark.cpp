@@ -2,7 +2,7 @@
 #include <iostream>
 #include <windows.h>
 #include <cstdio>
-#include <cmath> //연산
+#include<cmath> //연산
 #pragma comment(lib, "Urlmon.lib")
 #include <chrono> //시간값 계산
 #include <filesystem>
@@ -13,6 +13,7 @@
 #include <thread> //CPU 코어 수 불러오기
 using namespace std;
 using namespace chrono;
+double factorial(double a);
 
 //메모리 정보 불러오기 함수
 DWORDLONG GetTotalPhysicalMemory()
@@ -179,7 +180,7 @@ START:
     double j, surd_e;
     surd_e = 1;
 
-    for (add = 1; add <= ntimes; i++)
+    for (add = 1; add <= ntimes; add++)
     {
         j = 1 / factorial(add);
         surd_e = surd_e + j;
@@ -347,11 +348,11 @@ START:
 
 double factorial(double a)
 {
-    double i, j;
+    double add, j;
     j = 1;
-    for (i = 1; i <= a; i++)
+    for (add = 1; add <= a; add++)
     {
-        j = j * i;
+        j = j * add;
     }
     return j;
 }
