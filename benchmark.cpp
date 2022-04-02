@@ -11,6 +11,7 @@
 #include <string>
 #include <intrin.h> //CPU 이름 불러오기
 #include <thread> //CPU 코어 수 불러오기
+#include <sstream> //cmd값 변수 저장
 #include <stdlib.h> //방화벽 막히는지 확인하기
 #define BUFFER_SIZE 1024
 //네임스페이스 설정
@@ -18,6 +19,7 @@ using namespace std;
 using namespace chrono;
 //무리수 e 연산 위해 팩토리얼 계산
 double factorial(double a);
+
 
 //메모리 정보 불러오기 함수
 DWORDLONG GetTotalPhysicalMemory()
@@ -29,31 +31,32 @@ DWORDLONG GetTotalPhysicalMemory()
 }
 
 int main() {
+    
     //방화벽에 막히는지 확인
     char buffer[BUFFER_SIZE] = { 0 };
-        FILE* pipe = _popen("ping 1.1.1.1 -n 2", "rt");
-        if (pipe != NULL){
-            int rd = 0, ret;
-            while ((ret = fread(buffer + rd, 1, BUFFER_SIZE - rd, pipe)) > 0){
-                rd += ret;
-            }
+    FILE* pipe = _popen("ping 1.1.1.1 -n 2", "rt"); //1.1.1.1(클라우드플레어 DNS 서버)로 핑을 보닙니다.
+    if (pipe != NULL) {
+        int rd = 0, ret;
+        while ((ret = fread(buffer + rd, 1, BUFFER_SIZE - rd, pipe)) > 0) {
+            rd += ret;
+        }
 
-            if (strstr(buffer, "TTL=") != NULL){
-                printf("\n 인터넷에 연결되어 있습니다. 방화벽에도 막혀있지 않습니다.\n 정상적으로 프로그램을 사용할 수 있습니다.\n");
-                Sleep(3000);
-                system("CLS");
-            }
-            else{
-                printf("\n 인터넷에 연결되어 있지 않거나 방화벽에 차단되어 있습니다.\n 정상적인 프로그램 사용을 위해 인터넷을 연결하거나 방화벽에서 본 프로그램을 차단 해제해 주세요!\n 10초 뒤 프로그램이 자동 종료됩니다.");
-                Sleep(10000);
-            }
-            //printf( "%d bytes read\n\n%s\n", rd, buffer );
-            _pclose(pipe);
+        if (strstr(buffer, "TTL=") != NULL) { //인터넷에 연결이 되어 있는 경우
+            printf("\n 인터넷에 연결되어 있습니다. 방화벽에도 막혀있지 않습니다.\n 정상적으로 프로그램을 사용할 수 있습니다.\n");
+            Sleep(3000);
+            system("CLS");
         }
-        else
-        {
-            printf("Error in pipe opening!\n");
+        else {//인터넷에 연결이 안되어 있는 경우
+            printf("\n 인터넷에 연결되어 있지 않거나 방화벽에 차단되어 있습니다.\n 정상적인 프로그램 사용을 위해 인터넷을 연결하거나 방화벽에서 본 프로그램을 차단 해제해 주세요!\n 10초 뒤 프로그램이 자동 종료됩니다.");
+            Sleep(10000);
         }
+        //printf( "%d bytes read\n\n%s\n", rd, buffer );
+        _pclose(pipe);
+    }
+    else //명령어 실행에 실패한 경우
+    {
+        printf("Error in pipe opening!\n");
+    }
 
     system("title 벤치마크 - 약관 동의"); //콘솔창 제목 설정
 
@@ -62,11 +65,13 @@ int main() {
     프로그램이 멈추거나, 심하면 OS가 작동 중지 될 수도(사양이 낮을 경우) 있기 때문에, 약관에 동의하는 것을 추가합니다.
     약관 내용은 txt 파일을 불러오는 것으로 하였습니다.
     */
-
+    //약관 파일을 다운로드 합니다.
     URLDownloadToFile(NULL, L"https://common.gaon.xyz/prj/cpp_cli_benchmark/terms.txt", L"terms.txt", 0, NULL); //약관 파일을 다운로드합니다.
 
 TERMS:
 
+    cout << "---------------------------------------------------------------------------------------------\n";
+    //약관 파일을 엽니다.
     FILE* fp = 0;
     char text[100];
     setlocale(LC_ALL, "korean");
@@ -77,10 +82,11 @@ TERMS:
         if (feof(fp)) break;
     }
     fclose(fp); //파일 닫기
+    cout << "---------------------------------------------------------------------------------------------\n";
+    cout << "\n\n 약관에 동의하십니까? 동의하시면 Y를 입력해 주십시오.   : ";
 
     char terms_agree;
 
-    cout << "\n\n 약관에 동의하십니까? 동의하시면 Y를 입력해 주십시오.   : ";
     cin >> terms_agree;
     if (terms_agree == 'Y' || terms_agree == 'y') {
         goto START;
@@ -110,8 +116,9 @@ START:
 
     cout << "1. 1부터 300억까지 더하기" << endl;
 
-    long sum = 0;
     system_clock::time_point StartTime = system_clock::now();//시간 계산 시작
+
+    long sum = 0;
 
     long long i = 0;
     long long sums = 0;
@@ -239,22 +246,6 @@ START:
     cout << mill_end.count() << "ms (" << sec_end.count() << "초)" << endl;//시간 출력
     cout << "총 걸린 시간은 " << hour << "시간 " << min << "분 " << sec_end.count() % 60 << "초 입니다." << endl;
 
-    //사용한 파일들 삭제
-    system("@echo off && del terms.txt 7z.exe 7z.dll all.7z waifu2x-converter-cpp.exe w2xc.dll opencv_world430.dll LICENSE aki.png aki_out.png testfile.bin test.zip test.7z zip.7z terms.txt > 1.txt");
-    system("@echo off && del /s /q models_rgb > 1.txt"); //폴더는 따로 삭제합니다.
-    system("@echo off && del /s /q zip > 1.txt");
-
-    char filename1[] = "1.txt";
-
-    int r;
-    r = _unlink(filename1);
-
-    char rmpath1[] = { "models_rgb" };
-    char rmpath2[] = { "zip" };
-    int remove1 = rmdir(rmpath1);
-    int remove2 = rmdir(rmpath2);
-
-
     /*
     결과값 출력, PC 사양 정보 출력을 위해
     결과 내용을 score_pcspec.js에 저장합니다.
@@ -306,6 +297,31 @@ START:
     //RAM 정보 불러오기
     const DWORD dwMBFactor = 0x00100000;
     DWORDLONG dwTotalPhys = GetTotalPhysicalMemory();
+
+    //GPU 정보 불러오기
+    system("run.bat > 1.txt");
+
+    char gpu_info[1000];
+    FILE* fptr;
+    if ((fptr = fopen("1.txt", "r")) == NULL) {
+        printf("Error! File cannot be opened.");
+        // Program exits if the file pointer returns NULL.
+        exit(1);
+    }
+
+    // reads text until newline is encountered
+    fscanf(fptr, "%[^\n]", gpu_info);
+
+    string gpu_info_ncut(gpu_info);
+
+    string gpu_name_info = gpu_info_ncut.substr(7); //맨 앞에 Name : 부분 삭제
+    //띄어쓰기를 _(언더바)로 변경
+    for (int chub2 = 0; gpu_name_info[chub2]; chub2++) {
+        if (gpu_name_info[chub2] == ' ') gpu_name_info[chub2] = '_';
+    }
+
+    char gpu_name_raw[100];
+    strcpy(gpu_name_raw, gpu_name_info.c_str()); //string값인 gpu 정보를 char로 변환
 
 
     //결과값 저장 시작
@@ -371,12 +387,36 @@ START:
     sprintf(TotalRamSize, "%d", DTotalRamSize);
     fputs(strcat(ram_size, TotalRamSize), fpjs);
     fputs(";\n", fpjs);
+    
+    //GPU 이름 추가
+    char gpu_name[70] = "var gpu_name = \"";
+    fputs(strcat(gpu_name, gpu_name_raw), fpjs);
+    fputs("\b\";\n", fpjs);
 
     fclose(fpjs);    // 파일 포인터 닫기
 
+    //사용한 파일들 삭제
+    system("@echo off && del terms.txt 7z.exe 7z.dll all.7z waifu2x-converter-cpp.exe w2xc.dll opencv_world430.dll LICENSE aki.png aki_out.png testfile.bin test.zip test.7z zip.7z terms.txt > 1.txt");
+    system("@echo off && del /s /q models_rgb > 1.txt"); //폴더는 따로 삭제합니다.
+    system("@echo off && del /s /q zip > 1.txt");
+
+    char filename1[] = "1.txt";
+
+    int r;
+    r = _unlink(filename1);
+
+    char rmpath1[] = { "models_rgb" };
+    char rmpath2[] = { "zip" };
+    int remove1 = rmdir(rmpath1);
+    int remove2 = rmdir(rmpath2);
+    
+    //결과 페이지 열기
+    cout << "5초 뒤 결과가 나옵니다. 결과창을 확인하세요!";
     system("start /max index.html");
+    system("pause");
 }
 
+//팩토리얼 연산
 double factorial(double a)
 {
     double add, j;
