@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>벤치마크 점수 확인</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.13.5/dist/css/uikit.min.css" />
+    </head>
+    <body>
+        <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        </style>
+
+        <!-- NavBar -->
+        <nav class="uk-navbar-container" style="background-color: #F67066;" uk-navbar>
+            <div class="uk-navbar-left">
+                <ul class="uk-navbar-nav">
+                    <li class="uk-active" id="top"><a style="color: #FFFFFF; font-size:1.5em;" href="./index.html"><b>&nbsp;&nbsp;&nbsp;벤치마크 점수 확인</b></a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <style>
+            .horizontal_rule{
+                margin-top: 50px;
+            }
+            .horizontal_rule_5x{
+                margin-top: 250px;
+            }
+        </style>
+
+        <!-- 현재 날짜 시간 구하기 -->
+        <script>
+            var now = new Date();	// 현재 날짜 및 시간
+            var year = now.getFullYear();	// 연도
+            var month = now.getMonth();	// 월
+            var date = now.getDate();	// 일
+            var day = now.getDay();	// 요일
+            var hours = now.getHours();	// 시간
+            var minutes = now.getMinutes();	// 분
+
+            var days; //요일 if문으로 돌려 한글로 표시
+
+            if(day==0){
+                days="일";
+            }else if(day===1){
+                days="월";
+            }else if(day===2){
+                days="화";
+            }else if(day===3){
+                days="수";
+            }else if(day===4){
+                days="목";
+            }else if(day===5){
+                days="금";
+            }else if(day===6){
+                days="토";
+            }
+        </script>
+
+        <!-- 각 파트별 걸린 시간과 PC의 사양 정보가 담긴 파일을 불러옵니다. -->
+        <script src="./score_pcspec.js"></script>
+        
+        <!-- 각 파트별 걸린 시간을 점수로 변환합니다. -->
+        <script>
+		var plus_score_raw = plus_time/24000;
+        var plus_score_calc = plus_score_raw.toFixed(3);
+        var plus_score;
+        if(plus_score_calc > 1){
+	        plus_score = 2000 + (1- plus_score_calc)*1000;
+        } else if(plus_score==1){
+	        plus_score = 2000;
+        }else{
+	        plus_score = 2000 + (plus_score_calc - 1)*1000;
+        }
+
+        var pi_score_raw = pi_time/26000;
+        var pi_score_calc = pi_score_raw.toFixed(3);
+        var pi_score;
+        if(pi_score_calc > 1){
+	        pi_score = 2000 + (1- pi_score_calc)*1000;
+        } else if(pi_score==1){
+	        pi_score = 2000;
+        }else{
+	        pi_score = 2000 + (pi_score_calc - 1)*1000;
+        }
+
+        var download_score_raw = download_time/28000;
+        var download_score_calc = download_score_raw.toFixed(3);
+        var download_score;
+        if(download_score_calc > 1){
+	        download_score = 1000 + (1- download_score_calc)*1000;
+        } else if(download_score==1){
+	        download_score = 1000;
+        }else{
+	        download_score = 1000 + (download_score_calc - 1)*1000;
+        }
+
+        var upscale_score_raw = upscale_time/16000;
+        var upscale_score_calc = upscale_score_raw.toFixed(3);
+        var upscale_score;
+        if(upscale_score_calc > 1){
+	        upscale_score = 2000 + (1- upscale_score_calc)*1000;
+        } else if(upscale_score==1){
+	        upscale_score = 2000;
+        }else{
+	        upscale_score = 2000 + (upscale_score_calc - 1)*1000;
+        }
+
+        var compress_score_raw = compress_time/160000;
+        var compress_score_calc = compress_score_raw.toFixed(3);
+        var compress_score;
+        if(compress_score_calc > 1){
+        	compress_score = 2000 + (1- compress_score_calc)*1000;
+        } else if(compress_score==1){
+        	compress_score = 2000;
+        }else{
+        	compress_score = 2000 + (compress_score_calc - 1)*1000;
+        }
+
+        var surd_e_score_raw = surd_e_time/13500;
+        var surd_e_score_calc = surd_e_score_raw.toFixed(3);
+        var surd_e_score;
+        if(surd_e_score_calc > 1){
+	        surd_e_score = 2000 + (1- surd_e_score_calc)*1000;
+        } else if(surd_e_score==1){
+	        surd_e_score = 2000;
+        }else{
+        	surd_e_score = 2000 + (surd_e_score_calc - 1)*1000;
+        }
+		</script>
+		
+		<!-- CPU 이름을 불러오면 맨 뒤의 ____________를 제거하고, 띄어쓰기 하면 변수 오류가 나서 띄어쓰기를 _로 바꾼 부분을 띄어쓰기로 변경 -->
+		<script>
+			var real_cpu_name = cpu_name.replace(/_/gi, ' ');
+		</script>
+
+        <script>
+            var real_gpu_name = gpu_name.replace(/_/gi, ' ');
+        </script>
+
+        <!-- 총점 계산 -->
+        <script>
+            var all_score_time = plus_time + pi_time + download_time + upscale_time + compress_time + surd_e_time;
+            var all_score = plus_score + pi_score + download_score + upscale_score + compress_score + surd_e_score;
+        </script>
+
+        <!-- 브라우저 정보 불러오기 -->
+        <script>
+            var browser_name_calc;
+            var browser_name_insert;
+            var browser_name;
+
+            // includes는 IE에서 동작하지 않아서 indexOf를 사용
+			var userAgent = window.navigator.userAgent;
+			var isChrome = userAgent.indexOf('Chrome');
+			var isWhale = userAgent.indexOf('Whale');
+            var isFirefox = userAgent.indexOf('Firefox');
+			var isChromeMobile = userAgent.indexOf('CriOS');
+			var isSamsungBrowser = userAgent.indexOf('SamsungBrowser');
+			var isWindows = userAgent.indexOf('Windows NT');
+			var isEdge = userAgent.indexOf('Edg');
+			var isIE = userAgent.indexOf('Trident');
+            var isOpera = userAgent.indexOf('OPR');
+
+
+            
+
+			// 웨일 브라우저 체크
+			if(isWhale > -1){
+				browser_name_insert = 1;
+			}
+
+			// 크롬 브라우저 체크
+			else if(isChrome > -1 || isChromeMobile > -1){
+				browser_name_insert = 2;
+			}
+
+            // 엣지 브라우저 체크
+			else if(isEdge > -1){
+				browser_name_insert = 3;
+			}
+
+            // IE 체크
+			else if(isIE > -1){
+				browser_name_insert = 4;
+			}
+
+            // 파이어폭스 체크
+			else if(isFirefox > -1){
+				browser_name_insert = 5;
+			}
+
+            // 오페라 체크
+			else if(isOpera > -1){
+				browser_name_insert = 6;
+			}
+
+            if(browser_name_insert == 1){
+                browser_name = "웨일 브라우저"
+            }else if(browser_name_insert == 2){
+                browser_name = "크롬 브라우저"
+            }else if(browser_name_insert == 3){
+                browser_name = "엣지 브라우저"
+            }else if(browser_name_insert == 4){
+                browser_name = "인터넷 익스플로러"
+            }else if(browser_name_insert == 5){
+                browser_name = "파이어폭스"
+            }else if(browser_name_insert == 6){
+                browser_name = "오페라 브라우저"
+            }else{
+                browser_name = "브라우저를 찾다가 이세계로 날아가 버렸어요! 브라우저 정보를 알려주시면 다시 현실로 돌아올지도?!"
+            }
+
+        </script>
+
+        <!-- Total Score -->
+        <div class="horizontal_rule"></div>
+            <div style="margin: 0px 120px 0px 100px;">
+                    <div class="uk-card uk-card-default uk-width-1-2@m" style="margin: 0px auto;">
+                        <div class="uk-card-header" style="background-color: #D2FFFA;">
+                            <div class="uk-grid-small uk-flex-middle" uk-grid>
+                                <div class="uk-width-auto">
+                                    <img class="uk-border-circle" width="40" height="40" uk-icon="info">
+                                </div>
+                                <div class="uk-width-expand">
+                                    <h3 class="uk-card-title uk-margin-remove-bottom">벤치마크 총 점수</h3>
+                                    <p class="uk-text-meta uk-margin-remove-top"><time><script>document.write(year + "년 " + month + "월 " + date + "일 (" + days + "요일) " + hours + "시 " + minutes + "분");</script></time>자 벤치마크</p>
+                                </div>
+                            </div>
+                       </div>
+                        <div class="uk-card-body">
+                            <p style="text-align: center;">이 PC의 벤치마크 점수는</p><br><p style="font-size:5em; text-align: center;"><script>document.write(all_score_time.toLocaleString('ko-KR'));</script>ms</p><br><p style="text-align: center;">입니다.</p>
+                        </div>
+                        <div class="uk-card-footer">
+                            <a href="#pc_spec_title" class="uk-button uk-button-text">* 이 PC의 사양 확인하기</a>
+                            <br><br>
+                            <a href="#details_title" class="uk-button uk-button-text"  id="pc_spec_title">* 항목별 소요시간 확인하기</a>
+                        </div>
+                    </div>
+
+                    <!-- PC 사양 정보 확인 -->
+                    <div class="horizontal_rule"></div>
+                    <div class="horizontal_rule"></div>
+                    <div class="uk-card uk-card-default uk-width-1-2@m" style="margin: 0px auto;">
+                        <div class="uk-card-header" style="background-color: #D2FFFA;">
+                            <div class="uk-grid-small uk-flex-middle" uk-grid>
+                                <div class="uk-width-auto">
+                                    <img class="uk-border-circle" width="40" height="40" uk-icon="desktop">
+                                </div>
+                                <div class="uk-width-expand">
+                                    <h3 class="uk-card-title uk-margin-remove-bottom">현재 PC 사양</h3>
+                                    <p class="uk-text-meta uk-margin-remove-top">이 PC의 사양을 확인할 수 있습니다.</p>
+                                </div>
+                            </div>
+                       </div>
+                        <div class="uk-card-body">
+                            <p style="text-align: center;">CPU : <script>document.write(real_cpu_name.slice(0, -12));</script></p>
+                            <br>
+                            <p style="text-align: center;">RAM : <script>document.write(ram_size);</script>GB</p>
+                            <br>
+                            <p style="text-align: center;">GPU : <script>document.write(real_gpu_name.slice(0, -1));</script></p>
+                            <br>
+                            <p style="text-align: center;">브라우저 : <script>document.write(browser_name);</script></p>
+                            <p style="text-align: center;">
+                                <details>
+                                    <summary>브라우저 유저 에이전트(User Agent) 값 보기</summary>
+                                    <p style="text-align: center;"><script>document.write(userAgent);</script></p>
+                                </details>
+                            </p>
+                        </div>
+                        <div class="uk-card-footer">
+                           <a href="#details_title" class="uk-button uk-button-text">* 항목별 소요시간 확인하기</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        <!-- Score Table -->
+        <div class="horizontal_rule"></div>
+        <div style="margin: 0px 120px 0px 100px;">
+        <h2 id="details_title" style="text-align:center;">각 항목별 소요시간</h2>
+        <div class="uk-overflow-auto">
+            <table class="uk-table uk-table-hover uk-table-middle uk-table-divider">
+                <thead>
+                    <tr>
+                        <th class="uk-table-shrink uk-text-nowrap" style="text-align:center;">작업/연산 여부</th>
+                        <th class="uk-table-small" style="text-align:center;">작업/연산 내용</th>
+                        <th class="uk-width-small" style="text-align:center;">걸린 시간<br>(ms/초/분·초)</th>
+                        <th class="uk-table-shrink uk-text-nowrap style=" text-align: center;">점수</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align:center;">(연산)</td>
+                        <td class="uk-table-link">
+                            <p class="uk-link-reset" style="text-align:center;">1부터 300억까지 더하기</p>
+                        </td>
+                        <td class="uk-text-truncate" style="text-align:center;"><script>document.write(plus_time.toLocaleString('ko-KR'));</script>ms<br><script>document.write(plus_time/1000)</script>초<br><script>document.write(Math.floor(plus_time / 60000));</script>분 <script>document.write(Math.floor(plus_time/1000%60))</script>초</td>
+                        <td class="uk-text-nowrap" style="text-align:center;"><script>document.write(plus_score.toLocaleString('ko-KR'));</script>점</td>
+</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center;">(연산)</td>
+                        <td class="uk-table-link">
+                            <p class="uk-link-reset" style="text-align:center;">원주율(π) 구하기</p>
+                        </td>
+                        <td class="uk-text-truncate" style="text-align:center;"><script>document.write(pi_time.toLocaleString('ko-KR'));</script>ms<br><script>document.write(pi_time/1000)</script>초<br><script>document.write(Math.floor(pi_time / 60000));</script>분 <script>document.write(Math.floor(pi_time/1000%60))</script>초</td>
+                        <td class="uk-text-nowrap" style="text-align:center;"><script>document.write(pi_score.toLocaleString('ko-KR'));</script>점</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center;">(작업)</td>
+                        <td class="uk-table-link">
+                            <p class="uk-link-reset" style="text-align:center;">다운로드 속도 측정</p>
+                        </td>
+                        <td class="uk-text-truncate" style="text-align:center;"><script>document.write(download_time);</script>ms<br><script>document.write(download_time/1000)</script>초<br><script>document.write(Math.floor(download_time / 60000));</script>분 <script>document.write(Math.floor(download_time/1000%60))</script>초</td>
+                        <td class="uk-text-nowrap" style="text-align:center;"><script>document.write(download_score.toLocaleString('ko-KR'));</script>점</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center;">(작업)</td>
+                        <td class="uk-table-link">
+                            <p class="uk-link-reset" style="text-align:center;">waifu2x-converter-cpp로 업스케일링</p>
+                        </td>
+                        <td class="uk-text-truncate" style="text-align:center;"><script>document.write(upscale_time);</script>ms<br><script>document.write(upscale_time/1000)</script>초<br><script>document.write(Math.floor(upscale_time / 60000));</script>분 <script>document.write(Math.floor(upscale_time/1000%60))</script>초</td>
+                        <td class="uk-text-nowrap" style="text-align:center;"><script>document.write(upscale_score.toLocaleString('ko-KR'));</script>점</td>
+</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center;">(작업)</td>
+                        <td class="uk-table-link">
+                            <p class="uk-link-reset" style="text-align:center;">압축/압축해제</p>
+                        </td>
+                        <td class="uk-text-truncate" style="text-align:center;"><script>document.write(compress_time.toLocaleString('ko-KR'));</script>ms<br><script>document.write(compress_time/1000)</script>초<br><script>document.write(Math.floor(compress_time / 60000));</script>분 <script>document.write(Math.floor(compress_time/1000%60))</script>초</td>
+                        <td class="uk-text-nowrap" style="text-align:center;"><script>document.write(compress_score.toLocaleString('ko-KR'));</script>점</td>
+</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center;">(연산)</td>
+                        <td class="uk-table-link">
+                            <p class="uk-link-reset" style="text-align:center;">무리수 e 구하기</p>
+                        </td>
+                        <td class="uk-text-truncate" style="text-align:center;"><script>document.write(surd_e_time.toLocaleString('ko-KR'));</script>ms<br><script>document.write(surd_e_time/1000)</script>초<br><script>document.write(Math.floor(surd_e_time / 60000));</script>분 <script>document.write(Math.floor(surd_e_time/1000%60))</script>초</td>
+                        <td class="uk-text-nowrap" style="text-align:center;"><script>document.write(surd_e_score.toLocaleString('ko-KR'));</script>점</td>
+</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center;">(작업)</td>
+                        <td class="uk-table-link">
+                            <p class="uk-link-reset" style="text-align:center;">내용</p>
+                        </td>
+                        <td class="uk-text-truncate" style="text-align:center;"><script>document.write(변수.toLocaleString('ko-KR'));</script>ms<br><script>document.write(변수/1000)</script>초<br><script>document.write(Math.floor(변수 / 60000));</script>분 <script>document.write(Math.floor(변수/1000%60))</script>초</td>
+                        <td class="uk-text-nowrap" style="text-align:center;"><script>document.write(변수_score.toLocaleString('ko-KR'));</script>점</td>
+</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center;">총계</td>
+                        <td class="uk-table-link">
+                            <p class="uk-link-reset" style="text-align:center;"><b><script>document.write(all_score_time.toLocaleString('ko-KR'));</script>ms</b></p>
+                        </td>
+                        <td class="uk-text-truncate" style="text-align:center;"></td>
+                        <td class="uk-text-nowrap" style="text-align:center;"><script>document.write(all_score.toLocaleString('ko-KR'));</script>점</td>
+</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <div class="horizontal_rule_5x"></div>
+            <hr class="uk-divider-icon">
+            <ul class="uk-breadcrumb" style="text-align: center;">
+                <li><a href="#modal-used-materials" uk-toggle>사용된 자료들</a></li>
+                <li><a href="#modal-reference-sites" uk-toggle>참고 사이트</a></li>
+                <li><a href="#modal-special-thanks" uk-toggle>Special Thanks</a></li>
+                <li><span>본 페이지는 로컬상에서만 확인할 수 있습니다. 서버에 전송되는 값이 아닙니다. 제작자도 벤치마크 점수를 알 수 없습니다.</span></li>
+                <li><a class="uk-button uk-button-primary" href="#top" uk-scroll style="color: white;">Scroll Top</a></li>
+            </ul>
+
+            <!-- 사용 자료 표시 -->
+            <!-- This is the modal -->
+            <div id="modal-used-materials" uk-modal>
+                <div class="uk-modal-dialog uk-modal-body">
+                    <h2 class="uk-modal-title">사용 자료</h2>
+                    <p>본 프로젝트에는 다양한 자료들이 사용되었습니다.
+                        <ul>
+                            <li>파일 다운로드 - <a href="https://sel-kor-ping.vultr.com" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>Vultr 서버 속도 테스트 페이지</a></li>
+                            <li>이미지 업스케일링 - <a href="https://github.com/DeadSix27/waifu2x-converter-cpp" target="_blank"><span class="uk-margin-small-right" uk-icon="github"></span>waifu2x-converter-cpp</a></li>
+                            <li>압축/압축해제 - <a href="https://www.7-zip.org" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>7-Zip</a></li>
+                        </ul>
+                    </p>
+                    <p class="uk-text-right">
+                        <button class="uk-button uk-button-primary uk-modal-close" type="button">확인</button>
+                </div>
+            </div>
+            <!-- 참고 사이트 -->
+            <!-- This is the modal -->
+            <div id="modal-reference-sites" uk-modal>
+                <div class="uk-modal-dialog uk-modal-body">
+                    <h2 class="uk-modal-title">참고 사이트</h2>
+                    <p>본 프로젝트를 진행하는데 참고한 사이트 목록입니다.
+                        <ul>
+                            <li>파일 다운로드(URLDownloadToFile) - <a href="https://mhchoi8423.tistory.com/125" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>Positive Mental Attitude님 티스토리 블로그</a></li>
+                            <li>시간 측정(Chrono) - <a href="https://two-parks.tistory.com/32" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>TwoPark님 티스토리 블로그</a></li>
+                            <li>CPU 스레드 수 정보 획득(SYSTEM_INFO) - <a href="https://docs.microsoft.com/ko-kr/windows/win32/sysinfo/getting-hardware-information" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>마이크로소프트 공식 설명서</a></li>
+                            <li>Chrono 시간값을 string으로 변환 - <a href="https://stackoverflow.com/questions/31860405/how-to-concatenate-a-string-with-chronomilliseconds" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>stack overflow 질문 답변</a></li>
+                            <li>strcat 입력을 위해 string을 char로 변환 - <a href="https://danco.tistory.com/69" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>댄코 - 댄싱코딩님 티스토리 블로그</a></li>
+                            <li>오일러의 곱셈공식으로 원주율 구하기 - <a href="https://tre2man.tistory.com/89" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>발자취님 티스토리 블로그</a></li>
+                            <li>문자열 바꾸기(CPU 이름 부분/replace) - <a href="https://gent.tistory.com/415" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>젠트의 프로그래밍 세상님 티스토리 블로그</a></li>
+                            <li>소수점 반올림(점수 계산 부분/toFixed) - <a href="https://gahyun-web-diary.tistory.com/195" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>올라가용님 티스토리 블로그</a></li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                        </ul>
+                    </p>
+                    <p class="uk-text-right">
+                        <button class="uk-button uk-button-primary uk-modal-close" type="button">확인</button>
+                    </p>
+                </div>
+            </div>
+            <!-- Special Thanks -->
+            <!-- This is the modal -->
+            <div id="modal-special-thanks" uk-modal>
+                <div class="uk-modal-dialog uk-modal-body">
+                    <h2 class="uk-modal-title">Special Thanks</h2>
+                    <p>프로젝트를 만드는데 도움을 주신 분들입니다.
+                        <ul>
+                            <li>제작자 : 정가온 - <a href="https://github.com/gaon12" target="_blank"><span class="uk-margin-small-right" uk-icon="github"></span>gaon12</a></li></li>
+                            <li>(도움) 홍승백 - <a href="https://github.com/hihotz" target="_blank"><span class="uk-margin-small-right" uk-icon="github"></span>hihotz</a></li></li>
+                            <li>And You!</li>
+                        </ul>
+                    </p>
+                    <p class="uk-text-right">
+                        <button class="uk-button uk-button-primary uk-modal-close" type="button">확인</button>
+                    </p>
+                </div>
+            </div>
+            <div class="horizontal_rule"></div>
+            <div class="horizontal_rule"></div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.13.5/dist/js/uikit.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.13.5/dist/js/uikit-icons.min.js"></script>
+    </body>
+</html>
