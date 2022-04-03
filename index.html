@@ -68,7 +68,7 @@
 		var plus_score_raw = plus_time/24000;
         var plus_score_calc = plus_score_raw.toFixed(3);
         var plus_score;
-        if(plus_score_calc > 1){
+        if(plus_score_calc < 1){
 	        plus_score = 2000 + (1- plus_score_calc)*1000;
         } else if(plus_score==1){
 	        plus_score = 2000;
@@ -79,7 +79,7 @@
         var pi_score_raw = pi_time/26000;
         var pi_score_calc = pi_score_raw.toFixed(3);
         var pi_score;
-        if(pi_score_calc > 1){
+        if(pi_score_calc < 1){
 	        pi_score = 2000 + (1- pi_score_calc)*1000;
         } else if(pi_score==1){
 	        pi_score = 2000;
@@ -90,7 +90,7 @@
         var download_score_raw = download_time/28000;
         var download_score_calc = download_score_raw.toFixed(3);
         var download_score;
-        if(download_score_calc > 1){
+        if(download_score_calc < 1){
 	        download_score = 1000 + (1- download_score_calc)*1000;
         } else if(download_score==1){
 	        download_score = 1000;
@@ -101,7 +101,7 @@
         var upscale_score_raw = upscale_time/16000;
         var upscale_score_calc = upscale_score_raw.toFixed(3);
         var upscale_score;
-        if(upscale_score_calc > 1){
+        if(upscale_score_calc < 1){
 	        upscale_score = 2000 + (1- upscale_score_calc)*1000;
         } else if(upscale_score==1){
 	        upscale_score = 2000;
@@ -112,7 +112,7 @@
         var compress_score_raw = compress_time/160000;
         var compress_score_calc = compress_score_raw.toFixed(3);
         var compress_score;
-        if(compress_score_calc > 1){
+        if(compress_score_calc < 1){
         	compress_score = 2000 + (1- compress_score_calc)*1000;
         } else if(compress_score==1){
         	compress_score = 2000;
@@ -123,12 +123,23 @@
         var surd_e_score_raw = surd_e_time/13500;
         var surd_e_score_calc = surd_e_score_raw.toFixed(3);
         var surd_e_score;
-        if(surd_e_score_calc > 1){
+        if(surd_e_score_calc < 1){
 	        surd_e_score = 2000 + (1- surd_e_score_calc)*1000;
         } else if(surd_e_score==1){
 	        surd_e_score = 2000;
         }else{
         	surd_e_score = 2000 + (surd_e_score_calc - 1)*1000;
+        }
+
+        var decrypt_zip_score_raw = decrypt_zip_time/22000;
+        var decrypt_zip_score_calc = decrypt_zip_score_raw.toFixed(3);
+        var decrypt_zip_score;
+        if(decrypt_zip_score_calc < 1){
+	        decrypt_zip_score = 2000 + (1- decrypt_zip_score_calc)*1000;
+        } else if(decrypt_zip_score==1){
+	        decrypt_zip_score = 2000;
+        }else{
+        	decrypt_zip_score = 2000 + (decrypt_zip_score_calc - 1)*1000;
         }
 		</script>
 		
@@ -143,8 +154,52 @@
 
         <!-- 총점 계산 -->
         <script>
-            var all_score_time = plus_time + pi_time + download_time + upscale_time + compress_time + surd_e_time;
-            var all_score = plus_score + pi_score + download_score + upscale_score + compress_score + surd_e_score;
+            var all_score_time = plus_time + pi_time + upscale_time + compress_time + surd_e_time + decrypt_zip_time;
+            var all_score = plus_score + pi_score + upscale_score + compress_score + surd_e_score + decrypt_zip_score;
+        </script>
+
+        <!-- 수치가 이상한 경우 -->
+        <script>
+            if(plus_time < 100)
+            {
+                plus_time = '<p style="color: red;" uk-icon="warning">잘못된 수치 </p><div uk-drop><div style="width: 500px;" class="uk-card uk-card-body uk-card-default uk-card-hover">당신 뇌엔 슈퍼컴퓨터가 내장되어 있나요?</div></div>';
+                plus_score = '소세지 빵';
+                all_score = '<p style="color: red; text-align: center!important;" uk-icon="warning">점수가 잘못되었 </p><div uk-drop><div style="width: 500px; text-align: center;" class="uk-card uk-card-body uk-card-default uk-card-hover">1개 이상의 항목에서 비정상 적인 점수가 탐지되었습니다. 확인바랍니다.<br>점수가 이세계로 날아가 갔나 봐요!<br><s>안녕히 계세요 여러분! 전 이 세상의 모든 굴레와 속박을 벗어 던지고 제 행복을 찾아 떠납니다! 여러분도 행복하세요~~!</s></div></div>';
+            }
+            if(pi_time < 100)
+            {
+                pi_time = '<p style="color: red;" uk-icon="warning">잘못된 수치 </p><div uk-drop><div style="width: 500px;" class="uk-card uk-card-body uk-card-default uk-card-hover">혹시 원주율을 소수점 아래 1조자리까지 외우시나요?</div></div>';
+                pi_score = '문익';
+                all_score = '<p style="color: red; text-align: center!important;" uk-icon="warning">점수가 잘못되었 </p><div uk-drop><div style="width: 500px; text-align: center;" class="uk-card uk-card-body uk-card-default uk-card-hover">1개 이상의 항목에서 비정상 적인 점수가 탐지되었습니다. 확인바랍니다.<br>점수가 이세계로 날아가 갔나 봐요!<br><s>안녕히 계세요 여러분! 전 이 세상의 모든 굴레와 속박을 벗어 던지고 제 행복을 찾아 떠납니다! 여러분도 행복하세요~~!</s></div></div>';
+            }
+            if(upscale_time < 100)
+            {
+                upscale_time = '<p style="color: red;" uk-icon="warning">잘못된 수치 </p><div uk-drop><div style="width: 500px;" class="uk-card uk-card-body uk-card-default uk-card-hover">혹시 사용자가 인공지능?!</div></div>';
+                upscale_score = '내 학';
+                all_score = '<p style="color: red; text-align: center!important;" uk-icon="warning">점수가 잘못되었 </p><div uk-drop><div style="width: 500px; text-align: center;" class="uk-card uk-card-body uk-card-default uk-card-hover">1개 이상의 항목에서 비정상 적인 점수가 탐지되었습니다. 확인바랍니다.<br>점수가 이세계로 날아가 갔나 봐요!<br><s>안녕히 계세요 여러분! 전 이 세상의 모든 굴레와 속박을 벗어 던지고 제 행복을 찾아 떠납니다! 여러분도 행복하세요~~!</s></div></div>';
+            }
+            if(compress_time < 100)
+            {
+                compress_time = '<p style="color: red;" uk-icon="warning">잘못된 수치 </p><div uk-drop><div style="width: 500px;" class="uk-card uk-card-body uk-card-default uk-card-hover">양자컴퓨터로 돌리고 있나봐요.<br>혹시 그 양자컴퓨터 얼마에 사셨나요?</div></div>';
+                compress_score = '전지적 참견 시';
+                all_score = '<p style="color: red; text-align: center!important;" uk-icon="warning">점수가 잘못되었 </p><div uk-drop><div style="width: 500px; text-align: center;" class="uk-card uk-card-body uk-card-default uk-card-hover">1개 이상의 항목에서 비정상 적인 점수가 탐지되었습니다. 확인바랍니다.<br>점수가 이세계로 날아가 갔나 봐요!<br><s>안녕히 계세요 여러분! 전 이 세상의 모든 굴레와 속박을 벗어 던지고 제 행복을 찾아 떠납니다! 여러분도 행복하세요~~!</s></div></div>';
+            }
+            if(surd_e_time < 100)
+            {
+                surd_e_time = '<p style="color: red;" uk-icon="warning">잘못된 수치 </p><div uk-drop><div style="width: 500px;" class="uk-card uk-card-body uk-card-default uk-card-hover">현재 수치가 이세계로 넘어갔나봐요!<br><s>이세계에 가고싶다. ㅠㅠ</s></div></div>';
+                surd_e_score = '이세계가고싶';
+                all_score = '<p style="color: red; text-align: center!important;" uk-icon="warning">점수가 잘못되었 </p><div uk-drop><div style="width: 500px; text-align: center;" class="uk-card uk-card-body uk-card-default uk-card-hover">1개 이상의 항목에서 비정상 적인 점수가 탐지되었습니다. 확인바랍니다.<br>점수가 이세계로 날아가 갔나 봐요!<br><s>안녕히 계세요 여러분! 전 이 세상의 모든 굴레와 속박을 벗어 던지고 제 행복을 찾아 떠납니다! 여러분도 행복하세요~~!</s></div></div>';
+            }
+            if(decrypt_zip_time < 100)
+            {
+                decrypt_zip_time = '<p style="color: red;" uk-icon="warning">잘못된 수치 </p><div uk-drop><div style="width: 500px;" class="uk-card uk-card-body uk-card-default uk-card-hover">혹시 이렇게 빨리 풀 수 있다면 제 마음도 풀어주세요!</div></div>';
+                decrypt_zip_score = '편의'
+                all_score = '<p style="color: red; text-align: center!important;" uk-icon="warning">점수가 잘못되었 </p><div uk-drop><div style="width: 500px; text-align: center;" class="uk-card uk-card-body uk-card-default uk-card-hover">1개 이상의 항목에서 비정상 적인 점수가 탐지되었습니다. 확인바랍니다.<br>점수가 이세계로 날아가 갔나 봐요!<br><s>안녕히 계세요 여러분! 전 이 세상의 모든 굴레와 속박을 벗어 던지고 제 행복을 찾아 떠납니다! 여러분도 행복하세요~~!</s></div></div>';
+            }
+            if(download_time < 100)
+            {
+                download_time = '<p style="color: red;" uk-icon="warning">잘못된 수치 </p><div uk-drop><div style="width: 500px;" class="uk-card uk-card-body uk-card-default uk-card-hover">지금 사용중인 인터넷이 1000기가 인터넷인가봐요!<br>당신은 미래인이시군요?</div></div>';
+            }
         </script>
 
         <!-- 브라우저 정보 불러오기 -->
@@ -165,8 +220,6 @@
 			var isIE = userAgent.indexOf('Trident');
             var isOpera = userAgent.indexOf('OPR');
 
-
-            
 
 			// 웨일 브라우저 체크
 			if(isWhale > -1){
@@ -213,8 +266,22 @@
             }else{
                 browser_name = "브라우저를 찾다가 이세계로 날아가 버렸어요! 브라우저 정보를 알려주시면 다시 현실로 돌아올지도?!"
             }
-
         </script>
+        <style>
+            .fat_hr{
+                border: 0;
+                height: 3px;
+                background: #ccc;
+            }
+            thead tr th {
+            border-bottom: 3px solid #ccc; 
+            border-collapse: separate; 
+            border-spacing: 5px 5px;
+            }
+            .hanggan{
+                line-height: 0.6em;
+            }
+        </style>
 
         <!-- Total Score -->
         <div class="horizontal_rule"></div>
@@ -232,7 +299,7 @@
                             </div>
                        </div>
                         <div class="uk-card-body">
-                            <p style="text-align: center;">이 PC의 벤치마크 점수는</p><br><p style="font-size:5em; text-align: center;"><script>document.write(all_score_time.toLocaleString('ko-KR'));</script>ms</p><br><p style="text-align: center;">입니다.</p>
+                            <p style="text-align: center;">이 PC의 벤치마크 점수는</p><br><b><p class="hanggan" style="font-size: 3em; text-align: center!important;"><script>document.write(all_score.toLocaleString('ko-KR'));</script>점</p></b><br><p class="hanggan" style="text-align: center;">입니다.</p>
                         </div>
                         <div class="uk-card-footer">
                             <a href="#pc_spec_title" class="uk-button uk-button-text">* 이 PC의 사양 확인하기</a>
@@ -258,12 +325,10 @@
                        </div>
                         <div class="uk-card-body">
                             <p style="text-align: center;">CPU : <script>document.write(real_cpu_name.slice(0, -12));</script></p>
-                            <br>
                             <p style="text-align: center;">RAM : <script>document.write(ram_size);</script>GB</p>
-                            <br>
                             <p style="text-align: center;">GPU : <script>document.write(real_gpu_name.slice(0, -1));</script></p>
-                            <br>
                             <p style="text-align: center;">브라우저 : <script>document.write(browser_name);</script></p>
+                            <br>
                             <p style="text-align: center;">
                                 <details>
                                     <summary>브라우저 유저 에이전트(User Agent) 값 보기</summary>
@@ -289,7 +354,7 @@
                         <th class="uk-table-shrink uk-text-nowrap" style="text-align:center;">작업/연산 여부</th>
                         <th class="uk-table-small" style="text-align:center;">작업/연산 내용</th>
                         <th class="uk-width-small" style="text-align:center;">걸린 시간<br>(ms/초/분·초)</th>
-                        <th class="uk-table-shrink uk-text-nowrap style=" text-align: center;">점수</th>
+                        <th class="uk-table-shrink uk-text-nowrap" style="text-align: center;">점수</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -300,7 +365,6 @@
                         </td>
                         <td class="uk-text-truncate" style="text-align:center;"><script>document.write(plus_time.toLocaleString('ko-KR'));</script>ms<br><script>document.write(plus_time/1000)</script>초<br><script>document.write(Math.floor(plus_time / 60000));</script>분 <script>document.write(Math.floor(plus_time/1000%60))</script>초</td>
                         <td class="uk-text-nowrap" style="text-align:center;"><script>document.write(plus_score.toLocaleString('ko-KR'));</script>점</td>
-</td>
                     </tr>
                     <tr>
                         <td style="text-align:center;">(연산)</td>
@@ -313,19 +377,10 @@
                     <tr>
                         <td style="text-align:center;">(작업)</td>
                         <td class="uk-table-link">
-                            <p class="uk-link-reset" style="text-align:center;">다운로드 속도 측정</p>
-                        </td>
-                        <td class="uk-text-truncate" style="text-align:center;"><script>document.write(download_time);</script>ms<br><script>document.write(download_time/1000)</script>초<br><script>document.write(Math.floor(download_time / 60000));</script>분 <script>document.write(Math.floor(download_time/1000%60))</script>초</td>
-                        <td class="uk-text-nowrap" style="text-align:center;"><script>document.write(download_score.toLocaleString('ko-KR'));</script>점</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:center;">(작업)</td>
-                        <td class="uk-table-link">
                             <p class="uk-link-reset" style="text-align:center;">waifu2x-converter-cpp로 업스케일링</p>
                         </td>
                         <td class="uk-text-truncate" style="text-align:center;"><script>document.write(upscale_time);</script>ms<br><script>document.write(upscale_time/1000)</script>초<br><script>document.write(Math.floor(upscale_time / 60000));</script>분 <script>document.write(Math.floor(upscale_time/1000%60))</script>초</td>
                         <td class="uk-text-nowrap" style="text-align:center;"><script>document.write(upscale_score.toLocaleString('ko-KR'));</script>점</td>
-</td>
                     </tr>
                     <tr>
                         <td style="text-align:center;">(작업)</td>
@@ -334,7 +389,6 @@
                         </td>
                         <td class="uk-text-truncate" style="text-align:center;"><script>document.write(compress_time.toLocaleString('ko-KR'));</script>ms<br><script>document.write(compress_time/1000)</script>초<br><script>document.write(Math.floor(compress_time / 60000));</script>분 <script>document.write(Math.floor(compress_time/1000%60))</script>초</td>
                         <td class="uk-text-nowrap" style="text-align:center;"><script>document.write(compress_score.toLocaleString('ko-KR'));</script>점</td>
-</td>
                     </tr>
                     <tr>
                         <td style="text-align:center;">(연산)</td>
@@ -343,31 +397,52 @@
                         </td>
                         <td class="uk-text-truncate" style="text-align:center;"><script>document.write(surd_e_time.toLocaleString('ko-KR'));</script>ms<br><script>document.write(surd_e_time/1000)</script>초<br><script>document.write(Math.floor(surd_e_time / 60000));</script>분 <script>document.write(Math.floor(surd_e_time/1000%60))</script>초</td>
                         <td class="uk-text-nowrap" style="text-align:center;"><script>document.write(surd_e_score.toLocaleString('ko-KR'));</script>점</td>
-</td>
                     </tr>
                     <tr>
                         <td style="text-align:center;">(작업)</td>
                         <td class="uk-table-link">
-                            <p class="uk-link-reset" style="text-align:center;">내용</p>
+                            <p class="uk-link-reset" style="text-align:center;">암호 걸린 압축파일 풀기</p>
                         </td>
-                        <td class="uk-text-truncate" style="text-align:center;"><script>document.write(변수.toLocaleString('ko-KR'));</script>ms<br><script>document.write(변수/1000)</script>초<br><script>document.write(Math.floor(변수 / 60000));</script>분 <script>document.write(Math.floor(변수/1000%60))</script>초</td>
-                        <td class="uk-text-nowrap" style="text-align:center;"><script>document.write(변수_score.toLocaleString('ko-KR'));</script>점</td>
-</td>
+                        <td class="uk-text-truncate" style="text-align:center;"><script>document.write(decrypt_zip_time.toLocaleString('ko-KR'));</script>ms<br><script>document.write(decrypt_zip_time/1000)</script>초<br><script>document.write(Math.floor(decrypt_zip_time / 60000));</script>분 <script>document.write(Math.floor(decrypt_zip_time/1000%60))</script>초</td>
+                        <td class="uk-text-nowrap" style="text-align:center;"><script>document.write(decrypt_zip_score.toLocaleString('ko-KR'));</script>점</td>
                     </tr>
-                    <tr>
+                    <tr style="border-top: 3px solid #ccc;">
                         <td style="text-align:center;">총계</td>
                         <td class="uk-table-link">
-                            <p class="uk-link-reset" style="text-align:center;"><b><script>document.write(all_score_time.toLocaleString('ko-KR'));</script>ms</b></p>
+                            <p class="uk-link-reset" style="text-align:center;"><b><script>document.write(all_score_time.toLocaleString('ko-KR'));</script>ms</b>(<script>document.write(all_score_time/1000)</script>초 / <script>document.write(Math.floor(all_score_time / 60000));</script>분 <script>document.write(Math.floor(all_score_time/1000%60))</script>초)</p>
                         </td>
                         <td class="uk-text-truncate" style="text-align:center;"></td>
                         <td class="uk-text-nowrap" style="text-align:center;"><script>document.write(all_score.toLocaleString('ko-KR'));</script>점</td>
-</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="horizontal_rule"></div>
+
+            <hr class="uk-divider-icon">
+
+            <h2 style="text-align: center;">번외 - 다운로드 속도 테스트</h2>
+            <table class="uk-table uk-table-hover uk-table-middle uk-table-divider">
+                <thead>
+                    <tr>
+                        <th class="uk-table-shrink uk-text-nowrap" style="text-align:center;">작업/연산 여부</th>
+                        <th class="uk-table-small" style="text-align:center;">작업 내용</th>
+                        <th class="uk-width-small" style="text-align:center;">걸린 시간<br>(ms/초/분·초)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align:center;">(작업)</td>
+                        <td class="uk-table-link">
+                            <p class="uk-link-reset" style="text-align:center;">국내 서버에서 1,000MB짜리 파일 다운로드</p>
+                        </td>
+                        <td class="uk-text-truncate" style="text-align:center;"><script>document.write(download_time.toLocaleString('ko-KR'));</script>ms<br><script>document.write(download_time/1000)</script>초<br><script>document.write(Math.floor(download_time / 60000));</script>분 <script>document.write(Math.floor(download_time/1000%60))</script>초</td>
                     </tr>
                 </tbody>
             </table>
         </div>
         <div>
-            <div class="horizontal_rule_5x"></div>
+            <div class="horizontal_rule"></div>
             <hr class="uk-divider-icon">
             <ul class="uk-breadcrumb" style="text-align: center;">
                 <li><a href="#modal-used-materials" uk-toggle>사용된 자료들</a></li>
@@ -387,10 +462,12 @@
                             <li>파일 다운로드 - <a href="https://sel-kor-ping.vultr.com" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>Vultr 서버 속도 테스트 페이지</a></li>
                             <li>이미지 업스케일링 - <a href="https://github.com/DeadSix27/waifu2x-converter-cpp" target="_blank"><span class="uk-margin-small-right" uk-icon="github"></span>waifu2x-converter-cpp</a></li>
                             <li>압축/압축해제 - <a href="https://www.7-zip.org" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>7-Zip</a></li>
+                            <li>압축파일 암호 해독 - <a href="https://www.openwall.com/john" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>John the Ripper</a></li>
                         </ul>
                     </p>
                     <p class="uk-text-right">
                         <button class="uk-button uk-button-primary uk-modal-close" type="button">확인</button>
+                    </p>
                 </div>
             </div>
             <!-- 참고 사이트 -->
@@ -407,11 +484,11 @@
                             <li>strcat 입력을 위해 string을 char로 변환 - <a href="https://danco.tistory.com/69" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>댄코 - 댄싱코딩님 티스토리 블로그</a></li>
                             <li>오일러의 곱셈공식으로 원주율 구하기 - <a href="https://tre2man.tistory.com/89" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>발자취님 티스토리 블로그</a></li>
                             <li>문자열 바꾸기(CPU 이름 부분/replace) - <a href="https://gent.tistory.com/415" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>젠트의 프로그래밍 세상님 티스토리 블로그</a></li>
-                            <li>소수점 반올림(점수 계산 부분/toFixed) - <a href="https://gahyun-web-diary.tistory.com/195" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>올라가용님 티스토리 블로그</a></li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
+                            <li>소수점 반올림(점수 계산 부분/toFixed) - <a href="https://gahyun-web-diary.tistory.com/195" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>올라가용님 티스토리 블로그</a></li>
+                            <li>브라우저 정보 확인 - <a href="https://codepen.io/zineeworld/pen/oJyZOq" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>zinee님 CodePen</a></li>
+                            <li>GPU 이름 가져오기 - <a href="https://superuser.com/questions/723506/get-the-video-card-model-via-command-line-in-windows" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>StackExchange 질문 답변</a></li>
+                            <li>텍스트 첫번째 라인 읽기 - <a href="https://www.programiz.com/c-programming/examples/read-file" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>Programiz 문서</a></li>
+                            <li>인터넷 연결 여부 확인 - <a href="https://stackoverflow.com/questions/60992843/how-to-perform-a-ping-test-programmatically-on-windows" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>stack overflow 질문 답변</a></li>
                             <li></li>
                             <li></li>
                         </ul>
