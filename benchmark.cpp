@@ -559,7 +559,7 @@ void console_no_select_restore() {
 
 void rm_usefiles()
 {
-    system("@echo off && del terms.txt 7z.exe 7z.dll all.7z waifu2x-converter-cpp.exe w2xc.dll opencv_world430.dll LICENSE aki.png aki_out.png testfile.bin test.zip test.7z zip.7z terms.txt get_gpu_name.bat decrypt_zip.bat > 1.txt");
+    system("@echo off && del terms.txt 7z.exe 7z.dll all.7z waifu2x-converter-cpp.exe w2xc.dll opencv_world430.dll LICENSE aki.png aki_out.png testfile.bin test.zip test.7z zip.7z terms.txt get_gpu_name.bat decrypt_zip.bat console_no_select.bat console_no_select_restore.bat > 1.txt");
     system("@echo off && rmdir /s /q models_rgb > 1.txt"); //폴더는 따로 삭제합니다.
     system("@echo off && rmdir /s /q zip > 1.txt");
     system("@echo off && rmdir /s /q john > 1.txt");
