@@ -234,43 +234,43 @@
 				browser_name_insert = 1;
 			}
 
-			// 크롬 브라우저 체크
-			else if(isChrome > -1 || isChromeMobile > -1){
-				browser_name_insert = 2;
-			}
-
             // 엣지 브라우저 체크
 			else if(isEdge > -1){
-				browser_name_insert = 3;
+				browser_name_insert = 2;
 			}
 
             // IE 체크
 			else if(isIE > -1){
-				browser_name_insert = 4;
+				browser_name_insert = 3;
 			}
 
             // 파이어폭스 체크
 			else if(isFirefox > -1){
-				browser_name_insert = 5;
+				browser_name_insert = 4;
 			}
 
             // 오페라 체크
 			else if(isOpera > -1){
+				browser_name_insert = 5;
+			}
+
+            // 크롬 브라우저 체크
+			else if(isChrome > -1 || isChromeMobile > -1){
 				browser_name_insert = 6;
 			}
 
             if(browser_name_insert == 1){
                 browser_name = "웨일 브라우저"
             }else if(browser_name_insert == 2){
-                browser_name = "크롬 브라우저"
-            }else if(browser_name_insert == 3){
                 browser_name = "엣지 브라우저"
+            }else if(browser_name_insert == 3){
+                browser_name = "인터넷 익스플로"
             }else if(browser_name_insert == 4){
-                browser_name = "인터넷 익스플로러"
-            }else if(browser_name_insert == 5){
                 browser_name = "파이어폭스"
-            }else if(browser_name_insert == 6){
+            }else if(browser_name_insert == 5){
                 browser_name = "오페라 브라우저"
+            }else if(browser_name_insert == 6){
+                browser_name = "크롬"
             }else{
                 browser_name = "브라우저를 찾다가 이세계로 날아가 버렸어요! 브라우저 정보를 알려주시면 다시 현실로 돌아올지도?!"
             }
