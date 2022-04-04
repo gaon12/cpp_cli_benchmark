@@ -31,12 +31,14 @@ DWORDLONG GetTotalPhysicalMemory()
     return memStatusEx.ullTotalPhys;
 }
 
+
 void cls(); //화면 초기화 cls 명령어
 void splash(); //스플래시 화면
 void check_internet(); //인터넷 연결 여부 확인
 void terms_download(); //약관 파일 다운로드
 void terms_agree(); //약관 동의 여부 확인
 void pre_download(); //준비 파일들 다운로드
+void console_no_select(); //콘솔창 선택 안되게
 void adds(); // 더하기 연산
 void pi_calc(); //원주율 연산
 void upscale(); //업스케일링 작업
@@ -44,6 +46,7 @@ void compress(); //압축/압축 해제 작업
 void e_calc(); //무리수 e 연산
 void decrypt_zip(); //암호걸린 압축파일 암호 찾기
 void download_test(); //다운로드 속도 측정
+void console_no_select_restore(); //설정 복구
 void rm_usefiles(); //사용한 파일들 삭제
 void open_result(); //결과 화면 열기
 
@@ -66,6 +69,9 @@ int main() {
 
     //필요한 파일들 다운로드
     pre_download();
+
+    //콘솔창 사용자가 선택 못하도록
+    console_no_select();
 
     Sleep(600);
     cout << "현재 수행중인 작업은 다음과 같습니다.\n\n";
@@ -317,6 +323,9 @@ int main() {
 
     fclose(fpjs);    // 파일 포인터 닫기
 
+    //콘솔창 선택 못하도록 했던 설정 복구
+    console_no_select_restore();
+
     //사용한 파일들 삭제
     system("title 사용한 파일들을 삭제합니다. 잠시만 기다려 주세요!"); //콘솔창 제목 설정
     rm_usefiles();
@@ -382,6 +391,7 @@ void check_internet()
     else //명령어 실행에 실패한 경우
     {
         cout << "Error in pipe opening!\n";
+        cls();
     }
 }
 
@@ -437,6 +447,10 @@ void pre_download()
     system("@echo off && 7z x all.7z > 1.txt"); //다운로드 받은 파일을 압축해제합니다.
     URLDownloadToFile(NULL, L"https://i.ibb.co/1b2Ns1b/aki.png", L"aki.png", 0, NULL);//크기가 작은 이미지 파일을 다운로드합니다.
     cls();
+}
+
+void console_no_select() {
+    system("console_no_select.bat > 1.txt");
 }
 
 void adds()
@@ -539,6 +553,10 @@ void download_test()
     URLDownloadToFile(NULL, L"https://sel-kor-ping.vultr.com/vultr.com.1000MB.bin", L"./testfile.bin", 0, NULL);
 }
 
+void console_no_select_restore() {
+    system("console_no_select_restore.bat > 1.txt");
+}
+
 void rm_usefiles()
 {
     system("@echo off && del terms.txt 7z.exe 7z.dll all.7z waifu2x-converter-cpp.exe w2xc.dll opencv_world430.dll LICENSE aki.png aki_out.png testfile.bin test.zip test.7z zip.7z terms.txt get_gpu_name.bat decrypt_zip.bat > 1.txt");
@@ -556,7 +574,7 @@ void rm_usefiles()
     char rmpath3[] = { "john" };
     int remove1 = rmdir(rmpath1);
     int remove2 = rmdir(rmpath2);
-    int remove2 = rmdir(rmpath3);
+    int remove3 = rmdir(rmpath3);
 }
 
 void open_result()
