@@ -12,6 +12,7 @@
 #include <thread> //CPU 코어 수 불러오기
 #include <sstream> //cmd값 변수 저장
 #include <stdlib.h> //방화벽 막히는지 확인하기
+#include <ctime> //시간/날짜값 가져오기
 #define BUFFER_SIZE 1024
 //네임스페이스 설정
 using namespace std;
@@ -37,6 +38,7 @@ void splash(); //스플래시 화면
 void check_internet(); //인터넷 연결 여부 확인
 void terms_download(); //약관 파일 다운로드
 void terms_agree(); //약관 동의 여부 확인
+void help_document(); //도움말 문서
 void pre_download(); //준비 파일들 다운로드
 void console_no_select(); //콘솔창 선택 안되게
 void adds(); // 더하기 연산
@@ -127,11 +129,23 @@ int main() {
     //파트6 - 암호걸린 압축파일 비밀번호 찾기
     decrypt_zip();
 
+    //파트6을 진행하면 진행 과정이 화면에 나오기 때문에, 완료되면 바로 화면을 지우고 기존 값으로 덮어씌웁니다.
+    cls();
+
     system_clock::time_point SixthPartEndTime = system_clock::now();
     duration<double> DefaultSec_Sixth = SixthPartEndTime - FifthPartEndTime;
     milliseconds mill_sixth = duration_cast<milliseconds>(SixthPartEndTime - FifthPartEndTime);
     seconds sec_sixth = duration_cast<seconds>(SixthPartEndTime - FifthPartEndTime);
-    cout << mill_sixth.count() << "ms" << "(" << sec_sixth.count() << "초)";//시작 출력
+
+    //파트6을 진행하면 진행 과정이 화면에 나오기 때문에, 완료되면 바로 화면을 지우고 기존 값으로 덮어씌웁니다.
+    cls();
+
+    cout << "1. 1부터 300억까지 더하기 : " << mill.count() << "ms" << "(" << sec.count() << "초)\n";//시간 출력
+    cout << "2. 원주율 구하기 : " << mill_second.count() << "ms" << "(" << sec_second.count() << "초)\n";//시간 출력
+    cout << "3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(40배) : " << mill_third.count() << "ms" << "(" << sec_third.count() << "초)\n";//시간 출력
+    cout << "4. 압축/압축 해제 작업 : " << mill_fourth.count() << "ms" << "(" << sec_fourth.count() << "초)\n";//시작 출력
+    cout << "5. 무리수 e 구하기 : " << mill_fifth.count() << "ms" << "(" << sec_fifth.count() << "초)\n";//시작 출력
+    cout << "6. 압축파일 암호 풀기 : " << mill_sixth.count() << "ms" << "(" << sec_sixth.count() << "초)\n";//시작 출력
 
     //번외 테스트는 총 시간에 포함시키지 않기 위해 시점 조정
     system_clock::time_point EndTime = system_clock::now();
@@ -219,12 +233,27 @@ int main() {
     char gpu_name_raw[100];
     strcpy(gpu_name_raw, gpu_name_info.c_str()); //string값인 gpu 정보를 char로 변환
 
+    //현재 날짜 및 시간값 불러오기
+    time_t timer;
+    struct tm* t;
+    timer = time(NULL);
+    t = localtime(&timer);
+
+    char year[50] = { 0x00, }, month[50] = { 0x00, }, day[50] = { 0x00, }, hours[50] = { 0x00, }, minute[50] = { 0x00, }, wday[50] = { 0x00, };
+
+    sprintf(year, "%d", t->tm_year + 1900);
+    sprintf(month, "%d", t->tm_mon + 1);
+    sprintf(day, "%d", t->tm_mday);
+    sprintf(hours, "%d", t->tm_hour);
+    sprintf(minute,"%d", t->tm_min);
+    sprintf(wday, "%s", t->tm_wday);
+
 
     //결과값 저장
 
     /*
-    결과값 출력, PC 사양 정보 출력을 위해
-    결과 내용을 score_pcspec.js에 저장합니다.
+    결과값 출력, PC 사양 정보, 시간값 출력을 위해
+    결과 내용을 important_values.js에 저장합니다.
 
     결과값은 이미 저장되어 있지만, PC 사양 정보는 아직 읽어오지 않았기 때문에
     저장하기 전에 PC 사양 정보를 먼저 읽어옵니다.
@@ -243,11 +272,14 @@ int main() {
     * 압축/압축해제
     * 무리수 e 구하기
     * 다운로드 속도 측정
+    
+    [날짜 및 시간]
+    * 벤치마크를 돌린 날 기준으로 날짜와 시간
 
     */
 
     FILE* fpjs = 0;
-    fopen_s(&fpjs, "score_pcspec.js", "w");    // score.js 파일을 쓰기 모드(w)로 열기.
+    fopen_s(&fpjs, "important_values.js", "w");    // score.js 파일을 쓰기 모드(w)로 열기.
                                       // 파일 포인터를 반환
 
     char plus_time[70] = "var plus_time =";
@@ -319,6 +351,31 @@ int main() {
     //GPU 이름 추가
     char gpu_name[70] = "var gpu_name = \"";
     fputs(strcat(gpu_name, gpu_name_raw), fpjs);
+    fputs("\b\";\n", fpjs);
+
+    //현재 날짜 추가
+    char now_date_year[70] = "var now_date_year = \"";
+    fputs(strcat(now_date_year, year), fpjs);
+    fputs("\b\";\n", fpjs);
+
+    char now_date_month[70] = "var now_date_month = \"";
+    fputs(strcat(now_date_month, month), fpjs);
+    fputs("\b\";\n", fpjs);
+
+    char now_date_day[70] = "var now_date_day = \"";
+    fputs(strcat(now_date_day, day), fpjs);
+    fputs("\b\";\n", fpjs);
+
+    char now_date_hours[70] = "var now_date_hours = \"";
+    fputs(strcat(now_date_hours, hours), fpjs);
+    fputs("\b\";\n", fpjs);
+
+    char now_date_minute[70] = "var now_date_minute = \"";
+    fputs(strcat(now_date_minute, minute), fpjs);
+    fputs("\b\";\n", fpjs);
+
+    char now_date_wday[70] = "var now_date_wday = \"";
+    fputs(strcat(now_date_wday, wday), fpjs);
     fputs("\b\";\n", fpjs);
 
     fclose(fpjs);    // 파일 포인터 닫기
@@ -421,15 +478,68 @@ void terms_agree()
     }
     fclose(fp); //파일 닫기
     cout << "---------------------------------------------------------------------------------------------\n";
-    cout << "\n\n 약관에 동의하십니까? 동의하시면 Y를 입력해 주십시오.   : ";
+    cout << "\n\n 약관에 동의하십니까? 동의하시면 \"1\"을, 프로그램이 수집하는 내용을 확인하려면 \"2\"를, 종료는 \"0\"을 입력해 주세요.";
 
     while (1)
     {
-        char terms_agree;
+        int terms_agree;
         cin >> terms_agree;
-        if (terms_agree == 'Y' || terms_agree == 'y') {
+        if (terms_agree == 1) {
             cls();
             break;
+        }
+        else if (terms_agree == 2) {
+            cls();
+            help_document();
+        }
+        else if (terms_agree == 0) {
+            cls();
+            cout << "5초 뒤 종료됩니다.";
+            Sleep(5000);
+            exit(0);
+        }
+        else {
+            cout << "\n\nㅁ ERROR! 잘못 입력하셨습니다. 다시 입력해 주시기 바랍니다!";
+            cls();
+        }
+    }
+}
+
+void help_document() {
+    system("title 벤치마크 - 도움말"); //콘솔창 제목 설정
+
+    cout << "---------------------------------------------------------------------------------------------------------------------\n";
+    cout << "본 프로그램이 저장하는 값은 다음과 같습니다.\n\n";
+    cout << "1. 각 파트별 소요 시간값\n";
+    cout << "2. 벤치마크이 완료될 때의 날짜와 시간값\n";
+    cout << "3. PC 정보 일부(CPU 이름, 스레드 수, RAM 용량, GPU 이름)\n\n";
+    cout << "결과 페이지에서 수집하는 정보는 다음과 같습니다.\n";
+    cout << "브라우저 유저 에이전트 값\n\n";
+    cout << "인터넷에 연결되어 있어야 하는 이유와 다운로드하는 파일은 다음과 같습니다.\n";
+    cout << "프로그램이 정상적으로 작동하기 위해서 필요합니다.\n";
+    cout << "1. 약관 파일(약관 동의해야 진행 가능)\n";
+    cout << "2. 각 파트별 필요 프로그램(waifu2x-converter, 7zip, John the Ripper, Vultr 파일 다운로드 속도 테스트용 파일)\n";
+    cout << "3. 결과 페이지(디자인 프레임워크로 UIKit, UIKit-Icon 사용)\n";
+    cout << "---------------------------------------------------------------------------------------------------------------------\n";
+    cout << "\n\n 확인하였고, 계속 진행하려면 \"1\"을, 이전 화면(약관 확인)으로 이동하려면 \"2\"를, 종료는 \"0\"을 입력해 주세요.";
+
+    while (1)
+    {
+        int helpdoc_agree;
+        cin >> helpdoc_agree;
+        if (helpdoc_agree == 1) {
+            cls();
+            break;
+        }
+        else if (helpdoc_agree == 2) {
+            cls();
+            terms_agree();
+        }
+        else if (helpdoc_agree == 0) {
+            cls();
+            cout << "5초 뒤 종료됩니다.";
+            Sleep(5000);
+            exit(0);
         }
         else {
             cout << "\n\nㅁ ERROR! 잘못 입력하셨습니다. 다시 입력해 주시기 바랍니다!";
