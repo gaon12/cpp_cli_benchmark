@@ -38,7 +38,6 @@ void splash(); //스플래시 화면
 void check_internet(); //인터넷 연결 여부 확인
 void terms_download(); //약관 파일 다운로드
 void terms_agree(); //약관 동의 여부 확인
-void help_document(); //도움말 문서
 void pre_download(); //준비 파일들 다운로드
 void console_no_select(); //콘솔창 선택 안되게
 void adds(); // 더하기 연산
@@ -478,7 +477,7 @@ void terms_agree()
     }
     fclose(fp); //파일 닫기
     cout << "---------------------------------------------------------------------------------------------\n";
-    cout << "\n\n 약관에 동의하십니까? 동의하시면 \"1\"을, 프로그램이 수집하는 내용을 확인하려면 \"2\"를, 종료는 \"0\"을 입력해 주세요.";
+    cout << "\n\n 약관에 동의하십니까? 동의하시면 \"1\"을, 종료는 \"2\"를 입력해 주세요.";
 
     while (1)
     {
@@ -489,53 +488,6 @@ void terms_agree()
             break;
         }
         else if (terms_agree == 2) {
-            cls();
-            help_document();
-        }
-        else if (terms_agree == 0) {
-            cls();
-            cout << "5초 뒤 종료됩니다.";
-            Sleep(5000);
-            exit(0);
-        }
-        else {
-            cout << "\n\nㅁ ERROR! 잘못 입력하셨습니다. 다시 입력해 주시기 바랍니다!";
-            cls();
-        }
-    }
-}
-
-void help_document() {
-    system("title 벤치마크 - 도움말"); //콘솔창 제목 설정
-
-    cout << "---------------------------------------------------------------------------------------------------------------------\n";
-    cout << "본 프로그램이 저장하는 값은 다음과 같습니다.\n\n";
-    cout << "1. 각 파트별 소요 시간값\n";
-    cout << "2. 벤치마크이 완료될 때의 날짜와 시간값\n";
-    cout << "3. PC 정보 일부(CPU 이름, 스레드 수, RAM 용량, GPU 이름)\n\n";
-    cout << "결과 페이지에서 수집하는 정보는 다음과 같습니다.\n";
-    cout << "브라우저 유저 에이전트 값\n\n";
-    cout << "인터넷에 연결되어 있어야 하는 이유와 다운로드하는 파일은 다음과 같습니다.\n";
-    cout << "프로그램이 정상적으로 작동하기 위해서 필요합니다.\n";
-    cout << "1. 약관 파일(약관 동의해야 진행 가능)\n";
-    cout << "2. 각 파트별 필요 프로그램(waifu2x-converter, 7zip, John the Ripper, Vultr 파일 다운로드 속도 테스트용 파일)\n";
-    cout << "3. 결과 페이지(디자인 프레임워크로 UIKit, UIKit-Icon 사용)\n";
-    cout << "---------------------------------------------------------------------------------------------------------------------\n";
-    cout << "\n\n 확인하였고, 계속 진행하려면 \"1\"을, 이전 화면(약관 확인)으로 이동하려면 \"2\"를, 종료는 \"0\"을 입력해 주세요.";
-
-    while (1)
-    {
-        int helpdoc_agree;
-        cin >> helpdoc_agree;
-        if (helpdoc_agree == 1) {
-            cls();
-            break;
-        }
-        else if (helpdoc_agree == 2) {
-            cls();
-            terms_agree();
-        }
-        else if (helpdoc_agree == 0) {
             cls();
             cout << "5초 뒤 종료됩니다.";
             Sleep(5000);
@@ -550,6 +502,7 @@ void help_document() {
 
 void pre_download()
 {
+    system("title 벤치마크 - 필요한 파일들 다운로드 중..."); //콘솔창 제목 설정
     cout << "벤치마크 프로그램입니다.\n필요한 파일들을 다운로드하고 있습니다. 잠시만 기다려주세요.\n";
     URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/7-Zip/7z.exe", L"7z.exe", 0, NULL); //7z.exe를 다운로드합니다.
     URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/7-Zip/7z.dll", L"7z.dll", 0, NULL); //7z.exe이 동작하는데 필요한 파일인 7z.dll 파일을 다운로드합니다.
