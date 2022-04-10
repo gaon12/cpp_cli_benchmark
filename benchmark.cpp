@@ -32,12 +32,15 @@ DWORDLONG GetTotalPhysicalMemory()
     return memStatusEx.ullTotalPhys;
 }
 
+int check = 0;
 
 void cls(); //화면 초기화 cls 명령어
 void splash(); //스플래시 화면
 void check_internet(); //인터넷 연결 여부 확인
 void terms_download(); //약관 파일 다운로드
 void terms_agree(); //약관 동의 여부 확인
+void help_document(); //도움말 문서
+void exit_countdown(); //종료 선택시 카운트다운 시작
 void pre_download(); //준비 파일들 다운로드
 void console_no_select(); //콘솔창 선택 안되게
 void adds(); // 더하기 연산
@@ -46,6 +49,7 @@ void upscale(); //업스케일링 작업
 void compress(); //압축/압축 해제 작업
 void e_calc(); //무리수 e 연산
 void decrypt_zip(); //암호걸린 압축파일 암호 찾기
+void file_hash(); //파일 해시 계산
 void download_test(); //다운로드 속도 측정
 void console_no_select_restore(); //설정 복구
 void rm_usefiles(); //사용한 파일들 삭제
@@ -67,7 +71,7 @@ int main() {
 
     //약관 동의 여부 확인
     terms_agree();
-
+    
     //필요한 파일들 다운로드
     pre_download();
 
@@ -138,13 +142,34 @@ int main() {
 
     //파트6을 진행하면 진행 과정이 화면에 나오기 때문에, 완료되면 바로 화면을 지우고 기존 값으로 덮어씌웁니다.
     cls();
-
+    cout << "현재 수행중인 작업은 다음과 같습니다.\n\n";
     cout << "1. 1부터 300억까지 더하기 : " << mill.count() << "ms" << "(" << sec.count() << "초)\n";//시간 출력
     cout << "2. 원주율 구하기 : " << mill_second.count() << "ms" << "(" << sec_second.count() << "초)\n";//시간 출력
     cout << "3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(40배) : " << mill_third.count() << "ms" << "(" << sec_third.count() << "초)\n";//시간 출력
     cout << "4. 압축/압축 해제 작업 : " << mill_fourth.count() << "ms" << "(" << sec_fourth.count() << "초)\n";//시작 출력
     cout << "5. 무리수 e 구하기 : " << mill_fifth.count() << "ms" << "(" << sec_fifth.count() << "초)\n";//시작 출력
     cout << "6. 압축파일 암호 풀기 : " << mill_sixth.count() << "ms" << "(" << sec_sixth.count() << "초)\n";//시작 출력
+
+    //파트7 - 파일 해시값 계산
+    file_hash();
+
+   
+    system_clock::time_point SeventhPartEndTime = system_clock::now();
+    duration<double> DefaultSec_Seventh = SeventhPartEndTime - SixthPartEndTime;
+    milliseconds mill_seventh = duration_cast<milliseconds>(SeventhPartEndTime - SixthPartEndTime);
+    seconds sec_seventh = duration_cast<seconds>(SeventhPartEndTime - SixthPartEndTime);
+
+    //파트7을 진행하면 진행 과정이 화면에 나오기 때문에, 완료되면 바로 화면을 지우고 기존 값으로 덮어씌웁니다.
+    cls();
+    cout << "현재 수행중인 작업은 다음과 같습니다.\n\n";
+    cout << "1. 1부터 300억까지 더하기 : " << mill.count() << "ms" << "(" << sec.count() << "초)\n";//시간 출력
+    cout << "2. 원주율 구하기 : " << mill_second.count() << "ms" << "(" << sec_second.count() << "초)\n";//시간 출력
+    cout << "3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(40배) : " << mill_third.count() << "ms" << "(" << sec_third.count() << "초)\n";//시간 출력
+    cout << "4. 압축/압축 해제 작업 : " << mill_fourth.count() << "ms" << "(" << sec_fourth.count() << "초)\n";//시작 출력
+    cout << "5. 무리수 e 구하기 : " << mill_fifth.count() << "ms" << "(" << sec_fifth.count() << "초)\n";//시작 출력
+    cout << "6. 압축파일 암호 풀기 : " << mill_sixth.count() << "ms" << "(" << sec_sixth.count() << "초)\n";//시작 출력
+    cout << "7. 파일 해시값 계산 : " << mill_seventh.count() << "ms" << "(" << sec_seventh.count() << "초)\n";//시작 출력
+
 
     //번외 테스트는 총 시간에 포함시키지 않기 위해 시점 조정
     system_clock::time_point EndTime = system_clock::now();
@@ -168,7 +193,7 @@ int main() {
     minutes min_end = duration_cast<minutes>(EndTime - StartTime);
 
     system("title 벤치마크 - 완료!"); //콘솔창 제목 설정
-    cout << "\n총 수행시간 : ";
+    cout << "\n\n총 수행시간 : ";
 
     int min, hour;
     min = sec_end.count() / 60;
@@ -176,7 +201,7 @@ int main() {
     min = min % 60;
 
     cout << mill_end.count() << "ms (" << sec_end.count() << "초)";//시간 출력
-    cout << "총 걸린 시간은 " << hour << "시간 " << min << "분 " << sec_end.count() % 60 << "초 입니다.";
+    cout << "\n총 걸린 시간은 " << hour << "시간 " << min << "분 " << sec_end.count() % 60 << "초 입니다.";
 
     //PC 사양 정보 읽기
     //CPU 이름 불러오기
@@ -270,6 +295,7 @@ int main() {
     * waifu2x-converter-cpp로 업스케일링
     * 압축/압축해제
     * 무리수 e 구하기
+    * 파일 해시값 계산
     * 다운로드 속도 측정
     
     [날짜 및 시간]
@@ -283,11 +309,12 @@ int main() {
 
     char plus_time[70] = "var plus_time =";
     char pi_time[70] = "var pi_time =";
-    char download_time[70] = "var download_time =";
     char upscale_time[70] = "var upscale_time =";
     char compress_time[70] = "var compress_time =";
     char surd_e_time[70] = "var surd_e_time =";
     char decrypt_zip_time[70] = "var decrypt_zip_time =";
+    char file_hash_time[70] = "var file_hash_time =";
+    char download_time[70] = "var download_time =";
 
     char ch_plus_time[100];
     string st_plus_time = to_string(mill.count());
@@ -313,15 +340,18 @@ int main() {
     string st_decrypt_zip_time = to_string(mill_sixth.count());
     strcpy(ch_decrypt_zip_time, st_decrypt_zip_time.c_str());
 
+    char ch_file_hash_time[100];
+    string st_file_hash_time = to_string(mill_seventh.count());
+    strcpy(ch_file_hash_time, st_file_hash_time.c_str());
+
     char ch_download_time[100];
     string st_download_time = to_string(mill_extra.count());
     strcpy(ch_download_time, st_download_time.c_str());
+    
 
     fputs(strcat(plus_time, ch_plus_time), fpjs);
     fputs(";\n", fpjs);
     fputs(strcat(pi_time, ch_pi_time), fpjs);
-    fputs(";\n", fpjs);
-    fputs(strcat(download_time, ch_download_time), fpjs);
     fputs(";\n", fpjs);
     fputs(strcat(upscale_time, ch_upscale_time), fpjs);
     fputs(";\n", fpjs);
@@ -330,6 +360,10 @@ int main() {
     fputs(strcat(surd_e_time, ch_surd_e_time), fpjs);
     fputs(";\n", fpjs);
     fputs(strcat(decrypt_zip_time, ch_decrypt_zip_time), fpjs);
+    fputs(";\n", fpjs);
+    fputs(strcat(file_hash_time, ch_file_hash_time), fpjs);
+    fputs(";\n", fpjs);
+    fputs(strcat(download_time, ch_download_time), fpjs);
     fputs(";\n", fpjs);
 
     //PC 정보 추가
@@ -437,7 +471,7 @@ void check_internet()
             cls();
         }
         else {//인터넷에 연결이 안되어 있는 경우
-            cout << "\n\t\t\t\t 인터넷에 연결되어 있지 않거나 방화벽에 차단되어 있습니다.\n\t\t\t\t 정상적인 프로그램 사용을 위해 인터넷을 연결하거나 방화벽에서 본 프로그램을 차단 해제해 주세요!\n 10초 뒤 프로그램이 자동 종료됩니다.";
+            cout << "\n\t\t\t\t 인터넷에 연결되어 있지 않거나 방화벽에 차단되어 있습니다.\n\t\t\t\t\t 정상적인 프로그램 사용을 위해 인터넷을 연결하거나 방화벽에서 본 프로그램을 차단 해제해 주세요!\n 10초 뒤 프로그램이 자동 종료됩니다.";
             Sleep(10000);
             exit(0);
         }
@@ -477,7 +511,7 @@ void terms_agree()
     }
     fclose(fp); //파일 닫기
     cout << "---------------------------------------------------------------------------------------------\n";
-    cout << "\n\n 약관에 동의하십니까? 동의하시면 \"1\"을, 종료는 \"2\"를 입력해 주세요.";
+    cout << "\n\n 약관에 동의하십니까? 동의하시면 \"1\"을, 프로그램이 수집하는 내용을 확인하려면 \"2\"를, 종료는 \"0\"을 입력해 주세요.";
 
     while (1)
     {
@@ -485,13 +519,63 @@ void terms_agree()
         cin >> terms_agree;
         if (terms_agree == 1) {
             cls();
+            if (check == 1)
+                break;
             break;
         }
         else if (terms_agree == 2) {
             cls();
-            cout << "5초 뒤 종료됩니다.";
-            Sleep(5000);
-            exit(0);
+            help_document();
+            if (check == 1)
+                break;
+            
+        }
+        else if (terms_agree == 0) {
+            cls();
+            exit_countdown();
+        }
+        else {
+            cout << "\n\nㅁ ERROR! 잘못 입력하셨습니다. 다시 입력해 주시기 바랍니다!";
+            cls();
+        }
+    }
+}
+
+void help_document() {
+    system("title 벤치마크 - 도움말"); //콘솔창 제목 설정
+
+    cout << "-------------------------------------------------------------------------------------------------------\n";
+    cout << "본 프로그램이 저장하는 값은 다음과 같습니다.\n\n";
+    cout << "1. 각 파트별 소요 시간값\n";
+    cout << "2. 벤치마크이 완료될 때의 날짜와 시간값\n";
+    cout << "3. PC 정보 일부(CPU 이름, 스레드 수, RAM 용량, GPU 이름)\n\n";
+    cout << "결과 페이지에서 수집하는 정보는 다음과 같습니다.\n";
+    cout << "브라우저 유저 에이전트 값\n\n";
+    cout << "인터넷에 연결되어 있어야 하는 이유와 다운로드하는 파일은 다음과 같습니다.\n";
+    cout << "1. 약관 파일(약관 동의해야 진행 가능)\n";
+    cout << "2. 각 파트별 필요 프로그램(waifu2x-converter, 7zip, John the Ripper, Vultr 파일 다운로드 속도 테스트용 파일)\n";
+    cout << "3. 결과 페이지(디자인 프레임워크로 UIKit, UIKit-Icon 사용)\n";
+    cout << "-------------------------------------------------------------------------------------------------------\n";
+    cout << "\n\n 확인하였고, 계속 진행하려면 \"1\"을, 이전 화면(약관 확인)으로 이동하려면 \"2\"를, 종료는 \"0\"을 입력해 주세요.";
+
+    while (1)
+    {
+        int helpdoc_agree;
+        cin >> helpdoc_agree;
+        if (helpdoc_agree == 1) {
+            cls();
+            check = 1;
+            break;
+        }
+        else if (helpdoc_agree == 2) {
+            cls();
+            check = 1;
+            terms_agree();
+            break;
+        }
+        else if (helpdoc_agree == 0) {
+            cls();
+            exit_countdown();
         }
         else {
             cout << "\n\nㅁ ERROR! 잘못 입력하셨습니다. 다시 입력해 주시기 바랍니다!";
@@ -502,7 +586,6 @@ void terms_agree()
 
 void pre_download()
 {
-    system("title 벤치마크 - 필요한 파일들 다운로드 중..."); //콘솔창 제목 설정
     cout << "벤치마크 프로그램입니다.\n필요한 파일들을 다운로드하고 있습니다. 잠시만 기다려주세요.\n";
     URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/7-Zip/7z.exe", L"7z.exe", 0, NULL); //7z.exe를 다운로드합니다.
     URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/7-Zip/7z.dll", L"7z.dll", 0, NULL); //7z.exe이 동작하는데 필요한 파일인 7z.dll 파일을 다운로드합니다.
@@ -608,6 +691,13 @@ void decrypt_zip() {
     system("@echo off && cd john && zip2john test.zip > hash.txt && john hash.txt > 1.txt");
 }
 
+void file_hash() {
+    system("title 벤치마크 - (연산) 파일 해시값 계산"); //콘솔창 제목 설정
+    cout << "7. 파일 해시값 계산 : ";
+    system("powershell \"Get-FileHash hash_calc.txt -Algorithm SHA384\"");
+    system("powershell \"Get-FileHash hash_calc.txt -Algorithm RIPEMD160\"");
+}
+
 void download_test()
 {
     system("title 벤치마크 - (작업) 파일 다운로드 속도 측정"); //콘솔창 제목 설정
@@ -622,7 +712,7 @@ void console_no_select_restore() {
 
 void rm_usefiles()
 {
-    system("@echo off && del terms.txt 7z.exe 7z.dll all.7z waifu2x-converter-cpp.exe w2xc.dll opencv_world430.dll LICENSE aki.png aki_out.png testfile.bin test.zip test.7z zip.7z terms.txt get_gpu_name.bat decrypt_zip.bat console_no_select.bat console_no_select_restore.bat > 1.txt");
+    system("@echo off && del terms.txt 7z.exe 7z.dll all.7z waifu2x-converter-cpp.exe w2xc.dll opencv_world430.dll LICENSE aki.png aki_out.png testfile.bin test.zip test.7z zip.7z terms.txt get_gpu_name.bat decrypt_zip.bat console_no_select.bat console_no_select_restore.bat hash_calc.txt > 1.txt");
     system("@echo off && rmdir /s /q models_rgb > 1.txt"); //폴더는 따로 삭제합니다.
     system("@echo off && rmdir /s /q zip > 1.txt");
     system("@echo off && rmdir /s /q john > 1.txt");
@@ -632,8 +722,28 @@ void rm_usefiles()
 
 void open_result()
 {
-    cout << "5초 뒤 결과가 나옵니다. 결과창을 확인하세요!";
+    cout << "\n\n결과창을 확인하세요!";
     system("start /max index.html");
+}
+
+void exit_countdown() {
+    cout << "5초 뒤 종료합니다.";
+    Sleep(1000);
+    cls();
+    cout << "4초 뒤 종료합니다.";
+    Sleep(1000);
+    cls();
+    cout << "3초 뒤 종료합니다.";
+    Sleep(1000);
+    cls();
+    cout << "2초 뒤 종료합니다.";
+    Sleep(1000);
+    cls();
+    cout << "1초 뒤 종료합니다.";
+    Sleep(1000);
+    cls();
+    cout << "바이~ 바이!";
+    exit(1);
 }
 
 double factorial(double a) //팩토리얼 연산
