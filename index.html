@@ -17,8 +17,7 @@
             <div class="uk-navbar-left">
                 <ul class="uk-navbar-nav">
                     <li class="uk-active" id="top"><a style="color: #FFFFFF; font-size:1.5em;" href="./index.html"><b>&nbsp;&nbsp;&nbsp;벤치마크 점수 확인</b></a></li>
-                    <li class="uk-active" id="top"><a style="color: #FFFFFF; font-size:1em;" onclick="UIkit.notification({message: '<img src=\'https://i.ibb.co/wWMxdJ7/chibi-2380489.png\' height=\'100px\'> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;안티치드가 작동하고 있습니다.<br>&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp부정행위 여부를 판단합니다...'})"><b>&nbsp;&nbsp;&nbsp;<span uk-icon="lock"></span>&nbsp;&nbsp;안티치트 작동 중</b></a></li>
-                    <li class="uk-active" id="top"><a style="color: #FFFFFF; font-size:1em;" onclick="UIkit.notification({message: '<img src=\'https://i.ibb.co/wWMxdJ7/chibi-2380489.png\' height=\'100px\'> &nbsp;자주 묻는 사항은 <a href=\'https://common.gaon.xyz/w/index.php/Cpp_cli_benchmark\' target=\'_blank\'>이곳</a>에서 보실 수 있습니다.<br>&nbsp;추가 질문은 토론을 이용해 주세요!'})"><b>&nbsp;&nbsp;&nbsp;<span uk-icon="question"></span>&nbsp;&nbsp;Q&A</b></a></li>
+                    <li class="uk-active" id="top"><a style="color: #FFFFFF; font-size:1em;" onclick="UIkit.notification({message: '<img src=\'https://i.ibb.co/wWMxdJ7/chibi-2380489.png\' height=\'100px\'> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;안티치드가 작동하고 있습니다.<br>&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp부정행위 여부를 판단합니다...'})"><b>&nbsp;&nbsp;&nbsp;<span uk-icon="lock"></span>안티치트 작동 중</b></a></li>
                 </ul>
             </div>
         </nav>
@@ -60,7 +59,7 @@
         <script>
 		var plus_score_raw = plus_time/52000;
         var plus_score_calc = plus_score_raw.toFixed(3);
-        var plus_score_standard = 3500;
+        var plus_score_standard = 4500;
         var plus_score;
         var plus_scores;
         if(plus_score_calc < 1){
@@ -75,11 +74,11 @@
 
         var pi_score_raw = pi_time/29000;
         var pi_score_calc = pi_score_raw.toFixed(3);
-        var pi_score_standard = 3000;
+        var pi_score_standard = 2500;
         var pi_score;
         if(pi_score_calc < 1){
 	        pi_score = pi_score_standard + (1- pi_score_calc)*1000;
-        } else if(pi_score_raw==1){
+        } else if(pi_score==1){
 	        pi_score = pi_score_standard;
         }else{
 	        pi_score = pi_score_standard + (pi_score_calc - 1)*1000;
@@ -102,11 +101,11 @@
         var compress_standard = 2900;
         var compress_score;
         if(compress_score_calc < 1){
-        	compress_score = compress_standard + (1- compress_score_calc)*1000;
-        } else if(compress_score_raw==1){
-        	compress_score = compress_standard;
+        	compress_score = 2000 + (1- compress_score_calc)*1000;
+        } else if(compress_score==1){
+        	compress_score = 2000;
         }else{
-        	compress_score = compress_standard + (compress_score_calc - 1)*1000;
+        	compress_score = 2000 + (compress_score_calc - 1)*1000;
         }
 
         var surd_e_score_raw = surd_e_time/13500;
@@ -115,7 +114,7 @@
         var surd_e_score;
         if(surd_e_score_calc < 1){
 	        surd_e_score = surd_e_score_standard + (1- surd_e_score_calc)*1000;
-        } else if(surd_e_score_raw==1){
+        } else if(surd_e_score==1){
 	        surd_e_score = surd_e_score_standard;
         }else{
         	surd_e_score = surd_e_score_standard + (surd_e_score_calc - 1)*1000;
@@ -123,26 +122,14 @@
 
         var decrypt_zip_score_raw = decrypt_zip_time/25000;
         var decrypt_zip_score_calc = decrypt_zip_score_raw.toFixed(3);
-        var decrypt_zip_score_standard = 3100;
+        var decrypt_zip_score_standard = 2300;
         var decrypt_zip_score;
         if(decrypt_zip_score_calc < 1){
 	        decrypt_zip_score = decrypt_zip_score_standard + (1- decrypt_zip_score_calc)*1000;
-        } else if(decrypt_zip_score_raw==1){
+        } else if(decrypt_zip_score==1){
 	        decrypt_zip_score = decrypt_zip_score_standard;
         }else{
         	decrypt_zip_score = decrypt_zip_score_standard + (decrypt_zip_score_calc - 1)*1000;
-        }
-
-        var file_hash_score_raw = file_hash_time/25000;
-        var file_hash_score_calc = file_hash_score_raw.toFixed(3);
-        var file_hash_score_standard = 2700;
-        var file_hash_score;
-        if(file_hash_score_calc < 1){
-	        file_hash_score = file_hash_score_standard + (1- file_hash_score_calc)*1000;
-        } else if(file_hash_score_raw==1){
-	        file_hash_score = file_hash_score_standard;
-        }else{
-        	file_hash_score = file_hash_score_standard + (file_hash_score_calc - 1)*1000;
         }
 		</script>
 		
@@ -157,8 +144,8 @@
 
         <!-- 총점 계산 -->
         <script>
-            var all_score_time = plus_time + pi_time + upscale_time + compress_time + surd_e_time + decrypt_zip_time + file_hash_time;
-            var all_score = plus_score + pi_score + upscale_score + compress_score + surd_e_score + decrypt_zip_score + file_hash_score;
+            var all_score_time = plus_time + pi_time + upscale_time + compress_time + surd_e_time + decrypt_zip_time;
+            var all_score = plus_score + pi_score + upscale_score + compress_score + surd_e_score + decrypt_zip_score;
             var all_scores_time = all_score_time + "ms";
             var all_score_before = all_score;
             var all_scores = all_score_before;
@@ -173,58 +160,49 @@
 
         <!-- 안티치트 실행 -->
         <script>
-            error_msg_all_score_time = '<p style="font-size: 2em; color: red; text-align: center!important; margin : 0px 120px 0px 0px;">점수가 잘못되었네요! </p><div uk-drop><div style="width: 500px; text-align: center;" class="uk-card uk-card-body uk-card-default uk-card-hover">1개 이상의 항목에서 비정상 적인 점수가 탐지되었습니다.<br>확인바랍니다.</div></div>';
-            error_msg_all_score = '<p style="font-size: 2em; color: red; text-align: center!important; margin : 0px 120px 0px 0px;">점수가 잘못되었네요! </p><div uk-drop><div style="width: 500px; text-align: center;" class="uk-card uk-card-body uk-card-default uk-card-hover">1개 이상의 항목에서 비정상 적인 점수가 탐지되었습니다.<br>확인바랍니다.<br>점수가 이세계로 날아가 갔나 봐요!<br><s>안녕히 계세요 여러분! 전 이 세상의 모든 굴레와 속박을<br>벗어 던지고 제 행복을 찾아 떠납니다! 여러분도 행복하세요~~!</s></div></div>';
-            if(plus_time < 1000)
+            if(plus_time < 100)
             {
                 plus_time = '<p style="color: red;" uk-icon="warning">잘못된 수치 </p><div uk-drop><div style="width: 500px;" class="uk-card uk-card-body uk-card-default uk-card-hover">당신 뇌엔 슈퍼컴퓨터가 내장되어 있나요?</div></div>';
                 plus_score = '소세지 빵';
-                all_scores_time = error_msg_all_score_time;
-                all_scores = error_msg_all_score;
+                all_scores_time = '<p style="font-size: 2em; color: red; text-align: center!important; margin : 0px 120px 0px 0px;">점수가 잘못되었네요! </p><div uk-drop><div style="width: 500px; text-align: center;" class="uk-card uk-card-body uk-card-default uk-card-hover">1개 이상의 항목에서 비정상 적인 점수가 탐지되었습니다.<br>확인바랍니다.</div></div>';
+                all_scores = '<p style="font-size: 2em; color: red; text-align: center!important; margin : 0px 120px 0px 0px;">점수가 잘못되었네요! </p><div uk-drop><div style="width: 500px; text-align: center;" class="uk-card uk-card-body uk-card-default uk-card-hover">1개 이상의 항목에서 비정상 적인 점수가 탐지되었습니다.<br>확인바랍니다.<br>점수가 이세계로 날아가 갔나 봐요!<br><s>안녕히 계세요 여러분! 전 이 세상의 모든 굴레와 속박을<br>벗어 던지고 제 행복을 찾아 떠납니다! 여러분도 행복하세요~~!</s></div></div>';
             }
-            if(pi_time < 1000)
+            if(pi_time < 100)
             {
                 pi_time = '<p style="color: red;" uk-icon="warning">잘못된 수치 </p><div uk-drop><div style="width: 500px;" class="uk-card uk-card-body uk-card-default uk-card-hover">혹시 원주율을 소수점 아래 1조자리까지 외우시나요?</div></div>';
                 pi_score = '문익';
-                all_scores_time = error_msg_all_score_time;
-                all_scores = error_msg_all_score;
+                all_scores_time = '<p style="font-size: 2em; color: red; text-align: center!important; margin : 0px 120px 0px 0px;">점수가 잘못되었네요! </p><div uk-drop><div style="width: 500px; text-align: center;" class="uk-card uk-card-body uk-card-default uk-card-hover">1개 이상의 항목에서 비정상 적인 점수가 탐지되었습니다.<br>확인바랍니다.</div></div>';
+                all_scores = '<p style="font-size: 2em; color: red; text-align: center!important; margin : 0px 120px 0px 0px;">점수가 잘못되었네요! </p><div uk-drop><div style="width: 500px; text-align: center;" class="uk-card uk-card-body uk-card-default uk-card-hover">1개 이상의 항목에서 비정상 적인 점수가 탐지되었습니다.<br>확인바랍니다.<br>점수가 이세계로 날아가 갔나 봐요!<br><s>안녕히 계세요 여러분! 전 이 세상의 모든 굴레와 속박을<br>벗어 던지고 제 행복을 찾아 떠납니다! 여러분도 행복하세요~~!</s></div></div>';
             }
-            if(upscale_time < 1000)
+            if(upscale_time < 100)
             {
                 upscale_time = '<p style="color: red;" uk-icon="warning">잘못된 수치 </p><div uk-drop><div style="width: 500px;" class="uk-card uk-card-body uk-card-default uk-card-hover">혹시 사용자가 인공지능?!</div></div>';
                 upscale_score = '내 학';
-                all_scores_time = error_msg_all_score_time;
-                all_scores = error_msg_all_score;
+                all_scores_time = '<p style="font-size: 2em; color: red; text-align: center!important; margin : 0px 120px 0px 0px;">점수가 잘못되었네요! </p><div uk-drop><div style="width: 500px; text-align: center;" class="uk-card uk-card-body uk-card-default uk-card-hover">1개 이상의 항목에서 비정상 적인 점수가 탐지되었습니다.<br>확인바랍니다.</div></div>';
+                all_scores = '<p style="font-size: 2em; color: red; text-align: center!important; margin : 0px 120px 0px 0px;">점수가 잘못되었네요! </p><div uk-drop><div style="width: 500px; text-align: center;" class="uk-card uk-card-body uk-card-default uk-card-hover">1개 이상의 항목에서 비정상 적인 점수가 탐지되었습니다.<br>확인바랍니다.<br>점수가 이세계로 날아가 갔나 봐요!<br><s>안녕히 계세요 여러분! 전 이 세상의 모든 굴레와 속박을<br>벗어 던지고 제 행복을 찾아 떠납니다! 여러분도 행복하세요~~!</s></div></div>';
             }
-            if(compress_time < 1000)
+            if(compress_time < 100)
             {
                 compress_time = '<p style="color: red;" uk-icon="warning">잘못된 수치 </p><div uk-drop><div style="width: 500px;" class="uk-card uk-card-body uk-card-default uk-card-hover">양자컴퓨터로 돌리고 있나봐요.<br>혹시 그 양자컴퓨터 얼마에 사셨나요?</div></div>';
                 compress_score = '전지적 참견 시';
-                all_scores_time = error_msg_all_score_time;
-                all_scores = error_msg_all_score;
+                all_scores_time = '<p style="font-size: 2em; color: red; text-align: center!important; margin : 0px 120px 0px 0px;">점수가 잘못되었네요! </p><div uk-drop><div style="width: 500px; text-align: center;" class="uk-card uk-card-body uk-card-default uk-card-hover">1개 이상의 항목에서 비정상 적인 점수가 탐지되었습니다.<br>확인바랍니다.</div></div>';
+                all_scores = '<p style="font-size: 2em; color: red; text-align: center!important; margin : 0px 120px 0px 0px;">점수가 잘못되었네요! </p><div uk-drop><div style="width: 500px; text-align: center;" class="uk-card uk-card-body uk-card-default uk-card-hover">1개 이상의 항목에서 비정상 적인 점수가 탐지되었습니다.<br>확인바랍니다.<br>점수가 이세계로 날아가 갔나 봐요!<br><s>안녕히 계세요 여러분! 전 이 세상의 모든 굴레와 속박을<br>벗어 던지고 제 행복을 찾아 떠납니다! 여러분도 행복하세요~~!</s></div></div>';
             }
-            if(surd_e_time < 1000)
+            if(surd_e_time < 100)
             {
                 surd_e_time = '<p style="color: red;" uk-icon="warning">잘못된 수치 </p><div uk-drop><div style="width: 500px;" class="uk-card uk-card-body uk-card-default uk-card-hover">현재 수치가 이세계로 넘어갔나봐요!<br><s>이세계에 가고싶다. ㅠㅠ</s></div></div>';
                 surd_e_score = '이세계가고싶';
-                all_scores_time = error_msg_all_score_time;
-                all_scores = error_msg_all_score;
+                all_scores_time = '<p style="font-size: 2em; color: red; text-align: center!important; margin : 0px 120px 0px 0px;">점수가 잘못되었네요! </p><div uk-drop><div style="width: 500px; text-align: center;" class="uk-card uk-card-body uk-card-default uk-card-hover">1개 이상의 항목에서 비정상 적인 점수가 탐지되었습니다.<br>확인바랍니다.</div></div>';
+                all_scores = '<p style="font-size: 2em; color: red; text-align: center!important; margin : 0px 120px 0px 0px;">점수가 잘못되었네요! </p><div uk-drop><div style="width: 500px; text-align: center;" class="uk-card uk-card-body uk-card-default uk-card-hover">1개 이상의 항목에서 비정상 적인 점수가 탐지되었습니다.<br>확인바랍니다.<br>점수가 이세계로 날아가 갔나 봐요!<br><s>안녕히 계세요 여러분! 전 이 세상의 모든 굴레와 속박을<br>벗어 던지고 제 행복을 찾아 떠납니다! 여러분도 행복하세요~~!</s></div></div>';
             }
-            if(decrypt_zip_time < 1000)
+            if(decrypt_zip_time < 100)
             {
                 decrypt_zip_time = '<p style="color: red;" uk-icon="warning">잘못된 수치 </p><div uk-drop><div style="width: 500px;" class="uk-card uk-card-body uk-card-default uk-card-hover">혹시 이렇게 빨리 풀 수 있다면 제 마음도 풀어주세요!</div></div>';
                 decrypt_zip_score = '편의'
-                all_scores_time = error_msg_all_score_time;
-                all_scores = error_msg_all_score;
+                all_scores_time = '<p style="font-size: 2em; color: red; text-align: center!important; margin : 0px 120px 0px 0px;">점수가 잘못되었네요! </p><div uk-drop><div style="width: 500px; text-align: center;" class="uk-card uk-card-body uk-card-default uk-card-hover">1개 이상의 항목에서 비정상 적인 점수가 탐지되었습니다.<br>확인바랍니다.</div></div>';
+                all_scores = '<p style="font-size: 2em; color: red; text-align: center!important; margin : 0px 120px 0px 0px;">점수가 잘못되었네요! </p><div uk-drop><div style="width: 500px; text-align: center;" class="uk-card uk-card-body uk-card-default uk-card-hover">1개 이상의 항목에서 비정상 적인 점수가 탐지되었습니다.<br>확인바랍니다.<br>점수가 이세계로 날아가 갔나 봐요!<br><s>안녕히 계세요 여러분! 전 이 세상의 모든 굴레와 속박을<br>벗어 던지고 제 행복을 찾아 떠납니다! 여러분도 행복하세요~~!</s></div></div>';
             }
-            if(file_hash_time < 1000)
-            {
-                file_hash_time = '<p style="color: red;" uk-icon="warning">잘못된 수치 </p><div uk-drop><div style="width: 500px;" class="uk-card uk-card-body uk-card-default uk-card-hover">파일을 보면, 그 파일의 모든 정보를 0.01초만에 알 수 있는 기술이 있군요?</div></div>';
-                file_hash_score = '정육';
-                all_scores_time = error_msg_all_score_time;
-                all_scores = error_msg_all_score;
-            }
-            if(download_time < 1000)
+            if(download_time < 100)
             {
                 download_time = '<p style="color: red;" uk-icon="warning">잘못된 수치 </p><div uk-drop><div style="width: 425px;" class="uk-card uk-card-body uk-card-default uk-card-hover">지금 사용중인 인터넷이 1000기가 인터넷인가봐요!<br>당신은 미래인이시군요?</div></div>';
             }
@@ -438,14 +416,6 @@
                         <td class="uk-text-truncate" style="text-align:center;"><script>document.write(decrypt_zip_time.toLocaleString('ko-KR'));</script>ms<br><script>document.write(decrypt_zip_time/1000)</script>초<br><script>document.write(Math.floor(decrypt_zip_time / 60000));</script>분 <script>document.write(Math.floor(decrypt_zip_time/1000%60))</script>초</td>
                         <td class="uk-text-nowrap" style="text-align:center;"><script>document.write(decrypt_zip_score.toLocaleString('ko-KR'));</script>점</td>
                     </tr>
-                    <tr>
-                        <td style="text-align:center;">(연산)</td>
-                        <td class="uk-table-link">
-                            <p class="uk-link-reset" style="text-align:center;">파일 해시값 계산</p>
-                        </td>
-                        <td class="uk-text-truncate" style="text-align:center;"><script>document.write(file_hash_time.toLocaleString('ko-KR'));</script>ms<br><script>document.write(file_hash_time/1000)</script>초<br><script>document.write(Math.floor(file_hash_time / 60000));</script>분 <script>document.write(Math.floor(file_hash_time/1000%60))</script>초</td>
-                        <td class="uk-text-nowrap" style="text-align:center;"><script>document.write(file_hash_score.toLocaleString('ko-KR'));</script>점</td>
-                    </tr>
                     <tr style="border-top: 3px solid #ccc;">
                         <td style="text-align:center;">총계</td>
                         <td class="uk-table-link">
@@ -531,8 +501,7 @@
                             <li>텍스트 첫번째 라인 읽기 - <a href="https://www.programiz.com/c-programming/examples/read-file" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>Programiz 문서</a></li>
                             <li>인터넷 연결 여부 확인 - <a href="https://stackoverflow.com/questions/60992843/how-to-perform-a-ping-test-programmatically-on-windows" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>stack overflow 질문 답변</a></li>
                             <li>콘솔창 선택 시 멈추는 현상 수정 - <a href="https://www.ddengle.com/mining/2061437" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>떙글 커뮤니티 파이리님 게시글</a></li>
-                            <li>숫자 3자리마다 쉼표 찍기 - <a href="https://gofnrk.tistory.com/106" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>홍아지님 EasyEasy 티스토리 블로그</a></li>
-                            <Li>해시값 구하기 - <a href="https://docs.microsoft.com/ko-kr/powershell/module/microsoft.powershell.utility/get-filehash?view=powershell-7" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>마이크로소프트 공식 설명서</a></li>
+                            <li>숫자 3자리마다 쉼표 찍기 - <a href="https://gofnrk.tistory.com/106" target="_blank"<span class="uk-margin-small-right" uk-icon="link"></span>홍아지님 EasyEasy 티스토리 블로그</a></li>
                         </ul>
                     </p>
                     <p class="uk-text-right">
@@ -547,9 +516,8 @@
                     <h2 class="uk-modal-title">Special Thanks</h2>
                     <p>프로젝트를 만드는데 도움을 주신 분들입니다.
                         <ul>
-                            <li>제작자 : 정가온 - <a href="https://github.com/gaon12" target="_blank"><span class="uk-margin-small-right" uk-icon="github"></span>gaon12</a></li>
-                            <li>(도움) 홍승백 - <a href="https://github.com/hihotz" target="_blank"><span class="uk-margin-small-right" uk-icon="github"></span>hihotz</a></li>
-                            <li>(도움) 이창수</li>
+                            <li>제작자 : 정가온 - <a href="https://github.com/gaon12" target="_blank"><span class="uk-margin-small-right" uk-icon="github"></span>gaon12</a></li></li>
+                            <li>(도움) 홍승백 - <a href="https://github.com/hihotz" target="_blank"><span class="uk-margin-small-right" uk-icon="github"></span>hihotz</a></li></li>
                             <li>And You!</li>
                         </ul>
                     </p>
