@@ -59,7 +59,7 @@ int main() {
 
     //인터넷 연결 여부 확인
     check_internet();
-    
+
     system("title 벤치마크 - 약관 동의"); //콘솔창 제목 설정
 
     //약관 다운로드
@@ -244,8 +244,8 @@ int main() {
     sprintf(month, "%d", t->tm_mon + 1);
     sprintf(day, "%d", t->tm_mday);
     sprintf(hours, "%d", t->tm_hour);
-    sprintf(minute,"%d", t->tm_min);
-    sprintf(wday, "%s", t->tm_wday);
+    sprintf(minute, "%d", t->tm_min);
+    sprintf(wday, "%d", t->tm_wday);
 
 
     //결과값 저장
@@ -271,7 +271,7 @@ int main() {
     * 압축/압축해제
     * 무리수 e 구하기
     * 다운로드 속도 측정
-    
+
     [날짜 및 시간]
     * 벤치마크를 돌린 날 기준으로 날짜와 시간
 
@@ -568,7 +568,7 @@ void compress()
     5. zip 폴더를 삭제합니다. test.zip 파일을 압축해제하면 zip폴더가 생성이 되기 때문에 압축해제 하기 전에 zip 폴더를 삭제합니다.
     6. 4의 작업으로 얻은 test.zip을 압축해제합니다.
     */
-    
+
     //PC의 스레드 수를 구합니다.
     SYSTEM_INFO siSysInfo; // Copy the hardware information to the SYSTEM_INFO structure. 
     GetSystemInfo(&siSysInfo); // Display the contents of the SYSTEM_INFO structure. 
