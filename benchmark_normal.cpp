@@ -518,7 +518,7 @@ void console_no_select() {
 
 void adds()
 {
-    system("title 벤치마크 - (연산) 1부터 600억까지 더하기"); //콘솔창 제목 설정
+    system("title 벤치마크 - (연산) 1부터 300억까지 더하기"); //콘솔창 제목 설정
     cout << "1. 1부터 300억까지 더하기 : ";
 
     long sum = 0;
@@ -627,7 +627,8 @@ void rm_usefiles()
     system("@echo off && rmdir /s /q zip > 1.txt");
     system("@echo off && rmdir /s /q john > 1.txt");
 
-    remove("1.txt");
+    char rm_log[] = "1.txt";
+    remove(rm_log);
 }
 
 void open_result()
