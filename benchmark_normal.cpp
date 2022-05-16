@@ -39,7 +39,6 @@ void check_internet(); //인터넷 연결 여부 확인
 void terms_download(); //약관 파일 다운로드
 void terms_agree(); //약관 동의 여부 확인
 void pre_download(); //준비 파일들 다운로드
-void console_no_select(); //콘솔창 선택 안되게
 void adds(); // 더하기 연산
 void pi_calc(); //원주율 연산
 void upscale(); //업스케일링 작업
@@ -47,7 +46,6 @@ void compress(); //압축/압축 해제 작업
 void e_calc(); //무리수 e 연산
 void decrypt_zip(); //암호걸린 압축파일 암호 찾기
 void download_test(); //다운로드 속도 측정
-void console_no_select_restore(); //설정 복구
 void rm_usefiles(); //사용한 파일들 삭제
 void open_result(); //결과 화면 열기
 
@@ -70,9 +68,6 @@ int main() {
 
     //필요한 파일들 다운로드
     pre_download();
-
-    //콘솔창 사용자가 선택 못하도록
-    console_no_select();
 
     Sleep(600);
     cout << "현재 수행중인 작업은 다음과 같습니다.\n\n";
@@ -379,9 +374,6 @@ int main() {
 
     fclose(fpjs);    // 파일 포인터 닫기
 
-    //콘솔창 선택 못하도록 했던 설정 복구
-    console_no_select_restore();
-
     //사용한 파일들 삭제
     system("title 사용한 파일들을 삭제합니다. 잠시만 기다려 주세요!"); //콘솔창 제목 설정
     rm_usefiles();
@@ -393,6 +385,7 @@ int main() {
 
 void cls()
 {
+    //화면 내용을 모두 지우는 cls 명령어를 수행하는 함수입니다.
     system("cls");
 }
 
@@ -431,24 +424,87 @@ void check_internet()
             rd += ret;
         }
 
-        if (strstr(buffer, "TTL=") != NULL) { //인터넷에 연결이 되어 있는 경우
+        //인터넷에 연결이 되어 있는 경우
+        if (strstr(buffer, "TTL=") != NULL) {
+            //인터넷 연결 오류 메시지를 출력합니다.
             cout << "\n\t\t\t\t 인터넷에 연결되어 있습니다. 방화벽에도 막혀있지 않습니다.\n\t\t\t\t 정상적으로 프로그램을 사용할 수 있습니다.\n";
+            //3초(3000ms)간 대기합니다.
             Sleep(3000);
             cls();
         }
-        else {//인터넷에 연결이 안되어 있는 경우
+        //인터넷에 연결이 안되어 있는 경우
+        else {
+            //인터넷 연결 오류 메시지를 출력합니다.
             cout << "\n\t\t\t\t 인터넷에 연결되어 있지 않거나 방화벽에 차단되어 있습니다.\n\t\t\t\t 정상적인 프로그램 사용을 위해 인터넷을 연결하거나 방화벽에서 본 프로그램을 차단 해제해 주세요!\n 10초 뒤 프로그램이 자동 종료됩니다.";
+            //10초(10000ms)간 대기합니다.
             Sleep(10000);
             exit(0);
         }
         //printf( "%d bytes read\n\n%s\n", rd, buffer );
         _pclose(pipe);
     }
-    else //명령어 실행에 실패한 경우
+    //명령어 실행에 실패한 경우
+    else
     {
         cout << "Error in pipe opening!\n";
         cls();
+        exit(0);
     }
+}
+
+void update_check()
+{
+    system("title 벤치마크 - 업데이트 확인 중..."); //콘솔창 제목 설정
+
+    //최신 버전 정보가 담긴 파일을 다운로드합니다.
+    URLDownloadToFile(NULL, L"https://common.gaon.xyz/prj/cpp_cli_benchmark/latest_version_info.txt", L"latest_version_info.txt", 0, NULL);
+
+    char latest[20];    // 파일을 읽을 때 사용할 임시 공간
+
+    FILE* fp = fopen("latest_version_info.txt", "r");    // latest_version_info.txt 파일을 읽기 모드로 열기.  
+                                           // 파일 포인터를 반환
+    fgets(latest, sizeof(latest), fp);    // latest_version_info.txt에서 문자열을 읽음
+
+    //이 줄 위로는 latest_version_info.txt 파일 열기, 이 줄 아래는 current_version_info.txt 파일 열기
+    char current[20];    // 파일을 읽을 때 사용할 임시 공간
+    FILE* fp2 = fopen("current_version_info.txt", "r");    // current_version_info.txt 파일을 읽기 모드로 열기.  
+                                           // 파일 포인터를 반환
+
+    fgets(current, sizeof(current), fp2);    // current_version_info.txt에서 문자열을 읽음
+
+    //최신 버전과 현재 버전이 일치하는 경우
+    if (latest == current)
+    {
+        system("title 벤치마크 - 최신버전을 사용하고 계십니다!"); //콘솔창 제목 설정
+
+        //안내 메시지 출력
+        cout << "현재" << current << "최신버전(" << latest << ")을 사용하고 계십니다.\n 잠시 후 계속됩니다.";
+        //3초(3000ms)간 대기
+        Sleep(3000);
+        //화면 초기화
+        cls();
+    }
+    //그 외인 경우(최신 버전과 현재 버전의 값이 다른 경우)
+    else
+    {
+        system("title 벤치마크 - 구버전을 사용하고 계십니다! 업데이트를 진행합니다!"); //콘솔창 제목 설정
+
+        //안내 메시지 출력
+        cout << "현재" << current << "최신버전(" << latest << ")을 사용하고 계시지 않습니다.\n 업데이트를 시작합니다.";
+        //3초(3000ms)간 대기
+        Sleep(3000);
+
+        //업데이트 프로그램을 다운로드합니다.
+        URLDownloadToFile(NULL, L"https://common.gaon.xyz/prj/cpp_cli_benchmark/updater.exe", L"updater.exe", 0, NULL);
+        //업데이트 프로그램을 실행합니다.
+        system("updater.exe");
+        //프로그램 종료(업데이트 프로그램이 벤치마크 프로그램을 시작시킴)
+        exit(0);
+    }
+
+    //열었던 파일을 닫습니다.
+    fclose(fp); //최신 버전 정보가 담긴 파일을 닫습니다.
+    fclose(fp2); //현재 버전 정보가 담긴 파일을 닫습니다.
 }
 
 void terms_download()
@@ -479,23 +535,48 @@ void terms_agree()
     cout << "---------------------------------------------------------------------------------------------\n";
     cout << "\n\n 약관에 동의하십니까? 동의하시면 \"1\"을, 종료는 \"2\"를 입력해 주세요.";
 
+    /*
+    while문을 사용한 이유는 다음과 같습니다.
+    if문만 사용할 경우, 메뉴에 없는 값을 입력할 경우 되돌아가려면 goto문을 사용해야 합니다.
+    하지만 while문과 같이 사용하는 경우에는 메뉴에 없는 값을 입력하면 계속 반복시킬수 있고,
+    메뉴에 있는 값을 입력하면 break 처리하면 되기 때문에 더욱 편리합니다.
+    */
+
+    //무한 반복합니다.
     while (1)
     {
+        //메뉴를 입력받을 때 저장할 변수를 선언합니다.
         int terms_agree;
+
+        //사용자에게 메뉴값을 입력받고, 그 값을 terms_agree 메모리에 저장합니다.
         cin >> terms_agree;
+
+        //만약 1번을 입력하면
         if (terms_agree == 1) {
+            //화면을 지웁니다.
             cls();
+            //while문을 나갑니다.
             break;
         }
+
+        //만약 2번을 입력하면
         else if (terms_agree == 2) {
+            //화면을 지웁니다.
             cls();
+            //안내 메시지를 출력합니다.
             cout << "5초 뒤 종료됩니다.";
+            //5초(5000ms)간 대기합니다.
             Sleep(5000);
+            //프로그램을 종료합니다.
             exit(0);
         }
+        //메뉴에 없는 값(1 또는 2)을 입력받았을 경우
         else {
+            //오류 메시지를 출력합니다.
             cout << "\n\nㅁ ERROR! 잘못 입력하셨습니다. 다시 입력해 주시기 바랍니다!";
+            //화면을 지웁니다.
             cls();
+            //while문에 따라 다시 재입력 받습니다.
         }
     }
 }
@@ -503,7 +584,17 @@ void terms_agree()
 void pre_download()
 {
     system("title 벤치마크 - 필요한 파일들 다운로드 중..."); //콘솔창 제목 설정
+
+    //안내 메시지를 출력합니다.
     cout << "벤치마크 프로그램입니다.\n필요한 파일들을 다운로드하고 있습니다. 잠시만 기다려주세요.\n";
+
+    /*
+    필요한 파일들을 다운로드받습니다.
+    파일 목록과 사유는 다음과 같습니다.
+    * 7z.exe, 7z.dll : 각종 파일들을 모아둔 all.7z 파일을 압축해제하고, 이후에 파일 압축/압축 해제시 사용되는 파일입니다.
+    * all.7z : 벤치마크에 필요한 파일들이 모여있습니다.
+    * aki.png : 업스케일링 대상 파일입니다.
+    */
     URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/7-Zip/7z.exe", L"7z.exe", 0, NULL); //7z.exe를 다운로드합니다.
     URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/7-Zip/7z.dll", L"7z.dll", 0, NULL); //7z.exe이 동작하는데 필요한 파일인 7z.dll 파일을 다운로드합니다.
     URLDownloadToFile(NULL, L"https://common.gaon.xyz/prj/cpp_cli_benchmark/all.7z", L"all.7z", 0, NULL); //waifu2x, 테스트용 압축 파일이 담긴 압축파일을 다운로드합니다.
@@ -512,15 +603,15 @@ void pre_download()
     cls();
 }
 
-void console_no_select() {
-    system("console_no_select.bat > 1.txt");
-}
-
 void adds()
 {
     system("title 벤치마크 - (연산) 1부터 300억까지 더하기"); //콘솔창 제목 설정
+
+    //안내 메시지를 출력합니다.
     cout << "1. 1부터 300억까지 더하기 : ";
 
+
+    //1부터 300억까지 더합니다.
     long sum = 0;
 
     long long i = 0;
@@ -533,6 +624,8 @@ void adds()
 void pi_calc()
 {
     system("title 벤치마크 - (연산) 원주율 구하기"); //콘솔창 제목 설정
+    
+    //안내 메시지를 출력합니다.
     cout << "\n2. 원주율 구하기 : ";
 
     double pi = 0.0, num = 1.0;
@@ -614,10 +707,6 @@ void download_test()
     cout << "\n번외 - 파일 다운로드 속도 측정 : ";
 
     URLDownloadToFile(NULL, L"https://sel-kor-ping.vultr.com/vultr.com.1000MB.bin", L"./testfile.bin", 0, NULL);
-}
-
-void console_no_select_restore() {
-    system("console_no_select_restore.bat > 1.txt");
 }
 
 void rm_usefiles()
