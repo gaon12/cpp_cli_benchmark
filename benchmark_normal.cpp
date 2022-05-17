@@ -36,6 +36,9 @@ DWORDLONG GetTotalPhysicalMemory()
 void cls(); //화면 초기화 cls 명령어
 void splash(); //스플래시 화면
 void check_internet(); //인터넷 연결 여부 확인
+
+void update_check(); //업데이트 확인
+
 void terms_download(); //약관 파일 다운로드
 void terms_agree(); //약관 동의 여부 확인
 void pre_download(); //준비 파일들 다운로드
@@ -57,7 +60,10 @@ int main() {
 
     //인터넷 연결 여부 확인
     check_internet();
-
+    
+    //업데이트 확인
+    update_check();
+    
     system("title 벤치마크 - 약관 동의"); //콘솔창 제목 설정
 
     //약관 다운로드
@@ -406,9 +412,9 @@ void splash()
     cout << "\t\t\t\t\t   | |                   | |\n";
     cout << "\t\t\t\t\t   |_|                   |_|lc\n\n";
 
-    cout << "\t\t\t\t벤치마크 프로그램에 오신것을 환영합니다!\n";
-    cout << "\t\t\t\t인터넷 연결 여부를 확인하고 있습니다.\n";
-    cout << "\t\t\t\t\t잠시만 기다려 주세요!\n";
+    cout << "\t\t\t\t  벤치마크 프로그램에 오신것을 환영합니다!\n";
+    cout << "\t\t\t\t  인터넷 연결 여부를 확인하고 있습니다.\n";
+    cout << "\t\t\t\t\t  잠시만 기다려 주세요!\n";
     Sleep(3000);
     cls();
 }
@@ -427,7 +433,7 @@ void check_internet()
         //인터넷에 연결이 되어 있는 경우
         if (strstr(buffer, "TTL=") != NULL) {
             //인터넷 연결 오류 메시지를 출력합니다.
-            cout << "\n\t\t\t\t 인터넷에 연결되어 있습니다. 방화벽에도 막혀있지 않습니다.\n\t\t\t\t 정상적으로 프로그램을 사용할 수 있습니다.\n";
+            cout << "\n\t\t\t 인터넷에 연결되어 있습니다. 방화벽에도 막혀있지 않습니다.\n\t\t\t\t 정상적으로 프로그램을 사용할 수 있습니다.\n";
             //3초(3000ms)간 대기합니다.
             Sleep(3000);
             cls();
@@ -435,7 +441,7 @@ void check_internet()
         //인터넷에 연결이 안되어 있는 경우
         else {
             //인터넷 연결 오류 메시지를 출력합니다.
-            cout << "\n\t\t\t\t 인터넷에 연결되어 있지 않거나 방화벽에 차단되어 있습니다.\n\t\t\t\t 정상적인 프로그램 사용을 위해 인터넷을 연결하거나 방화벽에서 본 프로그램을 차단 해제해 주세요!\n 10초 뒤 프로그램이 자동 종료됩니다.";
+            cout << "\n\t\t\t 인터넷에 연결되어 있지 않거나 방화벽에 차단되어 있습니다.\n\t\t\t\t 정상적인 프로그램 사용을 위해 인터넷을 연결하거나 방화벽에서 본 프로그램을 차단 해제해 주세요!\n 10초 뒤 프로그램이 자동 종료됩니다.";
             //10초(10000ms)간 대기합니다.
             Sleep(10000);
             exit(0);
@@ -452,6 +458,7 @@ void check_internet()
     }
 }
 
+
 void update_check()
 {
     system("title 벤치마크 - 업데이트 확인 중..."); //콘솔창 제목 설정
@@ -459,38 +466,23 @@ void update_check()
     //최신 버전 정보가 담긴 파일을 다운로드합니다.
     URLDownloadToFile(NULL, L"https://common.gaon.xyz/prj/cpp_cli_benchmark/latest_version_info.txt", L"latest_version_info.txt", 0, NULL);
 
-    char latest[20];    // 파일을 읽을 때 사용할 임시 공간
+    char latest[50];    // 파일을 읽을 때 사용할 임시 공간
 
-    FILE* fp = fopen("latest_version_info.txt", "r");    // latest_version_info.txt 파일을 읽기 모드로 열기.  
+    FILE* fp = fopen("latest_version_info.txt", "r");    // latest_version_info.txt 파일을 읽기 모드로 열기.
                                            // 파일 포인터를 반환
     fgets(latest, sizeof(latest), fp);    // latest_version_info.txt에서 문자열을 읽음
 
-    //이 줄 위로는 latest_version_info.txt 파일 열기, 이 줄 아래는 current_version_info.txt 파일 열기
-    char current[20];    // 파일을 읽을 때 사용할 임시 공간
-    FILE* fp2 = fopen("current_version_info.txt", "r");    // current_version_info.txt 파일을 읽기 모드로 열기.  
-                                           // 파일 포인터를 반환
+    //이 줄 위로는 latest_version_info.txt 파일 열기
+    char current[50] = "1.0.1";
 
-    fgets(current, sizeof(current), fp2);    // current_version_info.txt에서 문자열을 읽음
-
-    //최신 버전과 현재 버전이 일치하는 경우
-    if (latest == current)
-    {
-        system("title 벤치마크 - 최신버전을 사용하고 계십니다!"); //콘솔창 제목 설정
-
-        //안내 메시지 출력
-        cout << "현재" << current << "최신버전(" << latest << ")을 사용하고 계십니다.\n 잠시 후 계속됩니다.";
-        //3초(3000ms)간 대기
-        Sleep(3000);
-        //화면 초기화
-        cls();
-    }
+    
     //그 외인 경우(최신 버전과 현재 버전의 값이 다른 경우)
-    else
+    if(*current != *latest)
     {
         system("title 벤치마크 - 구버전을 사용하고 계십니다! 업데이트를 진행합니다!"); //콘솔창 제목 설정
 
         //안내 메시지 출력
-        cout << "현재" << current << "최신버전(" << latest << ")을 사용하고 계시지 않습니다.\n 업데이트를 시작합니다.";
+        cout << "\n\t\t\t\t현재(" << current << ") 최신버전(" << latest << ")을 사용하고 계시지 않습니다.\n\t\t\t\t\t\t업데이트를 시작합니다.";
         //3초(3000ms)간 대기
         Sleep(3000);
 
@@ -501,10 +493,20 @@ void update_check()
         //프로그램 종료(업데이트 프로그램이 벤치마크 프로그램을 시작시킴)
         exit(0);
     }
+    //최신 버전과 현재 버전이 일치하는 경우
+    else
+    {
+        system("title 벤치마크 - 최신버전을 사용하고 계십니다!"); //콘솔창 제목 설정
 
+        //안내 메시지 출력
+        cout << "\n\t\t\t\t현재(" << current << ") 최신버전(" << latest << ")을 사용하고 계십니다.\n\t\t\t\t\t\t잠시 후 계속됩니다.";
+        //3초(3000ms)간 대기
+        Sleep(3000);
+        //화면 초기화
+        cls();
+    }
     //열었던 파일을 닫습니다.
     fclose(fp); //최신 버전 정보가 담긴 파일을 닫습니다.
-    fclose(fp2); //현재 버전 정보가 담긴 파일을 닫습니다.
 }
 
 void terms_download()
@@ -522,18 +524,19 @@ void terms_agree()
 {
     cout << "---------------------------------------------------------------------------------------------\n";
     //약관 파일을 엽니다.
-    FILE* fp = 0;
-    char text[100];
-    setlocale(LC_ALL, "korean");
-    fopen_s(&fp, "terms.txt", "r"); //약관 파일 열기
-    while (1) {
-        fgets(text, 100, fp);
-        printf("%s\n", text);
+    char buffer[10000];    // 파일을 읽을 때 사용할 임시 공간
+    FILE* fp = fopen("terms.txt", "r");    // terms.txt 파일을 읽기 모드로 열기.  
+                                           // 파일 포인터를 반환
+    while (1)
+    {
+        fgets(buffer, sizeof(buffer), fp);    // terms.txt에서 문자열을 읽음
+        printf("%s\n", buffer);    // 파일의 내용 출력
         if (feof(fp)) break;
     }
-    fclose(fp); //파일 닫기
+    
+    fclose(fp);    // 파일 포인터 닫기
     cout << "---------------------------------------------------------------------------------------------\n";
-    cout << "\n\n 약관에 동의하십니까? 동의하시면 \"1\"을, 종료는 \"2\"를 입력해 주세요.";
+    cout << "\n\n 약관에 동의하십니까? 동의하시면 \"1\"을, 종료는 \"2\"를 입력해 주세요 : ";
 
     /*
     while문을 사용한 이유는 다음과 같습니다.
@@ -564,9 +567,27 @@ void terms_agree()
             //화면을 지웁니다.
             cls();
             //안내 메시지를 출력합니다.
-            cout << "5초 뒤 종료됩니다.";
-            //5초(5000ms)간 대기합니다.
-            Sleep(5000);
+            cout << "5초 뒤 종료됩니다.\n";
+            //1초(1000ms)간 대기합니다.
+            Sleep(1000);
+            cls();
+            cout << "4초 뒤 종료됩니다.\n";
+            //1초(1000ms)간 대기합니다.
+            Sleep(1000);
+            cls();
+            cout << "3초 뒤 종료됩니다.\n";
+            //1초(1000ms)간 대기합니다.
+            Sleep(1000);
+            cls();
+            cout << "2초 뒤 종료됩니다.\n";
+            //1초(1000ms)간 대기합니다.
+            Sleep(1000);
+            cls();
+            cout << "1초 뒤 종료됩니다.\n";
+            //1초(1000ms)간 대기합니다.
+            Sleep(1000);
+            cls();
+            cout << "종료!\n";
             //프로그램을 종료합니다.
             exit(0);
         }
@@ -624,7 +645,7 @@ void adds()
 void pi_calc()
 {
     system("title 벤치마크 - (연산) 원주율 구하기"); //콘솔창 제목 설정
-    
+
     //안내 메시지를 출력합니다.
     cout << "\n2. 원주율 구하기 : ";
 
@@ -711,7 +732,7 @@ void download_test()
 
 void rm_usefiles()
 {
-    system("@echo off && del terms.txt 7z.exe 7z.dll all.7z waifu2x-converter-cpp.exe w2xc.dll opencv_world430.dll LICENSE aki.png aki_out.png testfile.bin test.zip test.7z zip.7z terms.txt get_gpu_name.bat decrypt_zip.bat console_no_select.bat console_no_select_restore.bat > 1.txt");
+    system("@echo off && del terms.txt 7z.exe 7z.dll all.7z waifu2x-converter-cpp.exe w2xc.dll opencv_world430.dll LICENSE aki.png aki_out.png testfile.bin test.zip test.7z zip.7z terms.txt get_gpu_name.bat decrypt_zip.bat current_version_info.txt latest_version_info.txt > 1.txt");
     system("@echo off && rmdir /s /q models_rgb > 1.txt"); //폴더는 따로 삭제합니다.
     system("@echo off && rmdir /s /q zip > 1.txt");
     system("@echo off && rmdir /s /q john > 1.txt");
