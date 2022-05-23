@@ -5,7 +5,6 @@
 #include<cmath> //연산
 #include <chrono> //시간값 계산
 #include <filesystem>
-#include "unistd.h"
 #include <direct.h> //폴더 삭제
 #include <string>
 #include <intrin.h> //CPU 이름 불러오기
@@ -13,6 +12,7 @@
 #include <sstream> //cmd값 변수 저장
 #include <stdlib.h> //방화벽 막히는지 확인하기
 #include <ctime> //시간/날짜값 가져오기
+
 #define BUFFER_SIZE 1024
 //네임스페이스 설정
 using namespace std;
@@ -21,6 +21,9 @@ using namespace chrono;
 double factorial(double a);
 //파일 다운로드를 위해 추가
 #pragma comment(lib, "Urlmon.lib")
+
+//윈도우 비트 확인
+int x64 = 0;
 
 
 //메모리 정보 불러오기 함수
@@ -41,6 +44,7 @@ void update_check(); //업데이트 확인
 
 void terms_download(); //약관 파일 다운로드
 void terms_agree(); //약관 동의 여부 확인
+int check_windows_bits();
 void pre_download(); //준비 파일들 다운로드
 void adds(); // 더하기 연산
 void pi_calc(); //원주율 연산
@@ -54,16 +58,15 @@ void open_result(); //결과 화면 열기
 
 
 int main() {
-
     //스플래시 화면
     splash();
 
     //인터넷 연결 여부 확인
     check_internet();
-    
+
     //업데이트 확인
     update_check();
-    
+
     system("title 벤치마크 - 약관 동의"); //콘솔창 제목 설정
 
     //약관 다운로드
@@ -71,6 +74,13 @@ int main() {
 
     //약관 동의 여부 확인
     terms_agree();
+
+    //기존 파일들 삭제
+    rm_usefiles();
+    cls();
+
+    //윈도우 비트 확인
+    check_windows_bits();
 
     //필요한 파일들 다운로드
     pre_download();
@@ -475,9 +485,9 @@ void update_check()
     //이 줄 위로는 latest_version_info.txt 파일 열기
     char current[50] = "1.0.1";
 
-    
+
     //그 외인 경우(최신 버전과 현재 버전의 값이 다른 경우)
-    if(*current != *latest)
+    if (*current != *latest)
     {
         system("title 벤치마크 - 구버전을 사용하고 계십니다! 업데이트를 진행합니다!"); //콘솔창 제목 설정
 
@@ -533,7 +543,7 @@ void terms_agree()
         printf("%s\n", buffer);    // 파일의 내용 출력
         if (feof(fp)) break;
     }
-    
+
     fclose(fp);    // 파일 포인터 닫기
     cout << "---------------------------------------------------------------------------------------------\n";
     cout << "\n\n 약관에 동의하십니까? 동의하시면 \"1\"을, 종료는 \"2\"를 입력해 주세요 : ";
@@ -567,27 +577,27 @@ void terms_agree()
             //화면을 지웁니다.
             cls();
             //안내 메시지를 출력합니다.
-            cout << "5초 뒤 종료됩니다.\n";
+            cout << "\n\t\t\t\t\t\t5초 뒤 종료됩니다.\n";
             //1초(1000ms)간 대기합니다.
             Sleep(1000);
             cls();
-            cout << "4초 뒤 종료됩니다.\n";
+            cout << "\n\t\t\t\t\t\t4초 뒤 종료됩니다.\n";
             //1초(1000ms)간 대기합니다.
             Sleep(1000);
             cls();
-            cout << "3초 뒤 종료됩니다.\n";
+            cout << "\n\t\t\t\t\t\t3초 뒤 종료됩니다.\n";
             //1초(1000ms)간 대기합니다.
             Sleep(1000);
             cls();
-            cout << "2초 뒤 종료됩니다.\n";
+            cout << "\n\t\t\t\t\t\t2초 뒤 종료됩니다.\n";
             //1초(1000ms)간 대기합니다.
             Sleep(1000);
             cls();
-            cout << "1초 뒤 종료됩니다.\n";
+            cout << "\n\t\t\t\t\t\t1초 뒤 종료됩니다.\n";
             //1초(1000ms)간 대기합니다.
             Sleep(1000);
             cls();
-            cout << "종료!\n";
+            cout << "\n\t\t\t\t\t\t종료!\n";
             //프로그램을 종료합니다.
             exit(0);
         }
@@ -602,12 +612,58 @@ void terms_agree()
     }
 }
 
+int check_windows_bits()
+{
+    if (sizeof(void*) * 8 == 64)
+    {
+        return x64 = 1;
+    }
+    else if (sizeof(void*) * 8 == 32)
+    {
+        return x64 = 2;
+    }
+    else
+    {
+        cout << "\t\t\t\t\t지원하지 않는 아키텍처입니다.\n\t\t\t본 프로그램은 32bits, 64bits만 지원합니다.\n";
+        cout << "\t\t\t\t\t잠시 후 종료됩니다.\n\n";
+        Sleep(1000);
+
+        cout << "\t\t\t\t\t\t5초 뒤 종료됩니다.\n";
+        Sleep(1000);
+        cls();
+
+        cout << "\t\t\t\t\t지원하지 않는 아키텍처입니다.\n\t\t\t본 프로그램은 32bits, 64bits만 지원합니다.\n";
+        cout << "\t\t\t\t\t\t4초 뒤 종료됩니다.\n";
+        Sleep(1000);
+        cls();
+
+        cout << "\t\t\t\t\t지원하지 않는 아키텍처입니다.\n\t\t\t본 프로그램은 32bits, 64bits만 지원합니다.\n";
+        cout << "\t\t\t\t\t\t3초 뒤 종료됩니다.\n";
+        Sleep(1000);
+        cls();
+
+        cout << "\t\t\t\t\t지원하지 않는 아키텍처입니다.\n\t\t\t본 프로그램은 32bits, 64bits만 지원합니다.\n";
+        cout << "\t\t\t\t\t\t2초 뒤 종료됩니다.\n";
+        Sleep(1000);
+        cls();
+
+        cout << "\t\t\t\t\t지원하지 않는 아키텍처입니다.\n\t\t\t본 프로그램은 32bits, 64bits만 지원합니다.\n";
+        cout << "\t\t\t\t\t\t1초 뒤 종료됩니다.\n";
+        Sleep(1000);
+        cls();
+
+        cout << "\t\t\t\t\t\t종료!\n";
+
+        return 0;
+    }
+}
+
 void pre_download()
 {
     system("title 벤치마크 - 필요한 파일들 다운로드 중..."); //콘솔창 제목 설정
 
     //안내 메시지를 출력합니다.
-    cout << "벤치마크 프로그램입니다.\n필요한 파일들을 다운로드하고 있습니다. 잠시만 기다려주세요.\n";
+    cout << "\t\t\t\t  벤치마크 프로그램입니다.\n\t\t\t  필요한 파일들을 다운로드하고 있습니다. 잠시만 기다려주세요.\n";
 
     /*
     필요한 파일들을 다운로드받습니다.
@@ -616,8 +672,17 @@ void pre_download()
     * all.7z : 벤치마크에 필요한 파일들이 모여있습니다.
     * aki.png : 업스케일링 대상 파일입니다.
     */
-    URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/7-Zip/7z.exe", L"7z.exe", 0, NULL); //7z.exe를 다운로드합니다.
-    URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/7-Zip/7z.dll", L"7z.dll", 0, NULL); //7z.exe이 동작하는데 필요한 파일인 7z.dll 파일을 다운로드합니다.
+
+    if (x64 == 1)
+    {
+        URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/x64/7-Zip/7z.exe", L"7z.exe", 0, NULL); //7z.exe를 다운로드합니다.
+        URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/x64/7-Zip/7z.dll", L"7z.dll", 0, NULL); //7z.exe이 동작하는데 필요한 파일인 7z.dll 파일을 다운로드합니다.
+    }
+    else if (x64 == 2)
+    {
+        URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/x86/7-Zip/7z.exe", L"7z.exe", 0, NULL); //7z.exe를 다운로드합니다.
+        URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/x86/7-Zip/7z.dll", L"7z.dll", 0, NULL); //7z.exe이 동작하는데 필요한 파일인 7z.dll 파일을 다운로드합니다.
+    }
     URLDownloadToFile(NULL, L"https://common.gaon.xyz/prj/cpp_cli_benchmark/all.7z", L"all.7z", 0, NULL); //waifu2x, 테스트용 압축 파일이 담긴 압축파일을 다운로드합니다.
     system("@echo off && 7z x all.7z > 1.txt"); //다운로드 받은 파일을 압축해제합니다.
     URLDownloadToFile(NULL, L"https://i.ibb.co/1b2Ns1b/aki.png", L"aki.png", 0, NULL);//크기가 작은 이미지 파일을 다운로드합니다.
