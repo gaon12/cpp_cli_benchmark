@@ -22,9 +22,14 @@ double factorial(double a);
 //파일 다운로드를 위해 추가
 #pragma comment(lib, "Urlmon.lib")
 
-//윈도우 비트 확인
-int x64 = 0;
+//메뉴별 이동 가능하도록 체크하는 변수 생성
+int check = 0;
 
+//윈도우 비트 확인
+int x64 = 1;
+
+//매운맛 정도
+int scoville = 2;
 
 //메모리 정보 불러오기 함수
 DWORDLONG GetTotalPhysicalMemory()
@@ -44,7 +49,7 @@ void update_check(); //업데이트 확인
 
 void terms_download(); //약관 파일 다운로드
 void terms_agree(); //약관 동의 여부 확인
-int check_windows_bits();
+void help_document(); //도움말 문서
 void pre_download(); //준비 파일들 다운로드
 void adds(); // 더하기 연산
 void pi_calc(); //원주율 연산
@@ -55,6 +60,7 @@ void decrypt_zip(); //암호걸린 압축파일 암호 찾기
 void download_test(); //다운로드 속도 측정
 void rm_usefiles(); //사용한 파일들 삭제
 void open_result(); //결과 화면 열기
+void exit_countdown(); //종료시 카운트다운
 
 
 int main() {
@@ -79,14 +85,11 @@ int main() {
     rm_usefiles();
     cls();
 
-    //윈도우 비트 확인
-    check_windows_bits();
-
     //필요한 파일들 다운로드
     pre_download();
 
     Sleep(600);
-    cout << "현재 수행중인 작업은 다음과 같습니다.\n\n";
+    cout << "\n현재 수행중인 작업은 다음과 같습니다.\n\n";
     Sleep(800);
 
     system_clock::time_point StartTime = system_clock::now();//시간 계산 시작
@@ -149,7 +152,7 @@ int main() {
 
     //파트6을 진행하면 진행 과정이 화면에 나오기 때문에, 완료되면 바로 화면을 지우고 기존 값으로 덮어씌웁니다.
     cls();
-
+    cout << "\n현재 수행중인 작업은 다음과 같습니다.\n\n";
     cout << "1. 1부터 300억까지 더하기 : " << mill.count() << "ms" << "(" << sec.count() << "초)\n";//시간 출력
     cout << "2. 원주율 구하기 : " << mill_second.count() << "ms" << "(" << sec_second.count() << "초)\n";//시간 출력
     cout << "3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(40배) : " << mill_third.count() << "ms" << "(" << sec_third.count() << "초)\n";//시간 출력
@@ -288,8 +291,8 @@ int main() {
 
     */
 
-    FILE* fpjs = 0;
-    fopen_s(&fpjs, "important_values.js", "w");    // score.js 파일을 쓰기 모드(w)로 열기.
+    FILE* fp = 0;
+    fopen_s(&fp, "important_values.js", "w");    // score.js 파일을 쓰기 모드(w)로 열기.
                                       // 파일 포인터를 반환
 
     char plus_time[70] = "var plus_time =";
@@ -328,26 +331,26 @@ int main() {
     string st_download_time = to_string(mill_extra.count());
     strcpy(ch_download_time, st_download_time.c_str());
 
-    fputs(strcat(plus_time, ch_plus_time), fpjs);
-    fputs(";\n", fpjs);
-    fputs(strcat(pi_time, ch_pi_time), fpjs);
-    fputs(";\n", fpjs);
-    fputs(strcat(download_time, ch_download_time), fpjs);
-    fputs(";\n", fpjs);
-    fputs(strcat(upscale_time, ch_upscale_time), fpjs);
-    fputs(";\n", fpjs);
-    fputs(strcat(compress_time, ch_compress_time), fpjs);
-    fputs(";\n", fpjs);
-    fputs(strcat(surd_e_time, ch_surd_e_time), fpjs);
-    fputs(";\n", fpjs);
-    fputs(strcat(decrypt_zip_time, ch_decrypt_zip_time), fpjs);
-    fputs(";\n", fpjs);
+    fputs(strcat(plus_time, ch_plus_time), fp);
+    fputs(";\n", fp);
+    fputs(strcat(pi_time, ch_pi_time), fp);
+    fputs(";\n", fp);
+    fputs(strcat(download_time, ch_download_time), fp);
+    fputs(";\n", fp);
+    fputs(strcat(upscale_time, ch_upscale_time), fp);
+    fputs(";\n", fp);
+    fputs(strcat(compress_time, ch_compress_time), fp);
+    fputs(";\n", fp);
+    fputs(strcat(surd_e_time, ch_surd_e_time), fp);
+    fputs(";\n", fp);
+    fputs(strcat(decrypt_zip_time, ch_decrypt_zip_time), fp);
+    fputs(";\n", fp);
 
     //PC 정보 추가
     //CPU 이름 추가
     char cpu_name[70] = "var cpu_name = \"";
-    fputs(strcat(cpu_name, CPUBrandString), fpjs);
-    fputs("\";\n", fpjs);
+    fputs(strcat(cpu_name, CPUBrandString), fp);
+    fputs("\";\n", fp);
 
     //RAM 크기 추가
     char ram_size[70] = "var ram_size = ";
@@ -355,40 +358,79 @@ int main() {
     //DWORD를 char로 변환
     char TotalRamSize[10];
     sprintf(TotalRamSize, "%d", DTotalRamSize);
-    fputs(strcat(ram_size, TotalRamSize), fpjs);
-    fputs(";\n", fpjs);
+    fputs(strcat(ram_size, TotalRamSize), fp);
+    fputs(";\n", fp);
 
     //GPU 이름 추가
     char gpu_name[70] = "var gpu_name = \"";
-    fputs(strcat(gpu_name, gpu_name_raw), fpjs);
-    fputs("\b\";\n", fpjs);
+    fputs(strcat(gpu_name, gpu_name_raw), fp);
+    fputs("\b\";\n", fp);
 
     //현재 날짜 추가
     char now_date_year[70] = "var now_date_year = \"";
-    fputs(strcat(now_date_year, year), fpjs);
-    fputs("\b\";\n", fpjs);
+    fputs(strcat(now_date_year, year), fp);
+    fputs("\b\";\n", fp);
 
     char now_date_month[70] = "var now_date_month = \"";
-    fputs(strcat(now_date_month, month), fpjs);
-    fputs("\b\";\n", fpjs);
+    fputs(strcat(now_date_month, month), fp);
+    fputs("\b\";\n", fp);
 
     char now_date_day[70] = "var now_date_day = \"";
-    fputs(strcat(now_date_day, day), fpjs);
-    fputs("\b\";\n", fpjs);
+    fputs(strcat(now_date_day, day), fp);
+    fputs("\b\";\n", fp);
 
     char now_date_hours[70] = "var now_date_hours = \"";
-    fputs(strcat(now_date_hours, hours), fpjs);
-    fputs("\b\";\n", fpjs);
+    fputs(strcat(now_date_hours, hours), fp);
+    fputs("\b\";\n", fp);
 
     char now_date_minute[70] = "var now_date_minute = \"";
-    fputs(strcat(now_date_minute, minute), fpjs);
-    fputs("\b\";\n", fpjs);
+    fputs(strcat(now_date_minute, minute), fp);
+    fputs("\b\";\n", fp);
 
     char now_date_wday[70] = "var now_date_wday = \"";
-    fputs(strcat(now_date_wday, wday), fpjs);
-    fputs("\b\";\n", fpjs);
+    fputs(strcat(now_date_wday, wday), fp);
+    fputs("\b\";\n", fp);
 
-    fclose(fpjs);    // 파일 포인터 닫기
+    //윈도우 비트 표시
+    if (x64 == 1)
+    {
+        char windows_bits[70] = "var windows_bits = \"";
+        char bits[20] = "64";
+        fputs(strcat(windows_bits, bits), fp);
+        fputs("\b\";\n", fp);
+    }
+    else if (x64 == 2)
+    {
+        char windows_bits[70] = "var windows_bits = \"";
+        char bits[20] = "32";
+        fputs(strcat(windows_bits, bits), fp);
+        fputs("\b\";\n", fp);
+    }
+
+    //매운맛 정도 표시
+    if (scoville == 1)
+    {
+        char scoville_scale[70] = "var scoville_scale = \"";
+        char scoville[20] = "64";
+        fputs(strcat(scoville_scale, scoville), fp);
+        fputs("\b\";\n", fp);
+    }
+    else if (scoville == 2)
+    {
+        char scoville_scale[70] = "var scoville_scale = \"";
+        char scoville[20] = "2";
+        fputs(strcat(scoville_scale, scoville), fp);
+        fputs("\b\";\n", fp);
+    }
+    else if (scoville == 3)
+    {
+        char scoville_scale[70] = "var scoville_scale = \"";
+        char scoville[20] = "3";
+        fputs(strcat(scoville_scale, scoville), fp);
+        fputs("\b\";\n", fp);
+    }
+
+    fclose(fp);    // 파일 포인터 닫기
 
     //사용한 파일들 삭제
     system("title 사용한 파일들을 삭제합니다. 잠시만 기다려 주세요!"); //콘솔창 제목 설정
@@ -468,7 +510,6 @@ void check_internet()
     }
 }
 
-
 void update_check()
 {
     system("title 벤치마크 - 업데이트 확인 중..."); //콘솔창 제목 설정
@@ -546,7 +587,7 @@ void terms_agree()
 
     fclose(fp);    // 파일 포인터 닫기
     cout << "---------------------------------------------------------------------------------------------\n";
-    cout << "\n\n 약관에 동의하십니까? 동의하시면 \"1\"을, 종료는 \"2\"를 입력해 주세요 : ";
+    cout << "\n\n 약관에 동의하십니까? 동의하시면 \"1\"을, 프로그램이 수집하는 내용을 확인하려면 \"2\"를, 종료는 \"0\"를 입력해 주세요 : ";
 
     /*
     while문을 사용한 이유는 다음과 같습니다.
@@ -574,87 +615,64 @@ void terms_agree()
 
         //만약 2번을 입력하면
         else if (terms_agree == 2) {
-            //화면을 지웁니다.
-            cls();
-            //안내 메시지를 출력합니다.
-            cout << "\n\t\t\t\t\t\t5초 뒤 종료됩니다.\n";
-            //1초(1000ms)간 대기합니다.
-            Sleep(1000);
-            cls();
-            cout << "\n\t\t\t\t\t\t4초 뒤 종료됩니다.\n";
-            //1초(1000ms)간 대기합니다.
-            Sleep(1000);
-            cls();
-            cout << "\n\t\t\t\t\t\t3초 뒤 종료됩니다.\n";
-            //1초(1000ms)간 대기합니다.
-            Sleep(1000);
-            cls();
-            cout << "\n\t\t\t\t\t\t2초 뒤 종료됩니다.\n";
-            //1초(1000ms)간 대기합니다.
-            Sleep(1000);
-            cls();
-            cout << "\n\t\t\t\t\t\t1초 뒤 종료됩니다.\n";
-            //1초(1000ms)간 대기합니다.
-            Sleep(1000);
-            cls();
-            cout << "\n\t\t\t\t\t\t종료!\n";
-            //프로그램을 종료합니다.
-            exit(0);
+            help_document();
+            if (check == 1)
+                break;
+
         }
-        //메뉴에 없는 값(1 또는 2)을 입력받았을 경우
-        else {
-            //오류 메시지를 출력합니다.
-            cout << "\n\nㅁ ERROR! 잘못 입력하셨습니다. 다시 입력해 주시기 바랍니다!";
-            //화면을 지웁니다.
+        else if (terms_agree == 0) {
             cls();
-            //while문에 따라 다시 재입력 받습니다.
+            exit_countdown();
+        }
+        else {
+            cout << "\n\nㅁ ERROR! 잘못 입력하셨습니다. 다시 입력해 주시기 바랍니다!";
+            cls();
         }
     }
 }
 
-int check_windows_bits()
-{
-    if (sizeof(void*) * 8 == 64)
+void help_document() {
+    system("title 벤치마크 - 도움말"); //콘솔창 제목 설정
+
+    cls();
+
+    cout << "-------------------------------------------------------------------------------------------------------------------\n";
+    cout << "\t\t * 본 프로그램이 저장하는 값은 다음과 같습니다.\n\n";
+    cout << "\t\t1. 각 파트별 소요 시간값\n";
+    cout << "\t\t2. 벤치마크이 완료될 때의 날짜와 시간값\n";
+    cout << "\t\t3. PC 정보 일부(CPU 이름, 스레드 수, RAM 용량, GPU 이름)\n\n";
+    cout << "\t\t * 결과 페이지에서 수집하는 정보는 다음과 같습니다.\n";
+    cout << "\t\t   - 브라우저 유저 에이전트 값\n\n";
+    cout << "\t\t * 인터넷에 연결되어 있어야 하는 이유와 다운로드하는 파일은 다음과 같습니다.\n";
+    cout << "\t\t1. 약관 파일(약관 동의해야 진행 가능)\n";
+    cout << "\t\t2. 각 파트별 필요 프로그램\n";
+    cout << "\t\t(waifu2x - converter, 7zip, John the Ripper, Vultr 파일 다운로드 속도 테스트용 파일)\n";
+    cout << "\t\t3. 결과 페이지(디자인 프레임워크로 UIKit, UIKit-Icon 사용)\n";
+    cout << "-------------------------------------------------------------------------------------------------------------------\n";
+    cout << "\n\n 확인하였고, 계속 진행하려면 \"1\"을, 이전 화면(약관 확인)으로 이동하려면 \"2\"를, 종료는 \"0\"을 입력해 주세요 : ";
+
+    while (1)
     {
-        return x64 = 1;
-    }
-    else if (sizeof(void*) * 8 == 32)
-    {
-        return x64 = 2;
-    }
-    else
-    {
-        cout << "\t\t\t\t\t지원하지 않는 아키텍처입니다.\n\t\t\t본 프로그램은 32bits, 64bits만 지원합니다.\n";
-        cout << "\t\t\t\t\t잠시 후 종료됩니다.\n\n";
-        Sleep(1000);
-
-        cout << "\t\t\t\t\t\t5초 뒤 종료됩니다.\n";
-        Sleep(1000);
-        cls();
-
-        cout << "\t\t\t\t\t지원하지 않는 아키텍처입니다.\n\t\t\t본 프로그램은 32bits, 64bits만 지원합니다.\n";
-        cout << "\t\t\t\t\t\t4초 뒤 종료됩니다.\n";
-        Sleep(1000);
-        cls();
-
-        cout << "\t\t\t\t\t지원하지 않는 아키텍처입니다.\n\t\t\t본 프로그램은 32bits, 64bits만 지원합니다.\n";
-        cout << "\t\t\t\t\t\t3초 뒤 종료됩니다.\n";
-        Sleep(1000);
-        cls();
-
-        cout << "\t\t\t\t\t지원하지 않는 아키텍처입니다.\n\t\t\t본 프로그램은 32bits, 64bits만 지원합니다.\n";
-        cout << "\t\t\t\t\t\t2초 뒤 종료됩니다.\n";
-        Sleep(1000);
-        cls();
-
-        cout << "\t\t\t\t\t지원하지 않는 아키텍처입니다.\n\t\t\t본 프로그램은 32bits, 64bits만 지원합니다.\n";
-        cout << "\t\t\t\t\t\t1초 뒤 종료됩니다.\n";
-        Sleep(1000);
-        cls();
-
-        cout << "\t\t\t\t\t\t종료!\n";
-
-        return 0;
+        int helpdoc_agree;
+        cin >> helpdoc_agree;
+        if (helpdoc_agree == 1) {
+            cls();
+            check = 1;
+            break;
+        }
+        else if (helpdoc_agree == 2) {
+            cls();
+            check = 1;
+            terms_agree();
+            break;
+        }
+        else if (helpdoc_agree == 0) {
+            cls();
+            exit_countdown();
+        }
+        else {
+            cout << "\n\nㅁ ERROR! 잘못 입력하셨습니다. 다시 입력해 주시기 바랍니다!";
+        }
     }
 }
 
@@ -673,16 +691,8 @@ void pre_download()
     * aki.png : 업스케일링 대상 파일입니다.
     */
 
-    if (x64 == 1)
-    {
-        URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/x64/7-Zip/7z.exe", L"7z.exe", 0, NULL); //7z.exe를 다운로드합니다.
-        URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/x64/7-Zip/7z.dll", L"7z.dll", 0, NULL); //7z.exe이 동작하는데 필요한 파일인 7z.dll 파일을 다운로드합니다.
-    }
-    else if (x64 == 2)
-    {
-        URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/x86/7-Zip/7z.exe", L"7z.exe", 0, NULL); //7z.exe를 다운로드합니다.
-        URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/x86/7-Zip/7z.dll", L"7z.dll", 0, NULL); //7z.exe이 동작하는데 필요한 파일인 7z.dll 파일을 다운로드합니다.
-    }
+    URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/x64/7-Zip/7z.exe", L"7z.exe", 0, NULL); //7z.exe를 다운로드합니다.
+    URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/x64/7-Zip/7z.dll", L"7z.dll", 0, NULL); //7z.exe이 동작하는데 필요한 파일인 7z.dll 파일을 다운로드합니다.
     URLDownloadToFile(NULL, L"https://common.gaon.xyz/prj/cpp_cli_benchmark/all.7z", L"all.7z", 0, NULL); //waifu2x, 테스트용 압축 파일이 담긴 압축파일을 다운로드합니다.
     system("@echo off && 7z x all.7z > 1.txt"); //다운로드 받은 파일을 압축해제합니다.
     URLDownloadToFile(NULL, L"https://i.ibb.co/1b2Ns1b/aki.png", L"aki.png", 0, NULL);//크기가 작은 이미지 파일을 다운로드합니다.
@@ -792,12 +802,12 @@ void download_test()
     system("title 벤치마크 - (작업) 파일 다운로드 속도 측정"); //콘솔창 제목 설정
     cout << "\n번외 - 파일 다운로드 속도 측정 : ";
 
-    URLDownloadToFile(NULL, L"https://sel-kor-ping.vultr.com/vultr.com.1000MB.bin", L"./testfile.bin", 0, NULL);
+    URLDownloadToFile(NULL, L"https://redirector.gvt1.com/edgedl/android/studio/install/2021.2.1.14/android-studio-2021.2.1.14-windows.exe", L"android_studio.exe", 0, NULL);
 }
 
 void rm_usefiles()
 {
-    system("@echo off && del terms.txt 7z.exe 7z.dll all.7z waifu2x-converter-cpp.exe w2xc.dll opencv_world430.dll LICENSE aki.png aki_out.png testfile.bin test.zip test.7z zip.7z terms.txt get_gpu_name.bat decrypt_zip.bat current_version_info.txt latest_version_info.txt > 1.txt");
+    system("@echo off && del terms.txt 7z.exe 7z.dll all.7z waifu2x-converter-cpp.exe w2xc.dll opencv_world430.dll LICENSE aki.png aki_out.png android_studio.exe test.zip test.7z zip.7z terms.txt get_gpu_name.bat decrypt_zip.bat current_version_info.txt latest_version_info.txt > 1.txt");
     system("@echo off && rmdir /s /q models_rgb > 1.txt"); //폴더는 따로 삭제합니다.
     system("@echo off && rmdir /s /q zip > 1.txt");
     system("@echo off && rmdir /s /q john > 1.txt");
@@ -808,7 +818,7 @@ void rm_usefiles()
 
 void open_result()
 {
-    cout << "5초 뒤 결과가 나옵니다. 결과창을 확인하세요!";
+    cout << "\n\n5초 뒤 결과가 나옵니다. 결과창을 확인하세요!";
     system("start /max index.html");
 }
 
@@ -821,4 +831,34 @@ double factorial(double a) //팩토리얼 연산
         j = j * add;
     }
     return j;
+}
+
+void exit_countdown()
+{
+    //화면을 지웁니다.
+    cls();
+    //안내 메시지를 출력합니다.
+    cout << "\n\t\t\t\t\t\t5초 뒤 종료됩니다.\n";
+    //1초(1000ms)간 대기합니다.
+    Sleep(1000);
+    cls();
+    cout << "\n\t\t\t\t\t\t4초 뒤 종료됩니다.\n";
+    //1초(1000ms)간 대기합니다.
+    Sleep(1000);
+    cls();
+    cout << "\n\t\t\t\t\t\t3초 뒤 종료됩니다.\n";
+    //1초(1000ms)간 대기합니다.
+    Sleep(1000);
+    cls();
+    cout << "\n\t\t\t\t\t\t2초 뒤 종료됩니다.\n";
+    //1초(1000ms)간 대기합니다.
+    Sleep(1000);
+    cls();
+    cout << "\n\t\t\t\t\t\t1초 뒤 종료됩니다.\n";
+    //1초(1000ms)간 대기합니다.
+    Sleep(1000);
+    cls();
+    cout << "\n\t\t\t\t\t\t종료!\n";
+    //프로그램을 종료합니다.
+    exit(0);
 }
