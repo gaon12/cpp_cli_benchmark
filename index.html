@@ -299,6 +299,27 @@
                 line-height: 0.6em;
             }
         </style>
+        <!--윈도우 비트 표시-->
+        <script>
+            var fianl_windows_bits = windows_bits.slice(0, -1);
+        </script>
+
+        <!--매운맛 정도 확인-->
+        <script>
+            var raw_scoville = scoville_scale.slice(0, -1);
+            if(raw_scoville == 1)
+            {
+                scoville = "순한맛";
+            }
+            else if(raw_scoville == 2)
+            {
+                scoville = "보통맛";
+            }
+            else if(raw_scoville == 3)
+            {
+                scoville = "매운맛";
+            }
+        </script>
 
         <!-- Total Score -->
         <div class="horizontal_rule"></div>
@@ -310,7 +331,7 @@
                                     <img class="uk-border-circle" width="40" height="40" uk-icon="info">
                                 </div>
                                 <div class="uk-width-expand">
-                                    <h3 class="uk-card-title uk-margin-remove-bottom">벤치마크 총 점수</h3>
+                                    <h3 class="uk-card-title uk-margin-remove-bottom">벤치마크 총 점수 (<script>document.write(scoville + " 버전");</script>, <script>document.write(fianl_windows_bits + "비트 버전");</script>)</h3>
                                     <p class="uk-text-meta uk-margin-remove-top"><time><script>document.write(year + "년 " + month + "월 " + day + "일 (" + days + "요일) " + hours + "시 " + minute + "분");</script></time>자 벤치마크</p>
                                 </div>
                             </div>
@@ -455,7 +476,7 @@
                     <tr>
                         <td style="text-align:center;">(작업)</td>
                         <td class="uk-table-link">
-                            <p class="uk-link-reset" style="text-align:center;">국내 서버에서 1,000MB짜리 파일 다운로드</p>
+                            <p class="uk-link-reset" style="text-align:center;">약 1,000MB짜리 파일 다운로드</p>
                         </td>
                         <td class="uk-text-truncate" style="text-align:center;"><script>document.write(download_time.toLocaleString('ko-KR'));</script>ms<br><script>document.write(download_time/1000)</script>초<br><script>document.write(Math.floor(download_time / 60000));</script>분 <script>document.write(Math.floor(download_time/1000%60))</script>초</td>
                     </tr>
@@ -511,7 +532,6 @@
                             <li>GPU 이름 가져오기 - <a href="https://superuser.com/questions/723506/get-the-video-card-model-via-command-line-in-windows" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>StackExchange 질문 답변</a></li>
                             <li>텍스트 첫번째 라인 읽기 - <a href="https://www.programiz.com/c-programming/examples/read-file" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>Programiz 문서</a></li>
                             <li>인터넷 연결 여부 확인 - <a href="https://stackoverflow.com/questions/60992843/how-to-perform-a-ping-test-programmatically-on-windows" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>stack overflow 질문 답변</a></li>
-                            <li>콘솔창 선택 시 멈추는 현상 수정 - <a href="https://www.ddengle.com/mining/2061437" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>떙글 커뮤니티 파이리님 게시글</a></li>
                             <li>숫자 3자리마다 쉼표 찍기 - <a href="https://gofnrk.tistory.com/106" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>홍아지님 EasyEasy 티스토리 블로그</a></li>
                             <li>해시값 구하기 - <a href="https://docs.microsoft.com/ko-kr/powershell/module/microsoft.powershell.utility/get-filehash?view=powershell-7" target="_blank"><span class="uk-margin-small-right" uk-icon="link"></span>마이크로소프트 공식 설명서</a></li>
                         </ul>
