@@ -29,7 +29,7 @@ int check = 0;
 int x64 = 1;
 
 //매운맛 정도
-int scoville = 2;
+int scoville = 0;
 
 //메모리 정보 불러오기 함수
 DWORDLONG GetTotalPhysicalMemory()
@@ -40,16 +40,32 @@ DWORDLONG GetTotalPhysicalMemory()
     return memStatusEx.ullTotalPhys;
 }
 
-
+//유틸리티(다용도)
 void cls(); //화면 초기화 cls 명령어
+
+void introduction(); //벤치마크 작동 전 공통으로 들어가는 항목을 모아둔 함수
 void splash(); //스플래시 화면
 void check_internet(); //인터넷 연결 여부 확인
-
 void update_check(); //업데이트 확인
-
 void terms_download(); //약관 파일 다운로드
 void terms_agree(); //약관 동의 여부 확인
 void help_document(); //도움말 문서
+
+int choose_level(); //매운맛 정도를 선택하는 함수
+
+//순한맛용 벤치마크 과정
+int mild(); //아래의 과정들을 모아둔 과정
+void mild_pre_download(); //준비 파일들 다운로드
+void mild_adds(); // 더하기 연산
+void mild_pi_calc(); //원주율 연산
+void mild_upscale(); //업스케일링 작업
+//void mild_compress(); //압축/압축 해제 작업 파트. 명령어는 동일하므로 따로 함수 생성 안함.
+void mild_e_calc(); //무리수 e 연산
+//void mild_decrypt_zip(); //암호걸린 압축파일 암호 찾기 명령어는 동일하므로 따로 함수 생성 안함.
+void mild_download_test(); //다운로드 속도 측정
+
+//보통맛용 벤치마크 과정
+int normal(); //아래의 과정들을 모아둔 과정
 void pre_download(); //준비 파일들 다운로드
 void adds(); // 더하기 연산
 void pi_calc(); //원주율 연산
@@ -58,38 +74,390 @@ void compress(); //압축/압축 해제 작업
 void e_calc(); //무리수 e 연산
 void decrypt_zip(); //암호걸린 압축파일 암호 찾기
 void download_test(); //다운로드 속도 측정
+
+//매운맛용 벤치마크 과정
+int spicy(); //아래의 과정들을 모아둔 과정
+void spicy_pre_download(); //준비 파일들 다운로드
+void spicy_adds(); // 더하기 연산
+void spicy_pi_calc(); //원주율 연산
+void spicy_upscale(); //업스케일링 작업
+//void spicy_compress(); //압축/압축 해제 작업 명령어는 동일하므로 따로 함수 생성 안함.
+void spicy_e_calc(); //무리수 e 연산
+//void spicy_decrypt_zip(); //암호걸린 압축파일 암호 찾기 명령어는 동일하므로 따로 함수 생성 안함.
+void spicy_download_test(); //다운로드 속도 측정
+
+void conclusion(); // 벤치마크 완료 후 결과 화면 출력까지의 과정을 모아둔 함수
 void rm_usefiles(); //사용한 파일들 삭제
 void open_result(); //결과 화면 열기
 void exit_countdown(); //종료시 카운트다운
 
-
-int main() {
-    //스플래시 화면
-    splash();
-
-    //인터넷 연결 여부 확인
-    check_internet();
-
-    //업데이트 확인
-    update_check();
-
-    system("title 벤치마크 - 약관 동의"); //콘솔창 제목 설정
-
-    //약관 다운로드
-    terms_download();
-
-    //약관 동의 여부 확인
-    terms_agree();
-
-    //기존 파일들 삭제
+int main()
+{
     rm_usefiles();
     cls();
 
-    //필요한 파일들 다운로드
+    introduction();
+
+    choose_level();
+
+    conclusion();
+}
+
+int mild() {
+    //필요한 파일을 다운로드합니다.
+    mild_pre_download();
+
+    Sleep(600);
+    cout << "\n현재 수행중인 작업은 다음과 같습니다. (순한맛 버전)\n\n";
+    Sleep(800);
+
+    system_clock::time_point StartTime = system_clock::now();//시간 계산 시작
+
+    //파트1 - 1부터 100억까지 더하기
+    mild_adds();
+
+    system_clock::time_point FirstPartEndTime = system_clock::now();
+    duration<double> DefaultSec = FirstPartEndTime - StartTime;
+    milliseconds mill = duration_cast<milliseconds>(FirstPartEndTime - StartTime);
+    seconds sec = duration_cast<seconds>(FirstPartEndTime - StartTime);
+    cout << mill.count() << "ms" << "(" << sec.count() << "초)";//시간 출력
+
+    //파트2 - 원주율 구하기
+    mild_pi_calc();
+
+    system_clock::time_point SecondPartEndTime = system_clock::now();
+    duration<double> DefaultSec_second = SecondPartEndTime - FirstPartEndTime;
+    milliseconds mill_second = duration_cast<milliseconds>(SecondPartEndTime - FirstPartEndTime);
+    seconds sec_second = duration_cast<seconds>(SecondPartEndTime - FirstPartEndTime);
+    cout << mill_second.count() << "ms" << "(" << sec_second.count() << "초)";//시간 출력
+
+    //파트3 - 업스케일링 10배
+    mild_upscale();
+
+    system_clock::time_point ThirdPartEndTime = system_clock::now();
+    duration<double> DefaultSec_Third = ThirdPartEndTime - SecondPartEndTime;
+    milliseconds mill_third = duration_cast<milliseconds>(ThirdPartEndTime - SecondPartEndTime);
+    seconds sec_third = duration_cast<seconds>(ThirdPartEndTime - SecondPartEndTime);
+    cout << mill_third.count() << "ms" << "(" << sec_third.count() << "초)";//시간 출력
+
+    //파트4 - 압축/압축 해제
+    compress();
+
+    system_clock::time_point FourthPartEndTime = system_clock::now();
+    duration<double> DefaultSec_Fourth = FourthPartEndTime - ThirdPartEndTime;
+    milliseconds mill_fourth = duration_cast<milliseconds>(FourthPartEndTime - ThirdPartEndTime);
+    seconds sec_fourth = duration_cast<seconds>(FourthPartEndTime - ThirdPartEndTime);
+    cout << mill_fourth.count() << "ms" << "(" << sec_fourth.count() << "초)";//시작 출력
+
+    //파트5 - 무리수 e 구하기
+    mild_e_calc();
+
+    system_clock::time_point FifthPartEndTime = system_clock::now();
+    duration<double> DefaultSec_Fifth = FifthPartEndTime - FourthPartEndTime;
+    milliseconds mill_fifth = duration_cast<milliseconds>(FifthPartEndTime - FourthPartEndTime);
+    seconds sec_fifth = duration_cast<seconds>(FifthPartEndTime - FourthPartEndTime);
+    cout << mill_fifth.count() << "ms" << "(" << sec_fifth.count() << "초)";//시작 출력
+
+    //파트6 - 암호걸린 압축파일 비밀번호 찾기
+    decrypt_zip();
+
+    //파트6을 진행하면 진행 과정이 화면에 나오기 때문에, 완료되면 바로 화면을 지우고 기존 값으로 덮어씌웁니다.
+    cls();
+
+    system_clock::time_point SixthPartEndTime = system_clock::now();
+    duration<double> DefaultSec_Sixth = SixthPartEndTime - FifthPartEndTime;
+    milliseconds mill_sixth = duration_cast<milliseconds>(SixthPartEndTime - FifthPartEndTime);
+    seconds sec_sixth = duration_cast<seconds>(SixthPartEndTime - FifthPartEndTime);
+
+    //파트6을 진행하면 진행 과정이 화면에 나오기 때문에, 완료되면 바로 화면을 지우고 기존 값으로 덮어씌웁니다.
+    cls();
+    cout << "\n현재 수행중인 작업은 다음과 같습니다. (순한맛 버전)\n\n";
+    cout << "1. 1부터 300억까지 더하기 : " << mill.count() << "ms" << "(" << sec.count() << "초)\n";//시간 출력
+    cout << "2. 원주율 구하기 : " << mill_second.count() << "ms" << "(" << sec_second.count() << "초)\n";//시간 출력
+    cout << "3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(10배) : " << mill_third.count() << "ms" << "(" << sec_third.count() << "초)\n";//시간 출력
+    cout << "4. 압축/압축 해제 작업 : " << mill_fourth.count() << "ms" << "(" << sec_fourth.count() << "초)\n";//시작 출력
+    cout << "5. 무리수 e 구하기 : " << mill_fifth.count() << "ms" << "(" << sec_fifth.count() << "초)\n";//시작 출력
+    cout << "6. 압축파일 암호 풀기 : " << mill_sixth.count() << "ms" << "(" << sec_sixth.count() << "초)\n";//시작 출력
+
+    //번외 테스트는 총 시간에 포함시키지 않기 위해 시점 조정
+    system_clock::time_point EndTime = system_clock::now();
+
+    //번외 테스트(다운로드 시간)
+    system_clock::time_point ExtraTestStartTime = system_clock::now();//시간 계산 시작
+
+    //번외 - 다운로드 속도 측정
+    mild_download_test();
+
+    system_clock::time_point ExtraTestEndTime = system_clock::now();
+    duration<double> DefaultSec_Extra = ExtraTestEndTime - ExtraTestStartTime;
+    milliseconds mill_extra = duration_cast<milliseconds>(ExtraTestEndTime - ExtraTestStartTime);
+    seconds sec_extra = duration_cast<seconds>(ExtraTestEndTime - ExtraTestStartTime);
+    cout << mill_extra.count() << "ms" << "(" << sec_extra.count() << "초)";//시작 출력
+
+    //결과 시간 측정
+    duration<double> DefaultSec_end = EndTime - StartTime;
+    milliseconds mill_end = duration_cast<milliseconds>(EndTime - StartTime);
+    seconds sec_end = duration_cast<seconds>(EndTime - StartTime);
+    minutes min_end = duration_cast<minutes>(EndTime - StartTime);
+
+    system("title 벤치마크 - 완료!"); //콘솔창 제목 설정
+    cout << "\n총 수행시간 : ";
+
+    int min, hour;
+    min = sec_end.count() / 60;
+    hour = min / 60;
+    min = min % 60;
+
+    cout << mill_end.count() << "ms (" << sec_end.count() << "초)";//시간 출력
+    cout << "총 걸린 시간은 " << hour << "시간 " << min << "분 " << sec_end.count() % 60 << "초 입니다.";
+
+    //PC 사양 정보 읽기
+    //CPU 이름 불러오기
+    int CPUInfo[4] = { -1 };
+    unsigned   nExIds, indexs = 0;
+    char CPUBrandString[0x40];
+    // Get the information associated with each extended ID.
+    __cpuid(CPUInfo, 0x80000000);
+    nExIds = CPUInfo[0];
+    for (indexs = 0x80000000; indexs <= nExIds; ++indexs)
+    {
+        __cpuid(CPUInfo, indexs);
+        // Interpret CPU brand string
+        if (indexs == 0x80000002)
+            memcpy(CPUBrandString, CPUInfo, sizeof(CPUInfo));
+        else if (indexs == 0x80000003)
+            memcpy(CPUBrandString + 16, CPUInfo, sizeof(CPUInfo));
+        else if (indexs == 0x80000004)
+            memcpy(CPUBrandString + 32, CPUInfo, sizeof(CPUInfo));
+    }
+    //string includes manufacturer, model and clockspeed
+    //띄어쓰기를 _(언더바)로 변경
+    for (int chub = 0; CPUBrandString[chub]; chub++) {
+        if (CPUBrandString[chub] == ' ') CPUBrandString[chub] = '_';
+    }
+
+    //RAM 정보 불러오기
+    const DWORD dwMBFactor = 0x00100000;
+    DWORDLONG dwTotalPhys = GetTotalPhysicalMemory();
+
+    //GPU 정보 불러오기
+    system("get_gpu_name.bat > 1.txt");
+
+    char gpu_info[1000];
+    FILE* fptr;
+    if ((fptr = fopen("1.txt", "r")) == NULL) {
+        printf("Error! File cannot be opened.");
+        // Program exits if the file pointer returns NULL.
+        exit(1);
+    }
+
+    // reads text until newline is encountered
+    fscanf(fptr, "%[^\n]", gpu_info);
+
+    string gpu_info_ncut(gpu_info);
+
+    string gpu_name_info = gpu_info_ncut.substr(7); //맨 앞에 Name : 부분 삭제
+    //띄어쓰기를 _(언더바)로 변경
+    for (int chub2 = 0; gpu_name_info[chub2]; chub2++) {
+        if (gpu_name_info[chub2] == ' ') gpu_name_info[chub2] = '_';
+    }
+
+    char gpu_name_raw[100];
+    strcpy(gpu_name_raw, gpu_name_info.c_str()); //string값인 gpu 정보를 char로 변환
+
+    //현재 날짜 및 시간값 불러오기
+    time_t timer;
+    struct tm* t;
+    timer = time(NULL);
+    t = localtime(&timer);
+
+    char year[50] = { 0x00, }, month[50] = { 0x00, }, day[50] = { 0x00, }, hours[50] = { 0x00, }, minute[50] = { 0x00, }, wday[50] = { 0x00, };
+
+    sprintf(year, "%d", t->tm_year + 1900);
+    sprintf(month, "%d", t->tm_mon + 1);
+    sprintf(day, "%d", t->tm_mday);
+    sprintf(hours, "%d", t->tm_hour);
+    sprintf(minute, "%d", t->tm_min);
+    sprintf(wday, "%d", t->tm_wday);
+
+
+    //결과값 저장
+
+    /*
+    결과값 출력, PC 사양 정보, 시간값 출력을 위해
+    결과 내용을 important_values.js에 저장합니다.
+
+    결과값은 이미 저장되어 있지만, PC 사양 정보는 아직 읽어오지 않았기 때문에
+    저장하기 전에 PC 사양 정보를 먼저 읽어옵니다.
+
+    저장되는 값은 다음과 같습니다.
+
+    [PC 사양]
+    * CPU 이름
+    * 램 용량(물리)
+    * GPU 이름
+
+    [결과값(시간값만)]
+    * 1부터 300억까지 더하기
+    * 원주율(π) 구하기
+    * waifu2x-converter-cpp로 업스케일링
+    * 압축/압축해제
+    * 무리수 e 구하기
+    * 다운로드 속도 측정
+
+    [날짜 및 시간]
+    * 벤치마크를 돌린 날 기준으로 날짜와 시간
+
+    */
+
+    FILE* fp = 0;
+    fopen_s(&fp, "important_values.js", "w");    // score.js 파일을 쓰기 모드(w)로 열기.
+                                      // 파일 포인터를 반환
+
+    char plus_time[70] = "var plus_time =";
+    char pi_time[70] = "var pi_time =";
+    char download_time[70] = "var download_time =";
+    char upscale_time[70] = "var upscale_time =";
+    char compress_time[70] = "var compress_time =";
+    char surd_e_time[70] = "var surd_e_time =";
+    char decrypt_zip_time[70] = "var decrypt_zip_time =";
+
+    char ch_plus_time[100];
+    string st_plus_time = to_string(mill.count());
+    strcpy(ch_plus_time, st_plus_time.c_str());
+
+    char ch_pi_time[100];
+    string st_pi_time = to_string(mill_second.count());
+    strcpy(ch_pi_time, st_pi_time.c_str());
+
+    char ch_upscale_time[100];
+    string st_upscale_time = to_string(mill_third.count());
+    strcpy(ch_upscale_time, st_upscale_time.c_str());
+
+    char ch_compress_time[100];
+    string st_compress_time = to_string(mill_fourth.count());
+    strcpy(ch_compress_time, st_compress_time.c_str());
+
+    char ch_surd_e_time[100];
+    string st_surd_e_time = to_string(mill_fifth.count());
+    strcpy(ch_surd_e_time, st_surd_e_time.c_str());
+
+    char ch_decrypt_zip_time[100];
+    string st_decrypt_zip_time = to_string(mill_sixth.count());
+    strcpy(ch_decrypt_zip_time, st_decrypt_zip_time.c_str());
+
+    char ch_download_time[100];
+    string st_download_time = to_string(mill_extra.count());
+    strcpy(ch_download_time, st_download_time.c_str());
+
+    fputs(strcat(plus_time, ch_plus_time), fp);
+    fputs(";\n", fp);
+    fputs(strcat(pi_time, ch_pi_time), fp);
+    fputs(";\n", fp);
+    fputs(strcat(download_time, ch_download_time), fp);
+    fputs(";\n", fp);
+    fputs(strcat(upscale_time, ch_upscale_time), fp);
+    fputs(";\n", fp);
+    fputs(strcat(compress_time, ch_compress_time), fp);
+    fputs(";\n", fp);
+    fputs(strcat(surd_e_time, ch_surd_e_time), fp);
+    fputs(";\n", fp);
+    fputs(strcat(decrypt_zip_time, ch_decrypt_zip_time), fp);
+    fputs(";\n", fp);
+
+    //PC 정보 추가
+    //CPU 이름 추가
+    char cpu_name[70] = "var cpu_name = \"";
+    fputs(strcat(cpu_name, CPUBrandString), fp);
+    fputs("\";\n", fp);
+
+    //RAM 크기 추가
+    char ram_size[70] = "var ram_size = ";
+    DWORD DTotalRamSize = dwTotalPhys / dwMBFactor / 1000;
+    //DWORD를 char로 변환
+    char TotalRamSize[10];
+    sprintf(TotalRamSize, "%d", DTotalRamSize);
+    fputs(strcat(ram_size, TotalRamSize), fp);
+    fputs(";\n", fp);
+
+    //GPU 이름 추가
+    char gpu_name[70] = "var gpu_name = \"";
+    fputs(strcat(gpu_name, gpu_name_raw), fp);
+    fputs("\b\";\n", fp);
+
+    //현재 날짜 추가
+    char now_date_year[70] = "var now_date_year = \"";
+    fputs(strcat(now_date_year, year), fp);
+    fputs("\b\";\n", fp);
+
+    char now_date_month[70] = "var now_date_month = \"";
+    fputs(strcat(now_date_month, month), fp);
+    fputs("\b\";\n", fp);
+
+    char now_date_day[70] = "var now_date_day = \"";
+    fputs(strcat(now_date_day, day), fp);
+    fputs("\b\";\n", fp);
+
+    char now_date_hours[70] = "var now_date_hours = \"";
+    fputs(strcat(now_date_hours, hours), fp);
+    fputs("\b\";\n", fp);
+
+    char now_date_minute[70] = "var now_date_minute = \"";
+    fputs(strcat(now_date_minute, minute), fp);
+    fputs("\b\";\n", fp);
+
+    char now_date_wday[70] = "var now_date_wday = \"";
+    fputs(strcat(now_date_wday, wday), fp);
+    fputs("\b\";\n", fp);
+
+    //윈도우 비트 표시
+    if (x64 == 1)
+    {
+        char windows_bits[70] = "var windows_bits = \"";
+        char bits[20] = "64";
+        fputs(strcat(windows_bits, bits), fp);
+        fputs("\b\";\n", fp);
+    }
+    else if (x64 == 2)
+    {
+        char windows_bits[70] = "var windows_bits = \"";
+        char bits[20] = "32";
+        fputs(strcat(windows_bits, bits), fp);
+        fputs("\b\";\n", fp);
+    }
+
+    //매운맛 정도 표시
+    if (scoville == 1)
+    {
+        char scoville_scale[70] = "var scoville_scale = \"";
+        char scoville[20] = "64";
+        fputs(strcat(scoville_scale, scoville), fp);
+        fputs("\b\";\n", fp);
+    }
+    else if (scoville == 2)
+    {
+        char scoville_scale[70] = "var scoville_scale = \"";
+        char scoville[20] = "2";
+        fputs(strcat(scoville_scale, scoville), fp);
+        fputs("\b\";\n", fp);
+    }
+    else if (scoville == 3)
+    {
+        char scoville_scale[70] = "var scoville_scale = \"";
+        char scoville[20] = "3";
+        fputs(strcat(scoville_scale, scoville), fp);
+        fputs("\b\";\n", fp);
+    }
+
+    fclose(fp);    // 파일 포인터 닫기
+}
+
+int normal() {
+    //필요한 파일을 다운로드합니다.
     pre_download();
 
     Sleep(600);
-    cout << "\n현재 수행중인 작업은 다음과 같습니다.\n\n";
+    cout << "\n현재 수행중인 작업은 다음과 같습니다. (보통맛 버전)\n\n";
     Sleep(800);
 
     system_clock::time_point StartTime = system_clock::now();//시간 계산 시작
@@ -152,10 +520,10 @@ int main() {
 
     //파트6을 진행하면 진행 과정이 화면에 나오기 때문에, 완료되면 바로 화면을 지우고 기존 값으로 덮어씌웁니다.
     cls();
-    cout << "\n현재 수행중인 작업은 다음과 같습니다.\n\n";
+    cout << "\n현재 수행중인 작업은 다음과 같습니다. (보통맛 버전)\n\n";
     cout << "1. 1부터 300억까지 더하기 : " << mill.count() << "ms" << "(" << sec.count() << "초)\n";//시간 출력
     cout << "2. 원주율 구하기 : " << mill_second.count() << "ms" << "(" << sec_second.count() << "초)\n";//시간 출력
-    cout << "3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(40배) : " << mill_third.count() << "ms" << "(" << sec_third.count() << "초)\n";//시간 출력
+    cout << "3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(30배) : " << mill_third.count() << "ms" << "(" << sec_third.count() << "초)\n";//시간 출력
     cout << "4. 압축/압축 해제 작업 : " << mill_fourth.count() << "ms" << "(" << sec_fourth.count() << "초)\n";//시작 출력
     cout << "5. 무리수 e 구하기 : " << mill_fifth.count() << "ms" << "(" << sec_fifth.count() << "초)\n";//시작 출력
     cout << "6. 압축파일 암호 풀기 : " << mill_sixth.count() << "ms" << "(" << sec_sixth.count() << "초)\n";//시작 출력
@@ -431,20 +799,447 @@ int main() {
     }
 
     fclose(fp);    // 파일 포인터 닫기
+}
 
-    //사용한 파일들 삭제
-    system("title 사용한 파일들을 삭제합니다. 잠시만 기다려 주세요!"); //콘솔창 제목 설정
-    rm_usefiles();
+int spicy() {
+    //필요한 파일을 다운로드합니다.
+    spicy_pre_download();
 
-    //결과 페이지 열기
-    system("title 결과 페이지에서 벤치마크 결과를 확인하세요!"); //콘솔창 제목 설정
-    open_result();
+    Sleep(600);
+    cout << "\n현재 수행중인 작업은 다음과 같습니다. (매운맛 버전)\n\n";
+    Sleep(800);
+
+    system_clock::time_point StartTime = system_clock::now();//시간 계산 시작
+
+    //파트1 - 1부터 600억까지 더하기
+    spicy_adds();
+
+    system_clock::time_point FirstPartEndTime = system_clock::now();
+    duration<double> DefaultSec = FirstPartEndTime - StartTime;
+    milliseconds mill = duration_cast<milliseconds>(FirstPartEndTime - StartTime);
+    seconds sec = duration_cast<seconds>(FirstPartEndTime - StartTime);
+    cout << mill.count() << "ms" << "(" << sec.count() << "초)";//시간 출력
+
+    //파트2 - 원주율 구하기
+    spicy_pi_calc();
+
+    system_clock::time_point SecondPartEndTime = system_clock::now();
+    duration<double> DefaultSec_second = SecondPartEndTime - FirstPartEndTime;
+    milliseconds mill_second = duration_cast<milliseconds>(SecondPartEndTime - FirstPartEndTime);
+    seconds sec_second = duration_cast<seconds>(SecondPartEndTime - FirstPartEndTime);
+    cout << mill_second.count() << "ms" << "(" << sec_second.count() << "초)";//시간 출력
+
+    //파트3 - 업스케일링 60배
+    spicy_upscale();
+
+    system_clock::time_point ThirdPartEndTime = system_clock::now();
+    duration<double> DefaultSec_Third = ThirdPartEndTime - SecondPartEndTime;
+    milliseconds mill_third = duration_cast<milliseconds>(ThirdPartEndTime - SecondPartEndTime);
+    seconds sec_third = duration_cast<seconds>(ThirdPartEndTime - SecondPartEndTime);
+    cout << mill_third.count() << "ms" << "(" << sec_third.count() << "초)";//시간 출력
+
+    //파트4 - 압축/압축 해제
+    compress();
+
+    system_clock::time_point FourthPartEndTime = system_clock::now();
+    duration<double> DefaultSec_Fourth = FourthPartEndTime - ThirdPartEndTime;
+    milliseconds mill_fourth = duration_cast<milliseconds>(FourthPartEndTime - ThirdPartEndTime);
+    seconds sec_fourth = duration_cast<seconds>(FourthPartEndTime - ThirdPartEndTime);
+    cout << mill_fourth.count() << "ms" << "(" << sec_fourth.count() << "초)";//시작 출력
+
+    //파트5 - 무리수 e 구하기
+    spicy_e_calc();
+
+    system_clock::time_point FifthPartEndTime = system_clock::now();
+    duration<double> DefaultSec_Fifth = FifthPartEndTime - FourthPartEndTime;
+    milliseconds mill_fifth = duration_cast<milliseconds>(FifthPartEndTime - FourthPartEndTime);
+    seconds sec_fifth = duration_cast<seconds>(FifthPartEndTime - FourthPartEndTime);
+    cout << mill_fifth.count() << "ms" << "(" << sec_fifth.count() << "초)";//시작 출력
+
+    //파트6 - 암호걸린 압축파일 비밀번호 찾기
+    decrypt_zip();
+
+    //파트6을 진행하면 진행 과정이 화면에 나오기 때문에, 완료되면 바로 화면을 지우고 기존 값으로 덮어씌웁니다.
+    cls();
+
+    system_clock::time_point SixthPartEndTime = system_clock::now();
+    duration<double> DefaultSec_Sixth = SixthPartEndTime - FifthPartEndTime;
+    milliseconds mill_sixth = duration_cast<milliseconds>(SixthPartEndTime - FifthPartEndTime);
+    seconds sec_sixth = duration_cast<seconds>(SixthPartEndTime - FifthPartEndTime);
+
+    //파트6을 진행하면 진행 과정이 화면에 나오기 때문에, 완료되면 바로 화면을 지우고 기존 값으로 덮어씌웁니다.
+    cls();
+    cout << "\n현재 수행중인 작업은 다음과 같습니다. (매운맛 버전)\n\n";
+    cout << "1. 1부터 300억까지 더하기 : " << mill.count() << "ms" << "(" << sec.count() << "초)\n";//시간 출력
+    cout << "2. 원주율 구하기 : " << mill_second.count() << "ms" << "(" << sec_second.count() << "초)\n";//시간 출력
+    cout << "3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(60배) : " << mill_third.count() << "ms" << "(" << sec_third.count() << "초)\n";//시간 출력
+    cout << "4. 압축/압축 해제 작업 : " << mill_fourth.count() << "ms" << "(" << sec_fourth.count() << "초)\n";//시작 출력
+    cout << "5. 무리수 e 구하기 : " << mill_fifth.count() << "ms" << "(" << sec_fifth.count() << "초)\n";//시작 출력
+    cout << "6. 압축파일 암호 풀기 : " << mill_sixth.count() << "ms" << "(" << sec_sixth.count() << "초)\n";//시작 출력
+
+    //번외 테스트는 총 시간에 포함시키지 않기 위해 시점 조정
+    system_clock::time_point EndTime = system_clock::now();
+
+    //번외 테스트(다운로드 시간)
+    system_clock::time_point ExtraTestStartTime = system_clock::now();//시간 계산 시작
+
+    //번외 - 다운로드 속도 측정
+    spicy_download_test();
+
+    system_clock::time_point ExtraTestEndTime = system_clock::now();
+    duration<double> DefaultSec_Extra = ExtraTestEndTime - ExtraTestStartTime;
+    milliseconds mill_extra = duration_cast<milliseconds>(ExtraTestEndTime - ExtraTestStartTime);
+    seconds sec_extra = duration_cast<seconds>(ExtraTestEndTime - ExtraTestStartTime);
+    cout << mill_extra.count() << "ms" << "(" << sec_extra.count() << "초)";//시작 출력
+
+    //결과 시간 측정
+    duration<double> DefaultSec_end = EndTime - StartTime;
+    milliseconds mill_end = duration_cast<milliseconds>(EndTime - StartTime);
+    seconds sec_end = duration_cast<seconds>(EndTime - StartTime);
+    minutes min_end = duration_cast<minutes>(EndTime - StartTime);
+
+    system("title 벤치마크 - 완료!"); //콘솔창 제목 설정
+    cout << "\n총 수행시간 : ";
+
+    int min, hour;
+    min = sec_end.count() / 60;
+    hour = min / 60;
+    min = min % 60;
+
+    cout << mill_end.count() << "ms (" << sec_end.count() << "초)";//시간 출력
+    cout << "총 걸린 시간은 " << hour << "시간 " << min << "분 " << sec_end.count() % 60 << "초 입니다.";
+
+    //PC 사양 정보 읽기
+    //CPU 이름 불러오기
+    int CPUInfo[4] = { -1 };
+    unsigned   nExIds, indexs = 0;
+    char CPUBrandString[0x40];
+    // Get the information associated with each extended ID.
+    __cpuid(CPUInfo, 0x80000000);
+    nExIds = CPUInfo[0];
+    for (indexs = 0x80000000; indexs <= nExIds; ++indexs)
+    {
+        __cpuid(CPUInfo, indexs);
+        // Interpret CPU brand string
+        if (indexs == 0x80000002)
+            memcpy(CPUBrandString, CPUInfo, sizeof(CPUInfo));
+        else if (indexs == 0x80000003)
+            memcpy(CPUBrandString + 16, CPUInfo, sizeof(CPUInfo));
+        else if (indexs == 0x80000004)
+            memcpy(CPUBrandString + 32, CPUInfo, sizeof(CPUInfo));
+    }
+    //string includes manufacturer, model and clockspeed
+    //띄어쓰기를 _(언더바)로 변경
+    for (int chub = 0; CPUBrandString[chub]; chub++) {
+        if (CPUBrandString[chub] == ' ') CPUBrandString[chub] = '_';
+    }
+
+    //RAM 정보 불러오기
+    const DWORD dwMBFactor = 0x00100000;
+    DWORDLONG dwTotalPhys = GetTotalPhysicalMemory();
+
+    //GPU 정보 불러오기
+    system("get_gpu_name.bat > 1.txt");
+
+    char gpu_info[1000];
+    FILE* fptr;
+    if ((fptr = fopen("1.txt", "r")) == NULL) {
+        printf("Error! File cannot be opened.");
+        // Program exits if the file pointer returns NULL.
+        exit(1);
+    }
+
+    // reads text until newline is encountered
+    fscanf(fptr, "%[^\n]", gpu_info);
+
+    string gpu_info_ncut(gpu_info);
+
+    string gpu_name_info = gpu_info_ncut.substr(7); //맨 앞에 Name : 부분 삭제
+    //띄어쓰기를 _(언더바)로 변경
+    for (int chub2 = 0; gpu_name_info[chub2]; chub2++) {
+        if (gpu_name_info[chub2] == ' ') gpu_name_info[chub2] = '_';
+    }
+
+    char gpu_name_raw[100];
+    strcpy(gpu_name_raw, gpu_name_info.c_str()); //string값인 gpu 정보를 char로 변환
+
+    //현재 날짜 및 시간값 불러오기
+    time_t timer;
+    struct tm* t;
+    timer = time(NULL);
+    t = localtime(&timer);
+
+    char year[50] = { 0x00, }, month[50] = { 0x00, }, day[50] = { 0x00, }, hours[50] = { 0x00, }, minute[50] = { 0x00, }, wday[50] = { 0x00, };
+
+    sprintf(year, "%d", t->tm_year + 1900);
+    sprintf(month, "%d", t->tm_mon + 1);
+    sprintf(day, "%d", t->tm_mday);
+    sprintf(hours, "%d", t->tm_hour);
+    sprintf(minute, "%d", t->tm_min);
+    sprintf(wday, "%d", t->tm_wday);
+
+
+    //결과값 저장
+
+    /*
+    결과값 출력, PC 사양 정보, 시간값 출력을 위해
+    결과 내용을 important_values.js에 저장합니다.
+
+    결과값은 이미 저장되어 있지만, PC 사양 정보는 아직 읽어오지 않았기 때문에
+    저장하기 전에 PC 사양 정보를 먼저 읽어옵니다.
+
+    저장되는 값은 다음과 같습니다.
+
+    [PC 사양]
+    * CPU 이름
+    * 램 용량(물리)
+    * GPU 이름
+
+    [결과값(시간값만)]
+    * 1부터 300억까지 더하기
+    * 원주율(π) 구하기
+    * waifu2x-converter-cpp로 업스케일링
+    * 압축/압축해제
+    * 무리수 e 구하기
+    * 다운로드 속도 측정
+
+    [날짜 및 시간]
+    * 벤치마크를 돌린 날 기준으로 날짜와 시간
+
+    */
+
+    FILE* fp = 0;
+    fopen_s(&fp, "important_values.js", "w");    // score.js 파일을 쓰기 모드(w)로 열기.
+                                      // 파일 포인터를 반환
+
+    char plus_time[70] = "var plus_time =";
+    char pi_time[70] = "var pi_time =";
+    char download_time[70] = "var download_time =";
+    char upscale_time[70] = "var upscale_time =";
+    char compress_time[70] = "var compress_time =";
+    char surd_e_time[70] = "var surd_e_time =";
+    char decrypt_zip_time[70] = "var decrypt_zip_time =";
+
+    char ch_plus_time[100];
+    string st_plus_time = to_string(mill.count());
+    strcpy(ch_plus_time, st_plus_time.c_str());
+
+    char ch_pi_time[100];
+    string st_pi_time = to_string(mill_second.count());
+    strcpy(ch_pi_time, st_pi_time.c_str());
+
+    char ch_upscale_time[100];
+    string st_upscale_time = to_string(mill_third.count());
+    strcpy(ch_upscale_time, st_upscale_time.c_str());
+
+    char ch_compress_time[100];
+    string st_compress_time = to_string(mill_fourth.count());
+    strcpy(ch_compress_time, st_compress_time.c_str());
+
+    char ch_surd_e_time[100];
+    string st_surd_e_time = to_string(mill_fifth.count());
+    strcpy(ch_surd_e_time, st_surd_e_time.c_str());
+
+    char ch_decrypt_zip_time[100];
+    string st_decrypt_zip_time = to_string(mill_sixth.count());
+    strcpy(ch_decrypt_zip_time, st_decrypt_zip_time.c_str());
+
+    char ch_download_time[100];
+    string st_download_time = to_string(mill_extra.count());
+    strcpy(ch_download_time, st_download_time.c_str());
+
+    fputs(strcat(plus_time, ch_plus_time), fp);
+    fputs(";\n", fp);
+    fputs(strcat(pi_time, ch_pi_time), fp);
+    fputs(";\n", fp);
+    fputs(strcat(download_time, ch_download_time), fp);
+    fputs(";\n", fp);
+    fputs(strcat(upscale_time, ch_upscale_time), fp);
+    fputs(";\n", fp);
+    fputs(strcat(compress_time, ch_compress_time), fp);
+    fputs(";\n", fp);
+    fputs(strcat(surd_e_time, ch_surd_e_time), fp);
+    fputs(";\n", fp);
+    fputs(strcat(decrypt_zip_time, ch_decrypt_zip_time), fp);
+    fputs(";\n", fp);
+
+    //PC 정보 추가
+    //CPU 이름 추가
+    char cpu_name[70] = "var cpu_name = \"";
+    fputs(strcat(cpu_name, CPUBrandString), fp);
+    fputs("\";\n", fp);
+
+    //RAM 크기 추가
+    char ram_size[70] = "var ram_size = ";
+    DWORD DTotalRamSize = dwTotalPhys / dwMBFactor / 1000;
+    //DWORD를 char로 변환
+    char TotalRamSize[10];
+    sprintf(TotalRamSize, "%d", DTotalRamSize);
+    fputs(strcat(ram_size, TotalRamSize), fp);
+    fputs(";\n", fp);
+
+    //GPU 이름 추가
+    char gpu_name[70] = "var gpu_name = \"";
+    fputs(strcat(gpu_name, gpu_name_raw), fp);
+    fputs("\b\";\n", fp);
+
+    //현재 날짜 추가
+    char now_date_year[70] = "var now_date_year = \"";
+    fputs(strcat(now_date_year, year), fp);
+    fputs("\b\";\n", fp);
+
+    char now_date_month[70] = "var now_date_month = \"";
+    fputs(strcat(now_date_month, month), fp);
+    fputs("\b\";\n", fp);
+
+    char now_date_day[70] = "var now_date_day = \"";
+    fputs(strcat(now_date_day, day), fp);
+    fputs("\b\";\n", fp);
+
+    char now_date_hours[70] = "var now_date_hours = \"";
+    fputs(strcat(now_date_hours, hours), fp);
+    fputs("\b\";\n", fp);
+
+    char now_date_minute[70] = "var now_date_minute = \"";
+    fputs(strcat(now_date_minute, minute), fp);
+    fputs("\b\";\n", fp);
+
+    char now_date_wday[70] = "var now_date_wday = \"";
+    fputs(strcat(now_date_wday, wday), fp);
+    fputs("\b\";\n", fp);
+
+    //윈도우 비트 표시
+    if (x64 == 1)
+    {
+        char windows_bits[70] = "var windows_bits = \"";
+        char bits[20] = "64";
+        fputs(strcat(windows_bits, bits), fp);
+        fputs("\b\";\n", fp);
+    }
+    else if (x64 == 2)
+    {
+        char windows_bits[70] = "var windows_bits = \"";
+        char bits[20] = "32";
+        fputs(strcat(windows_bits, bits), fp);
+        fputs("\b\";\n", fp);
+    }
+
+    //매운맛 정도 표시
+    if (scoville == 1)
+    {
+        char scoville_scale[70] = "var scoville_scale = \"";
+        char scoville[20] = "64";
+        fputs(strcat(scoville_scale, scoville), fp);
+        fputs("\b\";\n", fp);
+    }
+    else if (scoville == 2)
+    {
+        char scoville_scale[70] = "var scoville_scale = \"";
+        char scoville[20] = "2";
+        fputs(strcat(scoville_scale, scoville), fp);
+        fputs("\b\";\n", fp);
+    }
+    else if (scoville == 3)
+    {
+        char scoville_scale[70] = "var scoville_scale = \"";
+        char scoville[20] = "3";
+        fputs(strcat(scoville_scale, scoville), fp);
+        fputs("\b\";\n", fp);
+    }
+
+    fclose(fp);    // 파일 포인터 닫기
 }
 
 void cls()
 {
     //화면 내용을 모두 지우는 cls 명령어를 수행하는 함수입니다.
     system("cls");
+}
+
+void level_explanation()
+{
+    cout << "-------------------------------------------------------------------------------------------------------------------\n";
+    cout << "\t\t\t\t다양한 매운맛을 선택하실 수 있습니다.\n\n";
+    cout << "\t\t\t\t1. 순한맛(저사양 PC 사용 권장)\n";
+    cout << "\t\t\t\t(진라면 순한맛은 좀...)\n\n";
+    cout << "\t\t\t\t2. 보통맛(최소 i7 8700k 이상, 라이젠 5900x 이상 권장)\n";
+    cout << "\t\t\t\t(보보 보통맛! 궁금해 허니!)\n\n";
+    cout << "\t\t\t\t3. 매운맛(개발자는 5900x 사용중인데, 엄청 오래 걸림)\n";
+    cout << "\t\t\t\t(모니터 불좀 꺼줄래? 내 벤치마크 좀 보게)\n\n";
+    cout << "\t\t\t\t왠만해서는 매운맛 선택은 비추드립니다.\n";
+    cout << "\t\t\t\t최고사양이더라도 보통맛을 권장드립니다.\n";
+    cout << "\t\t\t\t개발자는 본 프로그램으로 인한 PC 고장에 책임을 지지 않습니다.\n";
+    cout << "-------------------------------------------------------------------------------------------------------------------\n";
+    cout << "\t\t원하는 매운맛 정도를 입력하세요 : ";
+}
+
+int choose_level()
+{
+    system("title 벤치마크 - 매운맛 정도(난이도)를 선택하세요!");
+
+    //무한 반복합니다.
+    while (1)
+    {
+        cls();
+
+        //설명 출력
+        level_explanation();
+
+        //사용자에게 메뉴값을 입력받고, 그 값을 scoville 변수에 저장합니다.
+        cin >> scoville;
+
+        //만약 1번을 입력하면
+        switch (scoville) {
+        case 1:
+            //화면을 지웁니다.
+            cls();
+            //순한맛 실행
+            mild();
+            //while문을 나갑니다.
+            break;
+        case 2:
+            //화면을 지웁니다.
+            cls();
+            //보통맛 실행
+            normal();
+            //while문을 나갑니다.
+            break;
+        case 3:
+            //화면을 지웁니다.
+            cls();
+            //매운맛 실행
+            spicy();
+            //while문을 나갑니다.
+            break;
+        default:
+            cout << "잘못된 값을 입력하셨습니다. 다시 입력해 주시기 바랍니다.\n";
+            Sleep(3000);
+        }
+    }
+}
+
+void introduction()
+{
+    //스플래시 화면
+    splash();
+
+    //인터넷 연결 여부 확인
+    check_internet();
+
+    //업데이트 확인
+    update_check();
+
+    system("title 벤치마크 - 약관 동의"); //콘솔창 제목 설정
+
+    //약관 다운로드
+    terms_download();
+
+    //약관 동의 여부 확인
+    terms_agree();
+
+    //기존 파일들 삭제
+    rm_usefiles();
+    cls();
 }
 
 void splash()
@@ -618,7 +1413,6 @@ void terms_agree()
             help_document();
             if (check == 1)
                 break;
-
         }
         else if (terms_agree == 0) {
             cls();
@@ -676,6 +1470,29 @@ void help_document() {
     }
 }
 
+void mild_pre_download()
+{
+    system("title 벤치마크 - 필요한 파일들 다운로드 중..."); //콘솔창 제목 설정
+
+    //안내 메시지를 출력합니다.
+    cout << "\t\t\t\t  벤치마크 프로그램입니다.\n\t\t\t  필요한 파일들을 다운로드하고 있습니다. 잠시만 기다려주세요.\n";
+
+    /*
+    필요한 파일들을 다운로드받습니다.
+    파일 목록과 사유는 다음과 같습니다.
+    * 7z.exe, 7z.dll : 각종 파일들을 모아둔 all.7z 파일을 압축해제하고, 이후에 파일 압축/압축 해제시 사용되는 파일입니다.
+    * all.7z : 벤치마크에 필요한 파일들이 모여있습니다.
+    * aki.png : 업스케일링 대상 파일입니다.
+    */
+
+    URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/x64/7-Zip/7z.exe", L"7z.exe", 0, NULL); //7z.exe를 다운로드합니다.
+    URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/x64/7-Zip/7z.dll", L"7z.dll", 0, NULL); //7z.exe이 동작하는데 필요한 파일인 7z.dll 파일을 다운로드합니다.
+    URLDownloadToFile(NULL, L"https://common.gaon.xyz/prj/cpp_cli_benchmark/mildall.7z", L"mildall.7z", 0, NULL); //waifu2x, 테스트용 압축 파일이 담긴 압축파일을 다운로드합니다.
+    system("@echo off && 7z x mildall.7z > 1.txt"); //다운로드 받은 파일을 압축해제합니다.
+    URLDownloadToFile(NULL, L"https://i.ibb.co/1b2Ns1b/aki.png", L"aki.png", 0, NULL);//크기가 작은 이미지 파일을 다운로드합니다.
+    cls();
+}
+
 void pre_download()
 {
     system("title 벤치마크 - 필요한 파일들 다운로드 중..."); //콘솔창 제목 설정
@@ -699,6 +1516,47 @@ void pre_download()
     cls();
 }
 
+void spicy_pre_download()
+{
+    system("title 벤치마크 - 필요한 파일들 다운로드 중..."); //콘솔창 제목 설정
+
+    //안내 메시지를 출력합니다.
+    cout << "\t\t\t\t  벤치마크 프로그램입니다.\n\t\t\t  필요한 파일들을 다운로드하고 있습니다. 잠시만 기다려주세요.\n";
+
+    /*
+    필요한 파일들을 다운로드받습니다.
+    파일 목록과 사유는 다음과 같습니다.
+    * 7z.exe, 7z.dll : 각종 파일들을 모아둔 all.7z 파일을 압축해제하고, 이후에 파일 압축/압축 해제시 사용되는 파일입니다.
+    * all.7z : 벤치마크에 필요한 파일들이 모여있습니다.
+    * aki.png : 업스케일링 대상 파일입니다.
+    */
+
+    URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/x64/7-Zip/7z.exe", L"7z.exe", 0, NULL); //7z.exe를 다운로드합니다.
+    URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/x64/7-Zip/7z.dll", L"7z.dll", 0, NULL); //7z.exe이 동작하는데 필요한 파일인 7z.dll 파일을 다운로드합니다.
+    URLDownloadToFile(NULL, L"https://common.gaon.xyz/prj/cpp_cli_benchmark/spicyall.7z", L"spicyall.7z", 0, NULL); //waifu2x, 테스트용 압축 파일이 담긴 압축파일을 다운로드합니다.
+    system("@echo off && 7z x spicyall.7z > 1.txt"); //다운로드 받은 파일을 압축해제합니다.
+    URLDownloadToFile(NULL, L"https://i.ibb.co/1b2Ns1b/aki.png", L"aki.png", 0, NULL);//크기가 작은 이미지 파일을 다운로드합니다.
+    cls();
+}
+
+void mild_adds()
+{
+    system("title 벤치마크 - (연산) 1부터 100억까지 더하기"); //콘솔창 제목 설정
+
+    //안내 메시지를 출력합니다.
+    cout << "1. 1부터 100억까지 더하기 : ";
+
+
+    //1부터 100억까지 더합니다.
+    long sum = 0;
+
+    long long i = 0;
+    long long sums = 0;
+    for (i = 1; i <= 10000000000; i++) { //1부터 10000000000까지 반복
+        sums += i; //sums=sums+i
+    }
+}
+
 void adds()
 {
     system("title 벤치마크 - (연산) 1부터 300억까지 더하기"); //콘솔창 제목 설정
@@ -714,6 +1572,40 @@ void adds()
     long long sums = 0;
     for (i = 1; i <= 30000000000; i++) { //1부터 30000000000까지 반복
         sums += i; //sums=sums+i
+    }
+}
+
+void spicy_adds()
+{
+    system("title 벤치마크 - (연산) 1부터 600억까지 더하기"); //콘솔창 제목 설정
+
+    //안내 메시지를 출력합니다.
+    cout << "1. 1부터 600억까지 더하기 : ";
+
+
+    //1부터 600억까지 더합니다.
+    long sum = 0;
+
+    long long i = 0;
+    long long sums = 0;
+    for (i = 1; i <= 60000000000; i++) { //1부터 60000000000까지 반복
+        sums += i; //sums=sums+i
+    }
+}
+
+void mild_pi_calc()
+{
+    system("title 벤치마크 - (연산) 원주율 구하기"); //콘솔창 제목 설정
+
+    //안내 메시지를 출력합니다.
+    cout << "\n2. 원주율 구하기 : ";
+
+    double pi = 0.0, num = 1.0;
+
+    while (num < 400000000)
+    {
+        pi += 1.0 / pow(num, 2.0);
+        num += 1.0;
     }
 }
 
@@ -733,12 +1625,44 @@ void pi_calc()
     }
 }
 
+void spicy_pi_calc()
+{
+    system("title 벤치마크 - (연산) 원주율 구하기"); //콘솔창 제목 설정
+
+    //안내 메시지를 출력합니다.
+    cout << "\n2. 원주율 구하기 : ";
+
+    double pi = 0.0, num = 1.0;
+
+    while (num < 2147483640)
+    {
+        pi += 1.0 / pow(num, 2.0);
+        num += 1.0;
+    }
+}
+
+void mild_upscale()
+{
+    system("title 벤치마크 - (작업) waifu2x 10배 업스케일링 작업"); //콘솔창 제목 설정
+    cout << "\n3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(10배) : ";
+
+    system("@echo off && waifu2x-converter-cpp  --scale-ratio 10 -i aki.png -o aki_out.png > 1.txt");
+}
+
 void upscale()
 {
-    system("title 벤치마크 - (작업) waifu2x 40배 업스케일링 작업"); //콘솔창 제목 설정
-    cout << "\n3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(40배) : ";
+    system("title 벤치마크 - (작업) waifu2x 30배 업스케일링 작업"); //콘솔창 제목 설정
+    cout << "\n3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(30배) : ";
 
-    system("@echo off && waifu2x-converter-cpp  --scale-ratio 40 -i aki.png -o aki_out.png > 1.txt");
+    system("@echo off && waifu2x-converter-cpp  --scale-ratio 30 -i aki.png -o aki_out.png > 1.txt");
+}
+
+void spicy_upscale()
+{
+    system("title 벤치마크 - (작업) waifu2x 60배 업스케일링 작업"); //콘솔창 제목 설정
+    cout << "\n3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(60배) : ";
+
+    system("@echo off && waifu2x-converter-cpp  --scale-ratio 60 -i aki.png -o aki_out.png > 1.txt");
 }
 
 void compress()
@@ -773,12 +1697,46 @@ void compress()
     system("7z x -bd zip.7z > 1.txt");
 }
 
+void mild_e_calc()
+{
+    system("title 벤치마크 - (연산) 무리수 e 구하기"); //콘솔창 제목 설정
+    cout << "\n5. 무리수 e 구하기 : ";
+
+    int ntimes = 56000;
+    int add;
+    double j, surd_e;
+    surd_e = 1;
+
+    for (add = 1; add <= ntimes; add++)
+    {
+        j = 1 / factorial(add);
+        surd_e = surd_e + j;
+    }
+}
+
 void e_calc()
 {
     system("title 벤치마크 - (연산) 무리수 e 구하기"); //콘솔창 제목 설정
     cout << "\n5. 무리수 e 구하기 : ";
 
     int ntimes = 130000;
+    int add;
+    double j, surd_e;
+    surd_e = 1;
+
+    for (add = 1; add <= ntimes; add++)
+    {
+        j = 1 / factorial(add);
+        surd_e = surd_e + j;
+    }
+}
+
+void spicy_e_calc()
+{
+    system("title 벤치마크 - (연산) 무리수 e 구하기"); //콘솔창 제목 설정
+    cout << "\n5. 무리수 e 구하기 : ";
+
+    int ntimes = 270000;
     int add;
     double j, surd_e;
     surd_e = 1;
@@ -797,6 +1755,14 @@ void decrypt_zip() {
     system("@echo off && cd john && zip2john test.zip > hash.txt && john hash.txt > 1.txt");
 }
 
+void mild_download_test()
+{
+    system("title 벤치마크 - (작업) 파일 다운로드 속도 측정"); //콘솔창 제목 설정
+    cout << "\n번외 - 파일 다운로드 속도 측정 : ";
+
+    URLDownloadToFile(NULL, L"https://dl.google.com/android/repository/commandlinetools-win-8512546_latest.zip", L"cmdtools.zip", 0, NULL);
+}
+
 void download_test()
 {
     system("title 벤치마크 - (작업) 파일 다운로드 속도 측정"); //콘솔창 제목 설정
@@ -805,21 +1771,48 @@ void download_test()
     URLDownloadToFile(NULL, L"https://redirector.gvt1.com/edgedl/android/studio/install/2021.2.1.14/android-studio-2021.2.1.14-windows.exe", L"android_studio.exe", 0, NULL);
 }
 
+void spicy_download_test()
+{
+    system("title 벤치마크 - (작업) 파일 다운로드 속도 측정"); //콘솔창 제목 설정
+    cout << "\n번외 - 파일 다운로드 속도 측정 : ";
+
+    URLDownloadToFile(NULL, L"https://dl.google.com/android/studio/maven-google-com/stable/offline-gmaven-stable.zip", L"gmaven.zip", 0, NULL);
+}
+
 void rm_usefiles()
 {
-    system("@echo off && del terms.txt 7z.exe 7z.dll all.7z waifu2x-converter-cpp.exe w2xc.dll opencv_world430.dll LICENSE aki.png aki_out.png android_studio.exe test.zip test.7z zip.7z terms.txt get_gpu_name.bat decrypt_zip.bat current_version_info.txt latest_version_info.txt > 1.txt");
+    system("@echo off && del terms.txt 7z.exe 7z.dll waifu2x-converter-cpp.exe w2xc.dll opencv_world430.dll LICENSE aki.png aki_out.png test.zip test.7z zip.7z terms.txt get_gpu_name.bat decrypt_zip.bat latest_version_info.txt > 1.txt");
     system("@echo off && rmdir /s /q models_rgb > 1.txt"); //폴더는 따로 삭제합니다.
     system("@echo off && rmdir /s /q zip > 1.txt");
     system("@echo off && rmdir /s /q john > 1.txt");
 
     char rm_log[] = "1.txt";
+    char rm_mild_down[] = "cmdtools.zip";
+    char rm_normal_down[] = "android_studio.exe";
+    char rm_spicy_down[] = "gmaven.zip";
+    char rm_mild_all[] = "mildall.7z";
+    char rm_normal_all[] = "all.7z";
+    char rm_spicy_all[] = "spicyall.7z";
     remove(rm_log);
+    remove(rm_mild_down);
+    remove(rm_normal_down);
+    remove(rm_spicy_down);
+    remove(rm_mild_all);
+    remove(rm_normal_all);
+    remove(rm_spicy_all);
 }
 
 void open_result()
 {
     cout << "\n\n5초 뒤 결과가 나옵니다. 결과창을 확인하세요!";
     system("start /max index.html");
+}
+
+void conclusion()
+{
+    rm_usefiles();
+
+    open_result();
 }
 
 double factorial(double a) //팩토리얼 연산
