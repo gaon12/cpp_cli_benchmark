@@ -91,6 +91,31 @@ void rm_usefiles(); //사용한 파일들 삭제
 void open_result(); //결과 화면 열기
 void exit_countdown(); //종료시 카운트다운
 
+/*
+void br(); //입력한 값만큼 줄 개행(줄바꿈)
+void progress(); //입력한 값만큼 퍼센테이지 표시
+*/
+
+void br(int a)
+{
+    for (int i = 0; i < a; i++)
+    {
+        cout << endl;
+    }
+}
+
+void progress(int b)
+{
+    int k = 100 - b;
+
+    cout << "[";
+    for (int i = 0; i < b; i++)
+        cout << "#";
+    for (int j = 0; j < k; j++)
+        cout << ".";
+
+    cout << "] " << b << "\%" << endl;
+}
 int main()
 {
     rm_usefiles();
@@ -100,6 +125,7 @@ int main()
 
     choose_level();
 
+    //마무리
     conclusion();
 }
 
@@ -116,6 +142,11 @@ int mild() {
     //파트1 - 1부터 100억까지 더하기
     mild_adds();
 
+    cls();
+
+    cout << "\n현재 수행중인 작업은 다음과 같습니다. (순한맛 버전)\n\n";
+    cout << "1. 1부터 100억까지 더하기 : ";
+
     system_clock::time_point FirstPartEndTime = system_clock::now();
     duration<double> DefaultSec = FirstPartEndTime - StartTime;
     milliseconds mill = duration_cast<milliseconds>(FirstPartEndTime - StartTime);
@@ -124,6 +155,12 @@ int mild() {
 
     //파트2 - 원주율 구하기
     mild_pi_calc();
+
+    cls();
+
+    cout << "\n현재 수행중인 작업은 다음과 같습니다. (순한맛 버전)\n\n";
+    cout << "1. 1부터 100억까지 더하기 : " << mill.count() << "ms" << "(" << sec.count() << "초)\n";//시간 출력
+    cout << "2. 원주율 구하기 : ";
 
     system_clock::time_point SecondPartEndTime = system_clock::now();
     duration<double> DefaultSec_second = SecondPartEndTime - FirstPartEndTime;
@@ -134,6 +171,13 @@ int mild() {
     //파트3 - 업스케일링 10배
     mild_upscale();
 
+    cls();
+
+    cout << "\n현재 수행중인 작업은 다음과 같습니다. (순한맛 버전)\n\n";
+    cout << "1. 1부터 100억까지 더하기 : " << mill.count() << "ms" << "(" << sec.count() << "초)\n";//시간 출력
+    cout << "2. 원주율 구하기 : " << mill_second.count() << "ms" << "(" << sec_second.count() << "초)\n";//시간 출력;
+    cout << "3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(10배) : ";
+
     system_clock::time_point ThirdPartEndTime = system_clock::now();
     duration<double> DefaultSec_Third = ThirdPartEndTime - SecondPartEndTime;
     milliseconds mill_third = duration_cast<milliseconds>(ThirdPartEndTime - SecondPartEndTime);
@@ -142,6 +186,14 @@ int mild() {
 
     //파트4 - 압축/압축 해제
     compress();
+
+    cls();
+
+    cout << "\n현재 수행중인 작업은 다음과 같습니다. (순한맛 버전)\n\n";
+    cout << "1. 1부터 100억까지 더하기 : " << mill.count() << "ms" << "(" << sec.count() << "초)\n";//시간 출력
+    cout << "2. 원주율 구하기 : " << mill_second.count() << "ms" << "(" << sec_second.count() << "초)\n";//시간 출력
+    cout << "3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(10배) : " << mill_third.count() << "ms" << "(" << sec_third.count() << "초)\n";//시간 출력;
+    cout << "4. 압축/압축 해제 작업 : ";
 
     system_clock::time_point FourthPartEndTime = system_clock::now();
     duration<double> DefaultSec_Fourth = FourthPartEndTime - ThirdPartEndTime;
@@ -152,6 +204,15 @@ int mild() {
     //파트5 - 무리수 e 구하기
     mild_e_calc();
 
+    cls();
+
+    cout << "\n현재 수행중인 작업은 다음과 같습니다. (순한맛 버전)\n\n";
+    cout << "1. 1부터 100억까지 더하기 : " << mill.count() << "ms" << "(" << sec.count() << "초)\n";//시간 출력
+    cout << "2. 원주율 구하기 : " << mill_second.count() << "ms" << "(" << sec_second.count() << "초)\n";//시간 출력
+    cout << "3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(10배) : " << mill_third.count() << "ms" << "(" << sec_third.count() << "초)\n";//시간 출력;
+    cout << "4. 압축/압축 해제 작업 : " << mill_fourth.count() << "ms" << "(" << sec_fourth.count() << "초)\n";//시작 출력
+    cout << "5. 무리수 e 구하기 : ";
+
     system_clock::time_point FifthPartEndTime = system_clock::now();
     duration<double> DefaultSec_Fifth = FifthPartEndTime - FourthPartEndTime;
     milliseconds mill_fifth = duration_cast<milliseconds>(FifthPartEndTime - FourthPartEndTime);
@@ -160,6 +221,16 @@ int mild() {
 
     //파트6 - 암호걸린 압축파일 비밀번호 찾기
     decrypt_zip();
+
+    cls();
+
+    cout << "\n현재 수행중인 작업은 다음과 같습니다. (순한맛 버전)\n\n";
+    cout << "1. 1부터 100억까지 더하기 : " << mill.count() << "ms" << "(" << sec.count() << "초)\n";//시간 출력
+    cout << "2. 원주율 구하기 : " << mill_second.count() << "ms" << "(" << sec_second.count() << "초)\n";//시간 출력
+    cout << "3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(10배) : " << mill_third.count() << "ms" << "(" << sec_third.count() << "초)\n";//시간 출력;
+    cout << "4. 압축/압축 해제 작업 : " << mill_fourth.count() << "ms" << "(" << sec_fourth.count() << "초)\n";//시작 출력
+    cout << "5. 무리수 e 구하기 : " << mill_fifth.count() << "ms" << "(" << sec_fifth.count() << "초)\n";//시작 출력
+    cout << "6. 압축파일 암호 풀기 : ";
 
     //파트6을 진행하면 진행 과정이 화면에 나오기 때문에, 완료되면 바로 화면을 지우고 기존 값으로 덮어씌웁니다.
     cls();
@@ -171,10 +242,11 @@ int mild() {
 
     //파트6을 진행하면 진행 과정이 화면에 나오기 때문에, 완료되면 바로 화면을 지우고 기존 값으로 덮어씌웁니다.
     cls();
+
     cout << "\n현재 수행중인 작업은 다음과 같습니다. (순한맛 버전)\n\n";
-    cout << "1. 1부터 300억까지 더하기 : " << mill.count() << "ms" << "(" << sec.count() << "초)\n";//시간 출력
+    cout << "1. 1부터 100억까지 더하기 : " << mill.count() << "ms" << "(" << sec.count() << "초)\n";//시간 출력
     cout << "2. 원주율 구하기 : " << mill_second.count() << "ms" << "(" << sec_second.count() << "초)\n";//시간 출력
-    cout << "3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(10배) : " << mill_third.count() << "ms" << "(" << sec_third.count() << "초)\n";//시간 출력
+    cout << "3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(10배) : " << mill_third.count() << "ms" << "(" << sec_third.count() << "초)\n";//시간 출력;
     cout << "4. 압축/압축 해제 작업 : " << mill_fourth.count() << "ms" << "(" << sec_fourth.count() << "초)\n";//시작 출력
     cout << "5. 무리수 e 구하기 : " << mill_fifth.count() << "ms" << "(" << sec_fifth.count() << "초)\n";//시작 출력
     cout << "6. 압축파일 암호 풀기 : " << mill_sixth.count() << "ms" << "(" << sec_sixth.count() << "초)\n";//시작 출력
@@ -187,6 +259,17 @@ int mild() {
 
     //번외 - 다운로드 속도 측정
     mild_download_test();
+
+    cls();
+
+    cout << "\n현재 수행중인 작업은 다음과 같습니다. (순한맛 버전)\n\n";
+    cout << "1. 1부터 100억까지 더하기 : " << mill.count() << "ms" << "(" << sec.count() << "초)\n";//시간 출력
+    cout << "2. 원주율 구하기 : " << mill_second.count() << "ms" << "(" << sec_second.count() << "초)\n";//시간 출력
+    cout << "3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(10배) : " << mill_third.count() << "ms" << "(" << sec_third.count() << "초)\n";//시간 출력;
+    cout << "4. 압축/압축 해제 작업 : " << mill_fourth.count() << "ms" << "(" << sec_fourth.count() << "초)\n";//시작 출력
+    cout << "5. 무리수 e 구하기 : " << mill_fifth.count() << "ms" << "(" << sec_fifth.count() << "초)\n";//시작 출력
+    cout << "6. 압축파일 암호 풀기 : " << mill_sixth.count() << "ms" << "(" << sec_sixth.count() << "초)\n";//시작 출력
+    cout << "번외 - 파일 다운로드 속도 측정 : ";
 
     system_clock::time_point ExtraTestEndTime = system_clock::now();
     duration<double> DefaultSec_Extra = ExtraTestEndTime - ExtraTestStartTime;
@@ -537,11 +620,31 @@ int normal() {
     //번외 - 다운로드 속도 측정
     download_test();
 
+    cls();
+    cout << "\n현재 수행중인 작업은 다음과 같습니다. (보통맛 버전)\n\n";
+    cout << "1. 1부터 300억까지 더하기 : " << mill.count() << "ms" << "(" << sec.count() << "초)\n";//시간 출력
+    cout << "2. 원주율 구하기 : " << mill_second.count() << "ms" << "(" << sec_second.count() << "초)\n";//시간 출력
+    cout << "3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(30배) : " << mill_third.count() << "ms" << "(" << sec_third.count() << "초)\n";//시간 출력
+    cout << "4. 압축/압축 해제 작업 : " << mill_fourth.count() << "ms" << "(" << sec_fourth.count() << "초)\n";//시작 출력
+    cout << "5. 무리수 e 구하기 : " << mill_fifth.count() << "ms" << "(" << sec_fifth.count() << "초)\n";//시작 출력
+    cout << "6. 압축파일 암호 풀기 : " << mill_sixth.count() << "ms" << "(" << sec_sixth.count() << "초)\n";//시작 출력
+    cout << "번외 - 파일 다운로드 속도 측정 : ";
+
     system_clock::time_point ExtraTestEndTime = system_clock::now();
     duration<double> DefaultSec_Extra = ExtraTestEndTime - ExtraTestStartTime;
     milliseconds mill_extra = duration_cast<milliseconds>(ExtraTestEndTime - ExtraTestStartTime);
     seconds sec_extra = duration_cast<seconds>(ExtraTestEndTime - ExtraTestStartTime);
     cout << mill_extra.count() << "ms" << "(" << sec_extra.count() << "초)";//시작 출력
+
+    cls();
+    cout << "\n현재 수행중인 작업은 다음과 같습니다. (보통맛 버전)\n\n";
+    cout << "1. 1부터 300억까지 더하기 : " << mill.count() << "ms" << "(" << sec.count() << "초)\n";//시간 출력
+    cout << "2. 원주율 구하기 : " << mill_second.count() << "ms" << "(" << sec_second.count() << "초)\n";//시간 출력
+    cout << "3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(30배) : " << mill_third.count() << "ms" << "(" << sec_third.count() << "초)\n";//시간 출력
+    cout << "4. 압축/압축 해제 작업 : " << mill_fourth.count() << "ms" << "(" << sec_fourth.count() << "초)\n";//시작 출력
+    cout << "5. 무리수 e 구하기 : " << mill_fifth.count() << "ms" << "(" << sec_fifth.count() << "초)\n";//시작 출력
+    cout << "6. 압축파일 암호 풀기 : " << mill_sixth.count() << "ms" << "(" << sec_sixth.count() << "초)\n";//시작 출력
+    cout << "번외 - 파일 다운로드 속도 측정 : " << mill_extra.count() << "ms" << "(" << sec_extra.count() << "초)";//시작 출력
 
     //결과 시간 측정
     duration<double> DefaultSec_end = EndTime - StartTime;
@@ -1189,29 +1292,38 @@ int choose_level()
         cin >> scoville;
 
         //만약 1번을 입력하면
-        switch (scoville) {
-        case 1:
+        if (scoville == 1)
+        {
             //화면을 지웁니다.
             cls();
             //순한맛 실행
             mild();
+            return scoville = 1;
             //while문을 나갑니다.
             break;
-        case 2:
+        }
+        else if (scoville == 2)
+        {
             //화면을 지웁니다.
             cls();
             //보통맛 실행
             normal();
+            return scoville = 2;
             //while문을 나갑니다.
             break;
-        case 3:
+        }
+        else if (scoville == 3)
+        {
             //화면을 지웁니다.
             cls();
             //매운맛 실행
             spicy();
+            return scoville = 3;
             //while문을 나갑니다.
             break;
-        default:
+        }
+        else
+        {
             cout << "잘못된 값을 입력하셨습니다. 다시 입력해 주시기 바랍니다.\n";
             Sleep(3000);
         }
@@ -1487,8 +1599,8 @@ void mild_pre_download()
 
     URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/x64/7-Zip/7z.exe", L"7z.exe", 0, NULL); //7z.exe를 다운로드합니다.
     URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/x64/7-Zip/7z.dll", L"7z.dll", 0, NULL); //7z.exe이 동작하는데 필요한 파일인 7z.dll 파일을 다운로드합니다.
-    URLDownloadToFile(NULL, L"https://common.gaon.xyz/prj/cpp_cli_benchmark/mildall.7z", L"mildall.7z", 0, NULL); //waifu2x, 테스트용 압축 파일이 담긴 압축파일을 다운로드합니다.
-    system("@echo off && 7z x mildall.7z > 1.txt"); //다운로드 받은 파일을 압축해제합니다.
+    URLDownloadToFile(NULL, L"https://common.gaon.xyz/prj/cpp_cli_benchmark/mildalls.7z", L"mildalls.7z", 0, NULL); //waifu2x, 테스트용 압축 파일이 담긴 압축파일을 다운로드합니다.
+    system("@echo off && 7z x mildalls.7z > 1.txt"); //다운로드 받은 파일을 압축해제합니다.
     URLDownloadToFile(NULL, L"https://i.ibb.co/1b2Ns1b/aki.png", L"aki.png", 0, NULL);//크기가 작은 이미지 파일을 다운로드합니다.
     cls();
 }
@@ -1546,6 +1658,9 @@ void mild_adds()
     //안내 메시지를 출력합니다.
     cout << "1. 1부터 100억까지 더하기 : ";
 
+    br(5);
+    progress(10);
+
 
     //1부터 100억까지 더합니다.
     long sum = 0;
@@ -1600,6 +1715,9 @@ void mild_pi_calc()
     //안내 메시지를 출력합니다.
     cout << "\n2. 원주율 구하기 : ";
 
+    br(5);
+    progress(30);
+
     double pi = 0.0, num = 1.0;
 
     while (num < 400000000)
@@ -1646,6 +1764,9 @@ void mild_upscale()
     system("title 벤치마크 - (작업) waifu2x 10배 업스케일링 작업"); //콘솔창 제목 설정
     cout << "\n3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(10배) : ";
 
+    br(5);
+    progress(55);
+
     system("@echo off && waifu2x-converter-cpp  --scale-ratio 10 -i aki.png -o aki_out.png > 1.txt");
 }
 
@@ -1669,6 +1790,9 @@ void compress()
 {
     system("title 벤치마크 - (작업) 압축/압축 해제 작업"); //콘솔창 제목 설정
     cout << "\n4. 압축/압축 해제 작업 : ";
+
+    br(5);
+    progress(70);
 
     /*
     압축과 압축 해제 작업입니다. 아래의 순서대로 작업이 이루어집니다.
@@ -1701,6 +1825,9 @@ void mild_e_calc()
 {
     system("title 벤치마크 - (연산) 무리수 e 구하기"); //콘솔창 제목 설정
     cout << "\n5. 무리수 e 구하기 : ";
+
+    br(5);
+    progress(85);
 
     int ntimes = 56000;
     int add;
@@ -1752,6 +1879,9 @@ void decrypt_zip() {
     system("title 벤치마크 - (작업) 압축파일 암호 풀기"); //콘솔창 제목 설정
     cout << "\n6. 압축파일 암호 풀기 : ";
 
+    br(5);
+    progress(90);
+
     system("@echo off && cd john && zip2john test.zip > hash.txt && john hash.txt > 1.txt");
 }
 
@@ -1759,6 +1889,9 @@ void mild_download_test()
 {
     system("title 벤치마크 - (작업) 파일 다운로드 속도 측정"); //콘솔창 제목 설정
     cout << "\n번외 - 파일 다운로드 속도 측정 : ";
+
+    br(5);
+    progress(98);
 
     URLDownloadToFile(NULL, L"https://dl.google.com/android/repository/commandlinetools-win-8512546_latest.zip", L"cmdtools.zip", 0, NULL);
 }
@@ -1790,7 +1923,7 @@ void rm_usefiles()
     char rm_mild_down[] = "cmdtools.zip";
     char rm_normal_down[] = "android_studio.exe";
     char rm_spicy_down[] = "gmaven.zip";
-    char rm_mild_all[] = "mildall.7z";
+    char rm_mild_all[] = "mildalls.7z";
     char rm_normal_all[] = "all.7z";
     char rm_spicy_all[] = "spicyall.7z";
     remove(rm_log);
