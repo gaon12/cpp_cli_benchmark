@@ -213,7 +213,7 @@
                 all_scores_time = error_msg_all_score_time;
                 all_scores = error_msg_all_score;
             }
-            if(download_time < 1000)
+            if(download_time < 100)
             {
                 download_time = '<p style="color: red;" uk-icon="warning">잘못된 수치 </p><div uk-drop><div style="width: 425px;" class="uk-card uk-card-body uk-card-default uk-card-hover">지금 사용중인 인터넷이 1000기가 인터넷인가봐요!<br>당신은 미래인이시군요?</div></div>';
             }
@@ -459,7 +459,7 @@
                     <tr>
                         <td style="text-align:center;">(작업)</td>
                         <td class="uk-table-link">
-                            <p class="uk-link-reset" style="text-align:center;">약 1,000MB짜리 파일 다운로드</p>
+                            <p class="uk-link-reset" style="text-align:center;">파일 다운로드</p>
                         </td>
                         <td class="uk-text-truncate" style="text-align:center;"><script>document.write(download_time.toLocaleString('ko-KR'));</script>ms<br><script>document.write(download_time/1000)</script>초<br><script>document.write(Math.floor(download_time / 60000));</script>분 <script>document.write(Math.floor(download_time/1000%60))</script>초</td>
                     </tr>
