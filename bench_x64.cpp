@@ -1694,8 +1694,6 @@ void mild_adds()
 
 
     //1부터 100억까지 더합니다.
-    long sum = 0;
-
     long long i = 0;
     long long sums = 0;
     for (i = 1; i <= 10000000000; i++) { //1부터 10000000000까지 반복
@@ -1715,8 +1713,6 @@ void adds()
 
 
     //1부터 300억까지 더합니다.
-    long sum = 0;
-
     long long i = 0;
     long long sums = 0;
     for (i = 1; i <= 30000000000; i++) { //1부터 30000000000까지 반복
@@ -1735,8 +1731,6 @@ void spicy_adds()
     progress(10);
 
     //1부터 600억까지 더합니다.
-    long sum = 0;
-
     long long i = 0;
     long long sums = 0;
     for (i = 1; i <= 60000000000; i++) { //1부터 60000000000까지 반복
