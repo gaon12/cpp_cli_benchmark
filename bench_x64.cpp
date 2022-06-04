@@ -56,7 +56,7 @@ int choose_level(); //매운맛 정도를 선택하는 함수
 void common_pre_download(); //공통 준비 파일들 다운로드
 
 //순한맛용 벤치마크 과정
-int mild(); //아래의 과정들을 모아둔 과정
+void mild(); //아래의 과정들을 모아둔 과정
 void mild_pre_download(); //준비 파일들 다운로드
 void mild_adds(); // 더하기 연산
 void mild_pi_calc(); //원주율 연산
@@ -67,7 +67,7 @@ void mild_e_calc(); //무리수 e 연산
 void mild_download_test(); //다운로드 속도 측정
 
 //보통맛용 벤치마크 과정
-int normal(); //아래의 과정들을 모아둔 과정
+void normal(); //아래의 과정들을 모아둔 과정
 void pre_download(); //준비 파일들 다운로드
 void adds(); // 더하기 연산
 void pi_calc(); //원주율 연산
@@ -78,7 +78,7 @@ void decrypt_zip(); //암호걸린 압축파일 암호 찾기
 void download_test(); //다운로드 속도 측정
 
 //매운맛용 벤치마크 과정
-int spicy(); //아래의 과정들을 모아둔 과정
+void spicy(); //아래의 과정들을 모아둔 과정
 void spicy_pre_download(); //준비 파일들 다운로드
 void spicy_adds(); // 더하기 연산
 void spicy_pi_calc(); //원주율 연산
@@ -116,7 +116,7 @@ void progress(int b)
     for (int j = 0; j < k; j++)
         cout << ".";
 
-    cout << "] " << b << "\%" << endl;
+    cout << "] " << b << "%%" << endl;
 }
 int main()
 {
@@ -131,7 +131,7 @@ int main()
     conclusion();
 }
 
-int mild() {
+void mild() {
     //필요한 파일을 다운로드합니다.
     mild_pre_download();
 
@@ -339,9 +339,8 @@ int mild() {
     // reads text until newline is encountered
     fscanf(fptr, "%[^\n]", gpu_info);
 
-    string gpu_info_ncut(gpu_info);
+    string gpu_name_info(gpu_info);
 
-    string gpu_name_info = gpu_info_ncut.substr(7); //맨 앞에 Name : 부분 삭제
     //띄어쓰기를 _(언더바)로 변경
     for (int chub2 = 0; gpu_name_info[chub2]; chub2++) {
         if (gpu_name_info[chub2] == ' ') gpu_name_info[chub2] = '_';
@@ -513,7 +512,7 @@ int mild() {
     fclose(fp);    // 파일 포인터 닫기
 }
 
-int normal() {
+void normal() {
     //필요한 파일을 다운로드합니다.
     pre_download();
 
@@ -721,9 +720,8 @@ int normal() {
     // reads text until newline is encountered
     fscanf(fptr, "%[^\n]", gpu_info);
 
-    string gpu_info_ncut(gpu_info);
+    string gpu_name_info(gpu_info);
 
-    string gpu_name_info = gpu_info_ncut.substr(7); //맨 앞에 Name : 부분 삭제
     //띄어쓰기를 _(언더바)로 변경
     for (int chub2 = 0; gpu_name_info[chub2]; chub2++) {
         if (gpu_name_info[chub2] == ' ') gpu_name_info[chub2] = '_';
@@ -895,7 +893,7 @@ int normal() {
     fclose(fp);    // 파일 포인터 닫기
 }
 
-int spicy() {
+void spicy() {
     //필요한 파일을 다운로드합니다.
     spicy_pre_download();
 
@@ -1103,9 +1101,8 @@ int spicy() {
     // reads text until newline is encountered
     fscanf(fptr, "%[^\n]", gpu_info);
 
-    string gpu_info_ncut(gpu_info);
+    string gpu_name_info(gpu_info);
 
-    string gpu_name_info = gpu_info_ncut.substr(7); //맨 앞에 Name : 부분 삭제
     //띄어쓰기를 _(언더바)로 변경
     for (int chub2 = 0; gpu_name_info[chub2]; chub2++) {
         if (gpu_name_info[chub2] == ' ') gpu_name_info[chub2] = '_';
