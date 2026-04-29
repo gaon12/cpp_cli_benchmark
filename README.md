@@ -147,3 +147,5 @@ cmake --build build --config Release
 ```
 - `src/report/runtime_utils.cpp` : 다운로드/입력검증/JSON 결과 저장 유틸
 - `include/report/runtime_utils.hpp` : report 유틸 인터페이스
+- `src/platform/windows/runtime.cpp` : Windows 런타임 작업(콘솔 초기화/임시파일 정리/종료 카운트다운)
+- `include/platform/windows/runtime.hpp` : Windows 런타임 인터페이스

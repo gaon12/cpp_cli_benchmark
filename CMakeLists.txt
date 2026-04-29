@@ -8,6 +8,7 @@ add_executable(cpp_cli_benchmark
   src/main.cpp
   src/app/benchmark_app.cpp
   src/report/runtime_utils.cpp
+  src/platform/windows/runtime.cpp
 )
 
 target_include_directories(cpp_cli_benchmark PRIVATE include)

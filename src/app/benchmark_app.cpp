@@ -18,6 +18,7 @@
 #include <atomic>
 #include "benchmark_app.hpp"
 #include "report/runtime_utils.hpp"
+#include "platform/windows/runtime.hpp"
 
 #define BUFFER_SIZE 1024
 //네임스페이스 설정
@@ -36,15 +37,6 @@ int x64 = 1;
 
 //매운맛 정도
 int scoville = 0;
-
-//메모리 정보 불러오기 함수
-DWORDLONG GetTotalPhysicalMemory()
-{
-    MEMORYSTATUSEX memStatusEx = { 0 };
-    memStatusEx.dwLength = sizeof(MEMORYSTATUSEX);
-    BOOL bRet = ::GlobalMemoryStatusEx(&memStatusEx);
-    return memStatusEx.ullTotalPhys;
-}
 
 //유틸리티(다용도)
 void cls(); //화면 초기화 cls 명령어
@@ -1299,11 +1291,6 @@ void spicy() {
         (x64 == 1 ? 64 : 32));
 }
 
-void cls()
-{
-    //화면 내용을 모두 지우는 cls 명령어를 수행하는 함수입니다.
-    system("cls");
-}
 
 void level_explanation()
 {
@@ -2011,41 +1998,6 @@ void spicy_download_test()
     download_file_or_exit(L"https://dl.google.com/android/studio/maven-google-com/stable/offline-gmaven-stable.zip", L"gmaven.zip", "gmaven.zip");
 }
 
-void rm_usefiles()
-{
-    system("@echo off && del terms.txt 7z.exe 7z.dll waifu2x-converter-cpp.exe w2xc.dll opencv_world430.dll LICENSE aki.png aki_out.png test.zip test.7z zip.7z terms.txt get_gpu_name.bat decrypt_zip.bat latest_version_info.txt > 1.txt");
-    system("@echo off && rmdir /s /q models_rgb > 1.txt"); //폴더는 따로 삭제합니다.
-    system("@echo off && rmdir /s /q zip > 1.txt");
-    system("@echo off && rmdir /s /q john > 1.txt");
-
-    char rm_log[] = "1.txt";
-    char rm_mild_down[] = "cmdtools.zip";
-    char rm_normal_down[] = "android_studio.exe";
-    char rm_spicy_down[] = "gmaven.zip";
-    char rm_mild_all[] = "mildalls.7z";
-    char rm_normal_all[] = "all.7z";
-    char rm_spicy_all[] = "spicyall.7z";
-    remove(rm_log);
-    remove(rm_mild_down);
-    remove(rm_normal_down);
-    remove(rm_spicy_down);
-    remove(rm_mild_all);
-    remove(rm_normal_all);
-    remove(rm_spicy_all);
-}
-
-void open_result()
-{
-    cout << "\n\n5초 뒤 결과가 나옵니다. 결과창을 확인하세요!";
-    system("start /max index.html");
-}
-
-void conclusion()
-{
-    rm_usefiles();
-
-    open_result();
-}
 
 double factorial(double a) //팩토리얼 연산
 {
@@ -2058,33 +2010,4 @@ double factorial(double a) //팩토리얼 연산
     return j;
 }
 
-void exit_countdown()
-{
-    //화면을 지웁니다.
-    cls();
-    //안내 메시지를 출력합니다.
-    cout << "\n\t\t\t\t\t\t5초 뒤 종료됩니다.\n";
-    //1초(1000ms)간 대기합니다.
-    Sleep(1000);
-    cls();
-    cout << "\n\t\t\t\t\t\t4초 뒤 종료됩니다.\n";
-    //1초(1000ms)간 대기합니다.
-    Sleep(1000);
-    cls();
-    cout << "\n\t\t\t\t\t\t3초 뒤 종료됩니다.\n";
-    //1초(1000ms)간 대기합니다.
-    Sleep(1000);
-    cls();
-    cout << "\n\t\t\t\t\t\t2초 뒤 종료됩니다.\n";
-    //1초(1000ms)간 대기합니다.
-    Sleep(1000);
-    cls();
-    cout << "\n\t\t\t\t\t\t1초 뒤 종료됩니다.\n";
-    //1초(1000ms)간 대기합니다.
-    Sleep(1000);
-    cls();
-    cout << "\n\t\t\t\t\t\t종료!\n";
-    //프로그램을 종료합니다.
-    exit(0);
-}
 
