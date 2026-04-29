@@ -1,0 +1,17 @@
+/build/
+/out/
+/.vs/
+*.obj
+*.exe
+*.pdb
+*.ilk
+*.log
+1.txt
+important_values.js
+result.json
+cmdtools.zip
+android_studio.exe
+gmaven.zip
+mildalls.7z
+all.7z
+spicyall.7z

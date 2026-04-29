@@ -14,6 +14,8 @@
 #include <ctime> //시간/날짜값 가져오기
 #include <limits>
 #include <cstring>
+#include <fstream>
+#include <atomic>
 
 #define BUFFER_SIZE 1024
 //네임스페이스 설정
@@ -97,6 +99,27 @@ void exit_countdown(); //종료시 카운트다운
 
 bool download_file_or_exit(const wchar_t* url, const wchar_t* destination, const char* label);
 int read_menu_choice();
+string json_escape(const string& input);
+void write_result_json(
+    long long plus_time_ms,
+    long long pi_time_ms,
+    long long download_time_ms,
+    long long upscale_time_ms,
+    long long compress_time_ms,
+    long long surd_e_time_ms,
+    long long decrypt_zip_time_ms,
+    const string& cpu_name,
+    unsigned long ram_size_gb,
+    const string& gpu_name,
+    int year,
+    int month,
+    int day,
+    int hour,
+    int minute,
+    int wday,
+    int windows_bits);
+
+volatile long double g_bench_sink = 0.0;
 
 /*
 void br(); //입력한 값만큼 줄 개행(줄바꿈)
@@ -138,6 +161,79 @@ int read_menu_choice()
     return value;
 }
 
+string json_escape(const string& input)
+{
+    string output;
+    output.reserve(input.size() + 16);
+    for (char c : input)
+    {
+        switch (c)
+        {
+        case '\\': output += "\\\\"; break;
+        case '\"': output += "\\\""; break;
+        case '\n': output += "\\n"; break;
+        case '\r': output += "\\r"; break;
+        case '\t': output += "\\t"; break;
+        default: output += c; break;
+        }
+    }
+    return output;
+}
+
+void write_result_json(
+    long long plus_time_ms,
+    long long pi_time_ms,
+    long long download_time_ms,
+    long long upscale_time_ms,
+    long long compress_time_ms,
+    long long surd_e_time_ms,
+    long long decrypt_zip_time_ms,
+    const string& cpu_name,
+    unsigned long ram_size_gb,
+    const string& gpu_name,
+    int year,
+    int month,
+    int day,
+    int hour,
+    int minute,
+    int wday,
+    int windows_bits)
+{
+    ofstream out("result.json", ios::trunc);
+    if (!out.is_open())
+    {
+        cerr << "\n[ERROR] result.json 파일 생성에 실패했습니다.\n";
+        return;
+    }
+
+    out << "{\n";
+    out << "  \"version\": \"1.0.2\",\n";
+    out << "  \"times_ms\": {\n";
+    out << "    \"plus\": " << plus_time_ms << ",\n";
+    out << "    \"pi\": " << pi_time_ms << ",\n";
+    out << "    \"download\": " << download_time_ms << ",\n";
+    out << "    \"upscale\": " << upscale_time_ms << ",\n";
+    out << "    \"compress\": " << compress_time_ms << ",\n";
+    out << "    \"surd_e\": " << surd_e_time_ms << ",\n";
+    out << "    \"decrypt_zip\": " << decrypt_zip_time_ms << "\n";
+    out << "  },\n";
+    out << "  \"system\": {\n";
+    out << "    \"cpu_name\": \"" << json_escape(cpu_name) << "\",\n";
+    out << "    \"ram_size_gb\": " << ram_size_gb << ",\n";
+    out << "    \"gpu_name\": \"" << json_escape(gpu_name) << "\",\n";
+    out << "    \"windows_bits\": " << windows_bits << "\n";
+    out << "  },\n";
+    out << "  \"measured_at\": {\n";
+    out << "    \"year\": " << year << ",\n";
+    out << "    \"month\": " << month << ",\n";
+    out << "    \"day\": " << day << ",\n";
+    out << "    \"hour\": " << hour << ",\n";
+    out << "    \"minute\": " << minute << ",\n";
+    out << "    \"wday\": " << wday << "\n";
+    out << "  }\n";
+    out << "}\n";
+}
+
 void progress(int b)
 {
     int k = 100 - b;
@@ -171,7 +267,7 @@ void mild() {
     cout << "\n현재 수행중인 작업은 다음과 같습니다. (순한맛 버전)\n\n";
     Sleep(800);
 
-    system_clock::time_point StartTime = system_clock::now();//시간 계산 시작
+    steady_clock::time_point StartTime = steady_clock::now();//시간 계산 시작
 
     //파트1 - 1부터 100억까지 더하기
     mild_adds();
@@ -181,7 +277,7 @@ void mild() {
     cout << "\n현재 수행중인 작업은 다음과 같습니다. (순한맛 버전)\n\n";
     cout << "1. 1부터 100억까지 더하기 : ";
 
-    system_clock::time_point FirstPartEndTime = system_clock::now();
+    steady_clock::time_point FirstPartEndTime = steady_clock::now();
     duration<double> DefaultSec = FirstPartEndTime - StartTime;
     milliseconds mill = duration_cast<milliseconds>(FirstPartEndTime - StartTime);
     seconds sec = duration_cast<seconds>(FirstPartEndTime - StartTime);
@@ -196,7 +292,7 @@ void mild() {
     cout << "1. 1부터 100억까지 더하기 : " << mill.count() << "ms" << "(" << sec.count() << "초)\n";//시간 출력
     cout << "2. 원주율 구하기 : ";
 
-    system_clock::time_point SecondPartEndTime = system_clock::now();
+    steady_clock::time_point SecondPartEndTime = steady_clock::now();
     duration<double> DefaultSec_second = SecondPartEndTime - FirstPartEndTime;
     milliseconds mill_second = duration_cast<milliseconds>(SecondPartEndTime - FirstPartEndTime);
     seconds sec_second = duration_cast<seconds>(SecondPartEndTime - FirstPartEndTime);
@@ -212,7 +308,7 @@ void mild() {
     cout << "2. 원주율 구하기 : " << mill_second.count() << "ms" << "(" << sec_second.count() << "초)\n";//시간 출력;
     cout << "3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(10배) : ";
 
-    system_clock::time_point ThirdPartEndTime = system_clock::now();
+    steady_clock::time_point ThirdPartEndTime = steady_clock::now();
     duration<double> DefaultSec_Third = ThirdPartEndTime - SecondPartEndTime;
     milliseconds mill_third = duration_cast<milliseconds>(ThirdPartEndTime - SecondPartEndTime);
     seconds sec_third = duration_cast<seconds>(ThirdPartEndTime - SecondPartEndTime);
@@ -229,7 +325,7 @@ void mild() {
     cout << "3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(10배) : " << mill_third.count() << "ms" << "(" << sec_third.count() << "초)\n";//시간 출력;
     cout << "4. 압축/압축 해제 작업 : ";
 
-    system_clock::time_point FourthPartEndTime = system_clock::now();
+    steady_clock::time_point FourthPartEndTime = steady_clock::now();
     duration<double> DefaultSec_Fourth = FourthPartEndTime - ThirdPartEndTime;
     milliseconds mill_fourth = duration_cast<milliseconds>(FourthPartEndTime - ThirdPartEndTime);
     seconds sec_fourth = duration_cast<seconds>(FourthPartEndTime - ThirdPartEndTime);
@@ -247,7 +343,7 @@ void mild() {
     cout << "4. 압축/압축 해제 작업 : " << mill_fourth.count() << "ms" << "(" << sec_fourth.count() << "초)\n";//시작 출력
     cout << "5. 무리수 e 구하기 : ";
 
-    system_clock::time_point FifthPartEndTime = system_clock::now();
+    steady_clock::time_point FifthPartEndTime = steady_clock::now();
     duration<double> DefaultSec_Fifth = FifthPartEndTime - FourthPartEndTime;
     milliseconds mill_fifth = duration_cast<milliseconds>(FifthPartEndTime - FourthPartEndTime);
     seconds sec_fifth = duration_cast<seconds>(FifthPartEndTime - FourthPartEndTime);
@@ -269,7 +365,7 @@ void mild() {
     //파트6을 진행하면 진행 과정이 화면에 나오기 때문에, 완료되면 바로 화면을 지우고 기존 값으로 덮어씌웁니다.
     cls();
 
-    system_clock::time_point SixthPartEndTime = system_clock::now();
+    steady_clock::time_point SixthPartEndTime = steady_clock::now();
     duration<double> DefaultSec_Sixth = SixthPartEndTime - FifthPartEndTime;
     milliseconds mill_sixth = duration_cast<milliseconds>(SixthPartEndTime - FifthPartEndTime);
     seconds sec_sixth = duration_cast<seconds>(SixthPartEndTime - FifthPartEndTime);
@@ -286,10 +382,10 @@ void mild() {
     cout << "6. 압축파일 암호 풀기 : " << mill_sixth.count() << "ms" << "(" << sec_sixth.count() << "초)\n";//시작 출력
 
     //번외 테스트는 총 시간에 포함시키지 않기 위해 시점 조정
-    system_clock::time_point EndTime = system_clock::now();
+    steady_clock::time_point EndTime = steady_clock::now();
 
     //번외 테스트(다운로드 시간)
-    system_clock::time_point ExtraTestStartTime = system_clock::now();//시간 계산 시작
+    steady_clock::time_point ExtraTestStartTime = steady_clock::now();//시간 계산 시작
 
     //번외 - 다운로드 속도 측정
     mild_download_test();
@@ -305,7 +401,7 @@ void mild() {
     cout << "6. 압축파일 암호 풀기 : " << mill_sixth.count() << "ms" << "(" << sec_sixth.count() << "초)\n";//시작 출력
     cout << "번외 - 파일 다운로드 속도 측정 : ";
 
-    system_clock::time_point ExtraTestEndTime = system_clock::now();
+    steady_clock::time_point ExtraTestEndTime = steady_clock::now();
     duration<double> DefaultSec_Extra = ExtraTestEndTime - ExtraTestStartTime;
     milliseconds mill_extra = duration_cast<milliseconds>(ExtraTestEndTime - ExtraTestStartTime);
     seconds sec_extra = duration_cast<seconds>(ExtraTestEndTime - ExtraTestStartTime);
@@ -542,6 +638,11 @@ void mild() {
         fputs("\b\";\n", fp);
     }
     fclose(fp);    // 파일 포인터 닫기
+    write_result_json(
+        mill.count(), mill_second.count(), mill_extra.count(), mill_third.count(), mill_fourth.count(), mill_fifth.count(), mill_sixth.count(),
+        CPUBrandString, static_cast<unsigned long>(DTotalRamSize), gpu_name_raw,
+        t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_wday,
+        (x64 == 1 ? 64 : 32));
 }
 
 void normal() {
@@ -552,7 +653,7 @@ void normal() {
     cout << "\n현재 수행중인 작업은 다음과 같습니다. (보통맛 버전)\n\n";
     Sleep(800);
 
-    system_clock::time_point StartTime = system_clock::now();//시간 계산 시작
+    steady_clock::time_point StartTime = steady_clock::now();//시간 계산 시작
 
     //파트1 - 1부터 100억까지 더하기
     adds();
@@ -562,7 +663,7 @@ void normal() {
     cout << "\n현재 수행중인 작업은 다음과 같습니다. (보통맛 버전)\n\n";
     cout << "1. 1부터 300억까지 더하기 : ";
 
-    system_clock::time_point FirstPartEndTime = system_clock::now();
+    steady_clock::time_point FirstPartEndTime = steady_clock::now();
     duration<double> DefaultSec = FirstPartEndTime - StartTime;
     milliseconds mill = duration_cast<milliseconds>(FirstPartEndTime - StartTime);
     seconds sec = duration_cast<seconds>(FirstPartEndTime - StartTime);
@@ -577,7 +678,7 @@ void normal() {
     cout << "1. 1부터 300억까지 더하기 : " << mill.count() << "ms" << "(" << sec.count() << "초)\n";//시간 출력
     cout << "2. 원주율 구하기 : ";
 
-    system_clock::time_point SecondPartEndTime = system_clock::now();
+    steady_clock::time_point SecondPartEndTime = steady_clock::now();
     duration<double> DefaultSec_second = SecondPartEndTime - FirstPartEndTime;
     milliseconds mill_second = duration_cast<milliseconds>(SecondPartEndTime - FirstPartEndTime);
     seconds sec_second = duration_cast<seconds>(SecondPartEndTime - FirstPartEndTime);
@@ -593,7 +694,7 @@ void normal() {
     cout << "2. 원주율 구하기 : " << mill_second.count() << "ms" << "(" << sec_second.count() << "초)\n";//시간 출력;
     cout << "3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(30배) : ";
 
-    system_clock::time_point ThirdPartEndTime = system_clock::now();
+    steady_clock::time_point ThirdPartEndTime = steady_clock::now();
     duration<double> DefaultSec_Third = ThirdPartEndTime - SecondPartEndTime;
     milliseconds mill_third = duration_cast<milliseconds>(ThirdPartEndTime - SecondPartEndTime);
     seconds sec_third = duration_cast<seconds>(ThirdPartEndTime - SecondPartEndTime);
@@ -610,7 +711,7 @@ void normal() {
     cout << "3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(30배) : " << mill_third.count() << "ms" << "(" << sec_third.count() << "초)\n";//시간 출력;
     cout << "4. 압축/압축 해제 작업 : ";
 
-    system_clock::time_point FourthPartEndTime = system_clock::now();
+    steady_clock::time_point FourthPartEndTime = steady_clock::now();
     duration<double> DefaultSec_Fourth = FourthPartEndTime - ThirdPartEndTime;
     milliseconds mill_fourth = duration_cast<milliseconds>(FourthPartEndTime - ThirdPartEndTime);
     seconds sec_fourth = duration_cast<seconds>(FourthPartEndTime - ThirdPartEndTime);
@@ -628,7 +729,7 @@ void normal() {
     cout << "4. 압축/압축 해제 작업 : " << mill_fourth.count() << "ms" << "(" << sec_fourth.count() << "초)\n";//시작 출력
     cout << "5. 무리수 e 구하기 : ";
 
-    system_clock::time_point FifthPartEndTime = system_clock::now();
+    steady_clock::time_point FifthPartEndTime = steady_clock::now();
     duration<double> DefaultSec_Fifth = FifthPartEndTime - FourthPartEndTime;
     milliseconds mill_fifth = duration_cast<milliseconds>(FifthPartEndTime - FourthPartEndTime);
     seconds sec_fifth = duration_cast<seconds>(FifthPartEndTime - FourthPartEndTime);
@@ -650,7 +751,7 @@ void normal() {
     //파트6을 진행하면 진행 과정이 화면에 나오기 때문에, 완료되면 바로 화면을 지우고 기존 값으로 덮어씌웁니다.
     cls();
 
-    system_clock::time_point SixthPartEndTime = system_clock::now();
+    steady_clock::time_point SixthPartEndTime = steady_clock::now();
     duration<double> DefaultSec_Sixth = SixthPartEndTime - FifthPartEndTime;
     milliseconds mill_sixth = duration_cast<milliseconds>(SixthPartEndTime - FifthPartEndTime);
     seconds sec_sixth = duration_cast<seconds>(SixthPartEndTime - FifthPartEndTime);
@@ -667,10 +768,10 @@ void normal() {
     cout << "6. 압축파일 암호 풀기 : " << mill_sixth.count() << "ms" << "(" << sec_sixth.count() << "초)\n";//시작 출력
 
     //번외 테스트는 총 시간에 포함시키지 않기 위해 시점 조정
-    system_clock::time_point EndTime = system_clock::now();
+    steady_clock::time_point EndTime = steady_clock::now();
 
     //번외 테스트(다운로드 시간)
-    system_clock::time_point ExtraTestStartTime = system_clock::now();//시간 계산 시작
+    steady_clock::time_point ExtraTestStartTime = steady_clock::now();//시간 계산 시작
 
     //번외 - 다운로드 속도 측정
     download_test();
@@ -686,7 +787,7 @@ void normal() {
     cout << "6. 압축파일 암호 풀기 : " << mill_sixth.count() << "ms" << "(" << sec_sixth.count() << "초)\n";//시작 출력
     cout << "번외 - 파일 다운로드 속도 측정 : ";
 
-    system_clock::time_point ExtraTestEndTime = system_clock::now();
+    steady_clock::time_point ExtraTestEndTime = steady_clock::now();
     duration<double> DefaultSec_Extra = ExtraTestEndTime - ExtraTestStartTime;
     milliseconds mill_extra = duration_cast<milliseconds>(ExtraTestEndTime - ExtraTestStartTime);
     seconds sec_extra = duration_cast<seconds>(ExtraTestEndTime - ExtraTestStartTime);
@@ -923,6 +1024,11 @@ void normal() {
         fputs("\b\";\n", fp);
     }
     fclose(fp);    // 파일 포인터 닫기
+    write_result_json(
+        mill.count(), mill_second.count(), mill_extra.count(), mill_third.count(), mill_fourth.count(), mill_fifth.count(), mill_sixth.count(),
+        CPUBrandString, static_cast<unsigned long>(DTotalRamSize), gpu_name_raw,
+        t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_wday,
+        (x64 == 1 ? 64 : 32));
 }
 
 void spicy() {
@@ -933,7 +1039,7 @@ void spicy() {
     cout << "\n현재 수행중인 작업은 다음과 같습니다. (매운맛 버전)\n\n";
     Sleep(800);
 
-    system_clock::time_point StartTime = system_clock::now();//시간 계산 시작
+    steady_clock::time_point StartTime = steady_clock::now();//시간 계산 시작
 
     //파트1 - 1부터 600억까지 더하기
     spicy_adds();
@@ -943,7 +1049,7 @@ void spicy() {
     cout << "\n현재 수행중인 작업은 다음과 같습니다. (매운맛 버전)\n\n";
     cout << "1. 1부터 600억까지 더하기 : ";
 
-    system_clock::time_point FirstPartEndTime = system_clock::now();
+    steady_clock::time_point FirstPartEndTime = steady_clock::now();
     duration<double> DefaultSec = FirstPartEndTime - StartTime;
     milliseconds mill = duration_cast<milliseconds>(FirstPartEndTime - StartTime);
     seconds sec = duration_cast<seconds>(FirstPartEndTime - StartTime);
@@ -958,7 +1064,7 @@ void spicy() {
     cout << "1. 1부터 600억까지 더하기 : " << mill.count() << "ms" << "(" << sec.count() << "초)\n";//시간 출력
     cout << "2. 원주율 구하기 : ";
 
-    system_clock::time_point SecondPartEndTime = system_clock::now();
+    steady_clock::time_point SecondPartEndTime = steady_clock::now();
     duration<double> DefaultSec_second = SecondPartEndTime - FirstPartEndTime;
     milliseconds mill_second = duration_cast<milliseconds>(SecondPartEndTime - FirstPartEndTime);
     seconds sec_second = duration_cast<seconds>(SecondPartEndTime - FirstPartEndTime);
@@ -974,7 +1080,7 @@ void spicy() {
     cout << "2. 원주율 구하기 : " << mill_second.count() << "ms" << "(" << sec_second.count() << "초)\n";//시간 출력;
     cout << "3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(60배) : ";
 
-    system_clock::time_point ThirdPartEndTime = system_clock::now();
+    steady_clock::time_point ThirdPartEndTime = steady_clock::now();
     duration<double> DefaultSec_Third = ThirdPartEndTime - SecondPartEndTime;
     milliseconds mill_third = duration_cast<milliseconds>(ThirdPartEndTime - SecondPartEndTime);
     seconds sec_third = duration_cast<seconds>(ThirdPartEndTime - SecondPartEndTime);
@@ -991,7 +1097,7 @@ void spicy() {
     cout << "3. 머신러닝(SRCNN) 기반 이미지 업스케일링 작업(60배) : " << mill_third.count() << "ms" << "(" << sec_third.count() << "초)\n";//시간 출력;
     cout << "4. 압축/압축 해제 작업 : ";
 
-    system_clock::time_point FourthPartEndTime = system_clock::now();
+    steady_clock::time_point FourthPartEndTime = steady_clock::now();
     duration<double> DefaultSec_Fourth = FourthPartEndTime - ThirdPartEndTime;
     milliseconds mill_fourth = duration_cast<milliseconds>(FourthPartEndTime - ThirdPartEndTime);
     seconds sec_fourth = duration_cast<seconds>(FourthPartEndTime - ThirdPartEndTime);
@@ -1009,7 +1115,7 @@ void spicy() {
     cout << "4. 압축/압축 해제 작업 : " << mill_fourth.count() << "ms" << "(" << sec_fourth.count() << "초)\n";//시작 출력
     cout << "5. 무리수 e 구하기 : ";
 
-    system_clock::time_point FifthPartEndTime = system_clock::now();
+    steady_clock::time_point FifthPartEndTime = steady_clock::now();
     duration<double> DefaultSec_Fifth = FifthPartEndTime - FourthPartEndTime;
     milliseconds mill_fifth = duration_cast<milliseconds>(FifthPartEndTime - FourthPartEndTime);
     seconds sec_fifth = duration_cast<seconds>(FifthPartEndTime - FourthPartEndTime);
@@ -1031,7 +1137,7 @@ void spicy() {
     //파트6을 진행하면 진행 과정이 화면에 나오기 때문에, 완료되면 바로 화면을 지우고 기존 값으로 덮어씌웁니다.
     cls();
 
-    system_clock::time_point SixthPartEndTime = system_clock::now();
+    steady_clock::time_point SixthPartEndTime = steady_clock::now();
     duration<double> DefaultSec_Sixth = SixthPartEndTime - FifthPartEndTime;
     milliseconds mill_sixth = duration_cast<milliseconds>(SixthPartEndTime - FifthPartEndTime);
     seconds sec_sixth = duration_cast<seconds>(SixthPartEndTime - FifthPartEndTime);
@@ -1048,10 +1154,10 @@ void spicy() {
     cout << "6. 압축파일 암호 풀기 : " << mill_sixth.count() << "ms" << "(" << sec_sixth.count() << "초)\n";//시작 출력
 
     //번외 테스트는 총 시간에 포함시키지 않기 위해 시점 조정
-    system_clock::time_point EndTime = system_clock::now();
+    steady_clock::time_point EndTime = steady_clock::now();
 
     //번외 테스트(다운로드 시간)
-    system_clock::time_point ExtraTestStartTime = system_clock::now();//시간 계산 시작
+    steady_clock::time_point ExtraTestStartTime = steady_clock::now();//시간 계산 시작
 
     //번외 - 다운로드 속도 측정
     spicy_download_test();
@@ -1067,7 +1173,7 @@ void spicy() {
     cout << "6. 압축파일 암호 풀기 : " << mill_sixth.count() << "ms" << "(" << sec_sixth.count() << "초)\n";//시작 출력
     cout << "번외 - 파일 다운로드 속도 측정 : ";
 
-    system_clock::time_point ExtraTestEndTime = system_clock::now();
+    steady_clock::time_point ExtraTestEndTime = steady_clock::now();
     duration<double> DefaultSec_Extra = ExtraTestEndTime - ExtraTestStartTime;
     milliseconds mill_extra = duration_cast<milliseconds>(ExtraTestEndTime - ExtraTestStartTime);
     seconds sec_extra = duration_cast<seconds>(ExtraTestEndTime - ExtraTestStartTime);
@@ -1304,6 +1410,11 @@ void spicy() {
         fputs("\b\";\n", fp);
     }
     fclose(fp);    // 파일 포인터 닫기
+    write_result_json(
+        mill.count(), mill_second.count(), mill_extra.count(), mill_third.count(), mill_fourth.count(), mill_fifth.count(), mill_sixth.count(),
+        CPUBrandString, static_cast<unsigned long>(DTotalRamSize), gpu_name_raw,
+        t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_wday,
+        (x64 == 1 ? 64 : 32));
 }
 
 void cls()
@@ -1733,6 +1844,8 @@ void mild_adds()
     for (i = 1; i <= 10000000000; i++) { //1부터 10000000000까지 반복
         sums += i; //sums=sums+i
     }
+    g_bench_sink += sums;
+    std::atomic_signal_fence(std::memory_order_seq_cst);
 }
 
 void adds()
@@ -1752,6 +1865,8 @@ void adds()
     for (i = 1; i <= 30000000000; i++) { //1부터 30000000000까지 반복
         sums += i; //sums=sums+i
     }
+    g_bench_sink += sums;
+    std::atomic_signal_fence(std::memory_order_seq_cst);
 }
 
 void spicy_adds()
@@ -1770,6 +1885,8 @@ void spicy_adds()
     for (i = 1; i <= 60000000000; i++) { //1부터 60000000000까지 반복
         sums += i; //sums=sums+i
     }
+    g_bench_sink += sums;
+    std::atomic_signal_fence(std::memory_order_seq_cst);
 }
 
 void mild_pi_calc()
@@ -1789,6 +1906,8 @@ void mild_pi_calc()
         pi += 1.0 / (num * num);
         num += 1.0;
     }
+    g_bench_sink += pi;
+    std::atomic_signal_fence(std::memory_order_seq_cst);
 }
 
 void pi_calc()
@@ -1808,6 +1927,8 @@ void pi_calc()
         pi += 1.0 / (num * num);
         num += 1.0;
     }
+    g_bench_sink += pi;
+    std::atomic_signal_fence(std::memory_order_seq_cst);
 }
 
 void spicy_pi_calc()
@@ -1827,6 +1948,8 @@ void spicy_pi_calc()
         pi += 1.0 / (num * num);
         num += 1.0;
     }
+    g_bench_sink += pi;
+    std::atomic_signal_fence(std::memory_order_seq_cst);
 }
 
 void mild_upscale()
@@ -1915,6 +2038,8 @@ void mild_e_calc()
         j = 1 / factorial(add);
         surd_e = surd_e + j;
     }
+    g_bench_sink += surd_e;
+    std::atomic_signal_fence(std::memory_order_seq_cst);
 }
 
 void e_calc()
@@ -1935,6 +2060,8 @@ void e_calc()
         j = 1 / factorial(add);
         surd_e = surd_e + j;
     }
+    g_bench_sink += surd_e;
+    std::atomic_signal_fence(std::memory_order_seq_cst);
 }
 
 void spicy_e_calc()
@@ -1955,6 +2082,8 @@ void spicy_e_calc()
         j = 1 / factorial(add);
         surd_e = surd_e + j;
     }
+    g_bench_sink += surd_e;
+    std::atomic_signal_fence(std::memory_order_seq_cst);
 }
 
 void decrypt_zip() {
@@ -2076,3 +2205,4 @@ void exit_countdown()
     //프로그램을 종료합니다.
     exit(0);
 }
+
