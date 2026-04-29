@@ -12,6 +12,8 @@
 #include <sstream> //cmd값 변수 저장
 #include <stdlib.h> //방화벽 막히는지 확인하기
 #include <ctime> //시간/날짜값 가져오기
+#include <limits>
+#include <cstring>
 
 #define BUFFER_SIZE 1024
 //네임스페이스 설정
@@ -93,6 +95,9 @@ void rm_usefiles(); //사용한 파일들 삭제
 void open_result(); //결과 화면 열기
 void exit_countdown(); //종료시 카운트다운
 
+bool download_file_or_exit(const wchar_t* url, const wchar_t* destination, const char* label);
+int read_menu_choice();
+
 /*
 void br(); //입력한 값만큼 줄 개행(줄바꿈)
 void progress(); //입력한 값만큼 퍼센테이지 표시
@@ -104,6 +109,33 @@ void br(int a)
     {
         cout << endl;
     }
+}
+
+bool download_file_or_exit(const wchar_t* url, const wchar_t* destination, const char* label)
+{
+    const HRESULT hr = URLDownloadToFileW(NULL, url, destination, 0, NULL);
+    if (SUCCEEDED(hr))
+    {
+        return true;
+    }
+
+    cerr << "\n[ERROR] 다운로드 실패: " << label << " (HRESULT: 0x" << hex << hr << dec << ")\n";
+    cout << "10초 후 프로그램을 종료합니다.\n";
+    Sleep(10000);
+    exit(1);
+}
+
+int read_menu_choice()
+{
+    int value = 0;
+    cin >> value;
+    if (cin.fail())
+    {
+        cin.clear();
+        cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
+        return -1;
+    }
+    return value;
 }
 
 void progress(int b)
@@ -1310,7 +1342,7 @@ int choose_level()
         level_explanation();
 
         //사용자에게 메뉴값을 입력받고, 그 값을 scoville 변수에 저장합니다.
-        cin >> scoville;
+        scoville = read_menu_choice();
 
         //만약 1번을 입력하면
         if (scoville == 1)
@@ -1449,20 +1481,25 @@ void update_check()
     system("title 벤치마크 - 업데이트 확인 중..."); //콘솔창 제목 설정
 
     //최신 버전 정보가 담긴 파일을 다운로드합니다.
-    URLDownloadToFile(NULL, L"https://common.gaon.xyz/prj/cpp_cli_benchmark/latest_version_info.txt", L"latest_version_info.txt", 0, NULL);
+    download_file_or_exit(L"https://common.gaon.xyz/prj/cpp_cli_benchmark/latest_version_info.txt", L"latest_version_info.txt", "latest_version_info.txt");
 
     char latest[50];    // 파일을 읽을 때 사용할 임시 공간
 
     FILE* fp = fopen("latest_version_info.txt", "r");    // latest_version_info.txt 파일을 읽기 모드로 열기.
-                                           // 파일 포인터를 반환
-    fgets(latest, sizeof(latest), fp);    // latest_version_info.txt에서 문자열을 읽음
+    if (fp == NULL || fgets(latest, sizeof(latest), fp) == NULL) {
+        cerr << "\n[ERROR] 최신 버전 정보를 읽을 수 없습니다.\n";
+        if (fp != NULL) fclose(fp);
+        Sleep(3000);
+        exit(1);
+    }
+    latest[strcspn(latest, "\r\n")] = '\0';
 
     //이 줄 위로는 latest_version_info.txt 파일 열기
     char current[50] = "1.0.1";
 
 
     //그 외인 경우(최신 버전과 현재 버전의 값이 다른 경우)
-    if (*current != *latest)
+    if (strcmp(current, latest) != 0)
     {
         system("title 벤치마크 - 구버전을 사용하고 계십니다! 업데이트를 진행합니다!"); //콘솔창 제목 설정
 
@@ -1472,7 +1509,7 @@ void update_check()
         Sleep(3000);
 
         //업데이트 프로그램을 다운로드합니다.
-        URLDownloadToFile(NULL, L"https://common.gaon.xyz/prj/cpp_cli_benchmark/updater.exe", L"updater.exe", 0, NULL);
+        download_file_or_exit(L"https://common.gaon.xyz/prj/cpp_cli_benchmark/updater.exe", L"updater.exe", "updater.exe");
         //업데이트 프로그램을 실행합니다.
         system("updater.exe");
         //프로그램 종료(업데이트 프로그램이 벤치마크 프로그램을 시작시킴)
@@ -1502,7 +1539,7 @@ void terms_download()
     약관 내용은 txt 파일을 불러오는 것으로 하였습니다.
     */
     //약관 파일을 다운로드 합니다.
-    URLDownloadToFile(NULL, L"https://common.gaon.xyz/prj/cpp_cli_benchmark/terms.txt", L"terms.txt", 0, NULL); //약관 파일을 다운로드합니다.
+    download_file_or_exit(L"https://common.gaon.xyz/prj/cpp_cli_benchmark/terms.txt", L"terms.txt", "terms.txt"); //약관 파일을 다운로드합니다.
 }
 
 void terms_agree()
@@ -1537,7 +1574,7 @@ void terms_agree()
         int terms_agree;
 
         //사용자에게 메뉴값을 입력받고, 그 값을 terms_agree 메모리에 저장합니다.
-        cin >> terms_agree;
+        terms_agree = read_menu_choice();
 
         //만약 1번을 입력하면
         if (terms_agree == 1) {
@@ -1587,7 +1624,7 @@ void help_document() {
     while (1)
     {
         int helpdoc_agree;
-        cin >> helpdoc_agree;
+        helpdoc_agree = read_menu_choice();
         if (helpdoc_agree == 1) {
             cls();
             check = 1;
@@ -1622,7 +1659,7 @@ void mild_pre_download()
     * mildall.7z : 벤치마크에 필요한 파일들이 모여있습니다.
     */
 
-    URLDownloadToFile(NULL, L"https://common.gaon.xyz/prj/cpp_cli_benchmark/mildalls.7z", L"mildalls.7z", 0, NULL); //waifu2x, 테스트용 압축 파일이 담긴 압축파일을 다운로드합니다.
+    download_file_or_exit(L"https://common.gaon.xyz/prj/cpp_cli_benchmark/mildalls.7z", L"mildalls.7z", "mildalls.7z"); //waifu2x, 테스트용 압축 파일이 담긴 압축파일을 다운로드합니다.
     system("@echo off && 7z x mildalls.7z > 1.txt"); //다운로드 받은 파일을 압축해제합니다.
     cls();
 }
@@ -1637,10 +1674,10 @@ void common_pre_download()
     * aki.png : 업스케일링 대상 파일입니다.
     * index.html : 최종 결과 출력용 html 파일입니다.
     */
-    URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/x64/7-Zip/7z.exe", L"7z.exe", 0, NULL); //7z.exe를 다운로드합니다.
-    URLDownloadToFile(NULL, L"https://common.gaon.xyz/utils/x64/7-Zip/7z.dll", L"7z.dll", 0, NULL); //7z.exe이 동작하는데 필요한 파일인 7z.dll 파일을 다운로드합니다.
-    URLDownloadToFile(NULL, L"https://i.ibb.co/1b2Ns1b/aki.png", L"aki.png", 0, NULL);//크기가 작은 이미지 파일을 다운로드합니다.
-    URLDownloadToFile(NULL, L"https://common.gaon.xyz/prj/cpp_cli_benchmark/result/index.html", L"index.html", 0, NULL);//최종 결과 화면을 띄울 html 파일을 다운로드합니다.
+    download_file_or_exit(L"https://common.gaon.xyz/utils/x64/7-Zip/7z.exe", L"7z.exe", "7z.exe"); //7z.exe를 다운로드합니다.
+    download_file_or_exit(L"https://common.gaon.xyz/utils/x64/7-Zip/7z.dll", L"7z.dll", "7z.dll"); //7z.exe이 동작하는데 필요한 파일인 7z.dll 파일을 다운로드합니다.
+    download_file_or_exit(L"https://i.ibb.co/1b2Ns1b/aki.png", L"aki.png", "aki.png");//크기가 작은 이미지 파일을 다운로드합니다.
+    download_file_or_exit(L"https://common.gaon.xyz/prj/cpp_cli_benchmark/result/index.html", L"index.html", "index.html");//최종 결과 화면을 띄울 html 파일을 다운로드합니다.
 }
 
 void pre_download()
@@ -1656,7 +1693,7 @@ void pre_download()
     * all.7z : 벤치마크에 필요한 파일들이 모여있습니다.
     */
 
-    URLDownloadToFile(NULL, L"https://common.gaon.xyz/prj/cpp_cli_benchmark/all.7z", L"all.7z", 0, NULL); //waifu2x, 테스트용 압축 파일이 담긴 압축파일을 다운로드합니다.
+    download_file_or_exit(L"https://common.gaon.xyz/prj/cpp_cli_benchmark/all.7z", L"all.7z", "all.7z"); //waifu2x, 테스트용 압축 파일이 담긴 압축파일을 다운로드합니다.
     system("@echo off && 7z x all.7z > 1.txt"); //다운로드 받은 파일을 압축해제합니다.
     cls();
 }
@@ -1674,7 +1711,7 @@ void spicy_pre_download()
     * spicyall.7z : 벤치마크에 필요한 파일들이 모여있습니다.
     */
 
-    URLDownloadToFile(NULL, L"https://common.gaon.xyz/prj/cpp_cli_benchmark/spicyall.7z", L"spicyall.7z", 0, NULL); //waifu2x, 테스트용 압축 파일이 담긴 압축파일을 다운로드합니다.
+    download_file_or_exit(L"https://common.gaon.xyz/prj/cpp_cli_benchmark/spicyall.7z", L"spicyall.7z", "spicyall.7z"); //waifu2x, 테스트용 압축 파일이 담긴 압축파일을 다운로드합니다.
     system("@echo off && 7z x spicyall.7z > 1.txt"); //다운로드 받은 파일을 압축해제합니다.
     cls();
 }
@@ -1692,7 +1729,7 @@ void mild_adds()
 
     //1부터 100억까지 더합니다.
     long long i = 0;
-    long long sums = 0;
+    long double sums = 0;
     for (i = 1; i <= 10000000000; i++) { //1부터 10000000000까지 반복
         sums += i; //sums=sums+i
     }
@@ -1711,7 +1748,7 @@ void adds()
 
     //1부터 300억까지 더합니다.
     long long i = 0;
-    long long sums = 0;
+    long double sums = 0;
     for (i = 1; i <= 30000000000; i++) { //1부터 30000000000까지 반복
         sums += i; //sums=sums+i
     }
@@ -1729,7 +1766,7 @@ void spicy_adds()
 
     //1부터 600억까지 더합니다.
     long long i = 0;
-    long long sums = 0;
+    long double sums = 0;
     for (i = 1; i <= 60000000000; i++) { //1부터 60000000000까지 반복
         sums += i; //sums=sums+i
     }
@@ -1749,7 +1786,7 @@ void mild_pi_calc()
 
     while (num < 400000000)
     {
-        pi += 1.0 / pow(num, 2.0);
+        pi += 1.0 / (num * num);
         num += 1.0;
     }
 }
@@ -1768,7 +1805,7 @@ void pi_calc()
 
     while (num < 1000000000)
     {
-        pi += 1.0 / pow(num, 2.0);
+        pi += 1.0 / (num * num);
         num += 1.0;
     }
 }
@@ -1787,7 +1824,7 @@ void spicy_pi_calc()
 
     while (num < 2147483640)
     {
-        pi += 1.0 / pow(num, 2.0);
+        pi += 1.0 / (num * num);
         num += 1.0;
     }
 }
@@ -1938,7 +1975,7 @@ void mild_download_test()
     br(5);
     progress(98);
 
-    URLDownloadToFile(NULL, L"https://dl.google.com/android/repository/commandlinetools-win-8512546_latest.zip", L"cmdtools.zip", 0, NULL);
+    download_file_or_exit(L"https://dl.google.com/android/repository/commandlinetools-win-8512546_latest.zip", L"cmdtools.zip", "cmdtools.zip");
 }
 
 void download_test()
@@ -1949,7 +1986,7 @@ void download_test()
     br(5);
     progress(98);
 
-    URLDownloadToFile(NULL, L"https://redirector.gvt1.com/edgedl/android/studio/install/2021.2.1.14/android-studio-2021.2.1.14-windows.exe", L"android_studio.exe", 0, NULL);
+    download_file_or_exit(L"https://redirector.gvt1.com/edgedl/android/studio/install/2021.2.1.14/android-studio-2021.2.1.14-windows.exe", L"android_studio.exe", "android_studio.exe");
 }
 
 void spicy_download_test()
@@ -1960,7 +1997,7 @@ void spicy_download_test()
     br(5);
     progress(98);
 
-    URLDownloadToFile(NULL, L"https://dl.google.com/android/studio/maven-google-com/stable/offline-gmaven-stable.zip", L"gmaven.zip", 0, NULL);
+    download_file_or_exit(L"https://dl.google.com/android/studio/maven-google-com/stable/offline-gmaven-stable.zip", L"gmaven.zip", "gmaven.zip");
 }
 
 void rm_usefiles()
