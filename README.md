@@ -149,3 +149,4 @@ cmake --build build --config Release
 - `include/report/runtime_utils.hpp` : report 유틸 인터페이스
 - `src/platform/windows/runtime.cpp` : Windows 런타임 작업(콘솔 초기화/임시파일 정리/종료 카운트다운)
 - `include/platform/windows/runtime.hpp` : Windows 런타임 인터페이스
+- `src/app/benchmark_app.cpp`는 450줄 이하 가독성을 위해 `src/app/chunks/*.inc`를 include 하는 구조로 분리됨
