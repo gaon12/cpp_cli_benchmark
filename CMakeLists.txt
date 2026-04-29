@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_executable(cpp_cli_benchmark
   src/main.cpp
   src/app/benchmark_app.cpp
+  src/report/runtime_utils.cpp
 )
 
 target_include_directories(cpp_cli_benchmark PRIVATE include)
