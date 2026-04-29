@@ -16,6 +16,7 @@
 #include <cstring>
 #include <fstream>
 #include <atomic>
+#include "benchmark_app.hpp"
 
 #define BUFFER_SIZE 1024
 //네임스페이스 설정
@@ -246,7 +247,7 @@ void progress(int b)
 
     cout << "] " << b << "%%" << endl;
 }
-int main()
+int run_benchmark_app()
 {
     rm_usefiles();
     cls();
@@ -257,6 +258,7 @@ int main()
 
     //마무리
     conclusion();
+    return 0;
 }
 
 void mild() {

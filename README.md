@@ -133,3 +133,15 @@ URLDownloadToFile(NULL, L"https://sel-kor-ping.vultr.com/vultr.com.1000MB.bin", 
 ```
 
 vultr사의 속도 테스트 페이지에서 국내(서울 서버)에서 파일을 다운로드 받습니다. 해당 파일의 용량은 1000MB입니다.
+
+## 현재 디렉터리 구조(요약)
+- `src/main.cpp` : 프로그램 진입점
+- `src/app/benchmark_app.cpp` : 기존 벤치마크 실행 로직(분리 1차)
+- `include/benchmark_app.hpp` : 앱 실행 인터페이스
+- `index.html`, `report.js`, `style.css` : 결과 리포트 UI
+
+## 빌드(CMake)
+```powershell
+cmake -S . -B build
+cmake --build build --config Release
+```

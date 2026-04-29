@@ -4,7 +4,12 @@ project(cpp_cli_benchmark LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(cpp_cli_benchmark bench_x64.cpp)
+add_executable(cpp_cli_benchmark
+  src/main.cpp
+  src/app/benchmark_app.cpp
+)
+
+target_include_directories(cpp_cli_benchmark PRIVATE include)
 
 if(MSVC)
   target_compile_options(cpp_cli_benchmark PRIVATE /W4 /utf-8)
